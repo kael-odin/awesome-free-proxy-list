@@ -393,14 +393,17 @@ def update_readme_stats(stats: dict) -> None:
 
 
 def sync_docs_data() -> None:
-    """Copy generated JSON outputs into docs/data/ so the static SPA can serve them.
+    """Copy generated JSON + subscription outputs into docs/data/ for the SPA / Pages.
 
-    The dashboard at docs/index.html fetches data/{summary,http,...}.json over the
-    same origin (GitHub Pages). Keeping this in sync with proxies/json/ means a
-    single `update.py` run leaves the site ready to deploy.
+    The dashboard at docs/index.html fetches data/*.json over the same origin
+    (GitHub Pages). Subscription files (clash/v2ray/links) are also mirrored so a
+    single update.py run leaves the site + all subscription endpoints ready.
     """
+    import shutil
+
     docs_data = ROOT / "docs" / "data"
     docs_data.mkdir(parents=True, exist_ok=True)
+
     for name in ("summary.json",):
         src = OUT_DIR / name
         if src.exists():
@@ -409,6 +412,21 @@ def sync_docs_data() -> None:
         src = JSON_DIR / name
         if src.exists():
             (docs_data / name).write_bytes(src.read_bytes())
+
+    # Subscription endpoints — mirror directory structure into docs/data/.
+    if (OUT_DIR / "subscriptions.json").exists():
+        (docs_data / "subscriptions.json").write_bytes((OUT_DIR / "subscriptions.json").read_bytes())
+    for subdir in ("clash", "v2ray", "links"):
+        src_dir = OUT_DIR / subdir
+        dst_dir = docs_data / subdir
+        dst_dir.mkdir(parents=True, exist_ok=True)
+        for old in dst_dir.glob("*"):
+            if old.is_file():
+                old.unlink()
+        if src_dir.exists():
+            for f in src_dir.glob("*"):
+                if f.is_file():
+                    shutil.copy2(f, dst_dir / f.name)
 
 
 async def main() -> None:
@@ -566,6 +584,13 @@ async def main() -> None:
         json.dumps(stats, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8"
     )
     update_readme_stats(stats)
+
+    # Subscription formats (Clash / V2Ray / links) — imported lazily to avoid a cycle.
+    import subscription  # noqa: E402 — local module
+
+    subscription.generate_all(
+        http_proxies, https_proxies, socks4_proxies_ok, socks5_proxies_ok, all_proxies, updated_utc
+    )
     sync_docs_data()
 
     geoip.close()
