@@ -1,196 +1,210 @@
 {
   "by_country": {
     "all": {
-      "BD": 3,
-      "CN": 4,
-      "DE": 1,
-      "GB": 1,
-      "HK": 2,
-      "ID": 2,
-      "IN": 2,
-      "JP": 1,
-      "PH": 1,
-      "UNKNOWN": 1,
-      "US": 2,
-      "VN": 1
+      "BD": 23,
+      "BR": 18,
+      "CN": 18,
+      "CO": 15,
+      "DE": 25,
+      "FR": 19,
+      "GB": 14,
+      "ID": 78,
+      "IN": 15,
+      "IR": 101,
+      "KH": 14,
+      "RU": 39,
+      "TR": 13,
+      "US": 178,
+      "VN": 22
     }
   },
   "by_tier": {
     "all": {
-      "fast": 7,
-      "medium": 13,
-      "slow": 1
+      "fast": 116,
+      "medium": 221,
+      "slow": 401
     },
     "http": {
-      "fast": 7,
-      "medium": 13,
-      "slow": 1
+      "fast": 94,
+      "medium": 52,
+      "slow": 182
     },
     "https": {
-      "medium": 2
+      "fast": 59,
+      "medium": 49,
+      "slow": 73
     },
-    "socks4": {},
-    "socks5": {}
+    "socks4": {
+      "fast": 12,
+      "medium": 101,
+      "slow": 81
+    },
+    "socks5": {
+      "fast": 17,
+      "medium": 106,
+      "slow": 190
+    }
   },
   "config": {
-    "concurrency": 100,
+    "concurrency": 200,
     "geoip_enabled": true,
-    "max_per_type": 300,
+    "max_per_type": 2000,
     "test_url_http": "http://api.ipify.org?format=json",
     "test_url_https": "https://api.ipify.org?format=json",
     "tier_thresholds_ms": {
       "fast": 500,
       "medium": 2000
     },
-    "timeout_sec": 6.0
+    "timeout_sec": 8.0
   },
   "counts": {
     "all": {
-      "candidates": 900,
-      "working": 21
+      "candidates": 6000,
+      "working": 738
     },
     "http": {
-      "candidates": 300,
-      "working": 21
+      "candidates": 2000,
+      "working": 328
     },
     "https": {
-      "candidates": 300,
-      "working": 2
+      "candidates": 2000,
+      "working": 181
     },
     "socks4": {
-      "candidates": 300,
-      "working": 0
+      "candidates": 2000,
+      "working": 194
     },
     "socks5": {
-      "candidates": 300,
-      "working": 0
+      "candidates": 2000,
+      "working": 313
     }
   },
   "sources": {
-    "count": 9,
+    "count": 10,
     "per_source_candidates": {
       "https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/proxy.txt": 823,
-      "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks4.txt": 2480,
-      "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks5.txt": 3274,
+      "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt": 3175,
+      "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks4.txt": 2425,
+      "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks5.txt": 3142,
       "https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt": 400,
       "https://raw.githubusercontent.com/hookzof/socks5_list/master/proxy.txt": 500,
-      "https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt": 514,
-      "https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/socks4.txt": 49,
-      "https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/socks5.txt": 102,
-      "https://raw.githubusercontent.com/roosterkid/openproxylist/main/HTTPS_RAW.txt": 95
+      "https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt": 519,
+      "https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/socks4.txt": 47,
+      "https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/socks5.txt": 104,
+      "https://raw.githubusercontent.com/roosterkid/openproxylist/main/HTTPS_RAW.txt": 102
     }
   },
   "top_fastest": [
     {
-      "country": "China",
-      "country_code": "CN",
-      "ip": "115.239.234.43",
-      "latency_ms": 36.9,
-      "port": 7302,
-      "source": "https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/proxy.txt",
-      "tier": "fast",
-      "type": "http",
-      "updated_utc": "2026-07-10T06:20:37+00:00"
-    },
-    {
-      "country": "China",
-      "country_code": "CN",
-      "ip": "112.28.149.152",
-      "latency_ms": 295.5,
-      "port": 8443,
-      "source": "https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt",
-      "tier": "fast",
-      "type": "http",
-      "updated_utc": "2026-07-10T06:20:37+00:00"
-    },
-    {
-      "country": "Hong Kong",
-      "country_code": "HK",
-      "ip": "119.237.43.106",
-      "latency_ms": 418.9,
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "ip": "185.170.166.50",
+      "latency_ms": 16.2,
       "port": 80,
-      "source": "https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt",
+      "source": "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
       "tier": "fast",
       "type": "http",
-      "updated_utc": "2026-07-10T06:20:37+00:00"
+      "updated_utc": "2026-07-10T07:19:03+00:00"
     },
     {
-      "country": "Germany",
-      "country_code": "DE",
-      "ip": "116.203.27.109",
-      "latency_ms": 420.3,
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "ip": "185.170.166.72",
+      "latency_ms": 16.8,
       "port": 80,
-      "source": "https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt",
+      "source": "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
       "tier": "fast",
       "type": "http",
-      "updated_utc": "2026-07-10T06:20:37+00:00"
+      "updated_utc": "2026-07-10T07:19:03+00:00"
     },
     {
-      "country": "Hong Kong",
-      "country_code": "HK",
-      "ip": "103.75.117.79",
-      "latency_ms": 426.6,
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "ip": "185.238.228.204",
+      "latency_ms": 17.5,
       "port": 80,
-      "source": "https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt",
+      "source": "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
       "tier": "fast",
       "type": "http",
-      "updated_utc": "2026-07-10T06:20:37+00:00"
+      "updated_utc": "2026-07-10T07:19:03+00:00"
     },
     {
-      "country": "Philippines",
-      "country_code": "PH",
-      "ip": "103.152.9.150",
-      "latency_ms": 461.1,
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "ip": "185.238.228.186",
+      "latency_ms": 17.7,
       "port": 80,
-      "source": "https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt",
+      "source": "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
       "tier": "fast",
       "type": "http",
-      "updated_utc": "2026-07-10T06:20:37+00:00"
+      "updated_utc": "2026-07-10T07:19:03+00:00"
     },
     {
-      "country": "Vietnam",
-      "country_code": "VN",
-      "ip": "103.157.219.4",
-      "latency_ms": 472.2,
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "ip": "185.238.228.50",
+      "latency_ms": 18.1,
       "port": 80,
-      "source": "https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/proxy.txt",
+      "source": "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
       "tier": "fast",
       "type": "http",
-      "updated_utc": "2026-07-10T06:20:37+00:00"
+      "updated_utc": "2026-07-10T07:19:03+00:00"
     },
     {
-      "country": "Bangladesh",
-      "country_code": "BD",
-      "ip": "103.147.182.36",
-      "latency_ms": 508.1,
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "ip": "185.238.228.108",
+      "latency_ms": 18.6,
       "port": 80,
-      "source": "https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/proxy.txt",
-      "tier": "medium",
+      "source": "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
+      "tier": "fast",
       "type": "http",
-      "updated_utc": "2026-07-10T06:20:37+00:00"
+      "updated_utc": "2026-07-10T07:19:03+00:00"
+    },
+    {
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "ip": "185.238.228.178",
+      "latency_ms": 19.7,
+      "port": 80,
+      "source": "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
+      "tier": "fast",
+      "type": "http",
+      "updated_utc": "2026-07-10T07:19:03+00:00"
+    },
+    {
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "ip": "164.38.155.55",
+      "latency_ms": 22.6,
+      "port": 80,
+      "source": "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
+      "tier": "fast",
+      "type": "http",
+      "updated_utc": "2026-07-10T07:19:03+00:00"
+    },
+    {
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "ip": "185.170.166.94",
+      "latency_ms": 22.8,
+      "port": 80,
+      "source": "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
+      "tier": "fast",
+      "type": "http",
+      "updated_utc": "2026-07-10T07:19:03+00:00"
     },
     {
       "country": "United States",
       "country_code": "US",
-      "ip": "104.129.192.156",
-      "latency_ms": 525.6,
-      "port": 80,
-      "source": "https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt",
-      "tier": "medium",
-      "type": "http",
-      "updated_utc": "2026-07-10T06:20:37+00:00"
-    },
-    {
-      "country": "India",
-      "country_code": "IN",
-      "ip": "103.51.153.82",
-      "latency_ms": 526.9,
-      "port": 80,
-      "source": "https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt",
-      "tier": "medium",
-      "type": "http",
-      "updated_utc": "2026-07-10T06:20:37+00:00"
+      "ip": "172.171.83.26",
+      "latency_ms": 26.2,
+      "port": 8080,
+      "source": "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt",
+      "tier": "fast",
+      "type": "https",
+      "updated_utc": "2026-07-10T07:19:03+00:00"
     }
   ],
-  "updated_utc": "2026-07-10T06:20:37+00:00"
+  "updated_utc": "2026-07-10T07:19:03+00:00"
 }
