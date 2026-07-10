@@ -257,36 +257,59 @@ def build_links(proxies: list[Proxy], ptype: str | None = None) -> str:
     return "\n".join(urls) + ("\n" if urls else "")
 
 
-def build_manifest(updated_utc: str, proxy_counts: dict) -> dict:
-    """Manifest describing every subscription file + its public Pages URL."""
+def build_manifest(updated_utc: str, proxy_counts: dict, categories: dict) -> dict:
+    """Manifest describing every subscription file + its public Pages URL.
+
+    `categories` maps a category key (e.g. "fast", "us", "high-anon") to a human
+    label, so the SPA can render grouped subscription cards.
+    """
     base = "https://kael-odin.github.io/awesome-free-proxy-list/data"
     raw_base = "https://raw.githubusercontent.com/kael-odin/awesome-free-proxy-list/main/proxies"
     files = [
+        # --- Clash configs ---
         {"name": "Clash / Mihomo — 全部 (HTTP+SOCKS5)", "name_en": "Clash/Mihomo — All (HTTP+SOCKS5)",
-         "format": "clash", "path": "clash/all.yaml",
+         "format": "clash", "category": "all", "path": "clash/all.yaml",
          "pages": f"{base}/clash/all.yaml", "raw": f"{raw_base}/clash/all.yaml"},
         {"name": "Clash / Mihomo — 仅 HTTP", "name_en": "Clash/Mihomo — HTTP only",
-         "format": "clash", "path": "clash/http.yaml",
+         "format": "clash", "category": "by_type", "path": "clash/http.yaml",
          "pages": f"{base}/clash/http.yaml", "raw": f"{raw_base}/clash/http.yaml"},
         {"name": "Clash / Mihomo — 仅 SOCKS5", "name_en": "Clash/Mihomo — SOCKS5 only",
-         "format": "clash", "path": "clash/socks5.yaml",
+         "format": "clash", "category": "by_type", "path": "clash/socks5.yaml",
          "pages": f"{base}/clash/socks5.yaml", "raw": f"{raw_base}/clash/socks5.yaml"},
+        {"name": "Clash — 仅快速 (fast 档)", "name_en": "Clash — Fast tier only",
+         "format": "clash", "category": "by_tier", "path": "clash/fast.yaml",
+         "pages": f"{base}/clash/fast.yaml", "raw": f"{raw_base}/clash/fast.yaml"},
+        {"name": "Clash — 高匿 (elite)", "name_en": "Clash — High-anon (elite)",
+         "format": "clash", "category": "by_anon", "path": "clash/high-anon.yaml",
+         "pages": f"{base}/clash/high-anon.yaml", "raw": f"{raw_base}/clash/high-anon.yaml"},
+        {"name": "Clash — 稳定 (连续多日可用)", "name_en": "Clash — Stable (multi-day)",
+         "format": "clash", "category": "stable", "path": "clash/stable.yaml",
+         "pages": f"{base}/clash/stable.yaml", "raw": f"{raw_base}/clash/stable.yaml"},
+        # --- V2Ray ---
         {"name": "V2Ray base64 订阅 (全部)", "name_en": "V2Ray base64 subscription (all)",
-         "format": "v2ray", "path": "v2ray/all.txt",
+         "format": "v2ray", "category": "all", "path": "v2ray/all.txt",
          "pages": f"{base}/v2ray/all.txt", "raw": f"{raw_base}/v2ray/all.txt"},
+        # --- Link lists ---
         {"name": "链接列表 — HTTP", "name_en": "Link list — HTTP",
-         "format": "links", "path": "links/http.txt",
+         "format": "links", "category": "by_type", "path": "links/http.txt",
          "pages": f"{base}/links/http.txt", "raw": f"{raw_base}/links/http.txt"},
         {"name": "链接列表 — SOCKS5", "name_en": "Link list — SOCKS5",
-         "format": "links", "path": "links/socks5.txt",
+         "format": "links", "category": "by_type", "path": "links/socks5.txt",
          "pages": f"{base}/links/socks5.txt", "raw": f"{raw_base}/links/socks5.txt"},
         {"name": "链接列表 — 全部", "name_en": "Link list — All",
-         "format": "links", "path": "links/all.txt",
+         "format": "links", "category": "all", "path": "links/all.txt",
          "pages": f"{base}/links/all.txt", "raw": f"{raw_base}/links/all.txt"},
+        {"name": "链接列表 — 高匿", "name_en": "Link list — High-anon",
+         "format": "links", "category": "by_anon", "path": "links/high-anon.txt",
+         "pages": f"{base}/links/high-anon.txt", "raw": f"{raw_base}/links/high-anon.txt"},
+        {"name": "链接列表 — 稳定", "name_en": "Link list — Stable",
+         "format": "links", "category": "stable", "path": "links/stable.txt",
+         "pages": f"{base}/links/stable.txt", "raw": f"{raw_base}/links/stable.txt"},
     ]
     return {
         "updated_utc": updated_utc,
         "counts": proxy_counts,
+        "categories": categories,
         "subscriptions": files,
         "import_guides": {
             "clash_verge": "打开 Clash Verge → 订阅 → 粘贴 .yaml 的 Pages URL → 更新 → 选中配置",
@@ -327,11 +350,39 @@ def generate_all(
         encoding="utf-8",
     )
 
+    # --- Filtered Clash configs: fast tier / high-anon / stable ---
+    fast_proxies = [p for p in clash_combined if p.tier == "fast"]
+    high_anon_proxies = [p for p in clash_combined if p.anonymity == "elite"]
+    stable_proxies = [p for p in clash_combined if p.streak >= 2]
+    if fast_proxies:
+        (CLASH_DIR / "fast.yaml").write_text(
+            build_clash_config(fast_proxies, title="Free Proxy List — Fast tier (<500ms)", updated_utc=updated_utc),
+            encoding="utf-8",
+        )
+    else:
+        (CLASH_DIR / "fast.yaml").unlink(missing_ok=True)
+    if high_anon_proxies:
+        (CLASH_DIR / "high-anon.yaml").write_text(
+            build_clash_config(high_anon_proxies, title="Free Proxy List — High-anonymity (elite)", updated_utc=updated_utc),
+            encoding="utf-8",
+        )
+    else:
+        (CLASH_DIR / "high-anon.yaml").unlink(missing_ok=True)
+    if stable_proxies:
+        (CLASH_DIR / "stable.yaml").write_text(
+            build_clash_config(stable_proxies, title="Free Proxy List — Stable (multi-day)", updated_utc=updated_utc),
+            encoding="utf-8",
+        )
+    else:
+        (CLASH_DIR / "stable.yaml").unlink(missing_ok=True)
+
     (V2RAY_DIR / "all.txt").write_text(build_v2ray_sub(clash_combined), encoding="utf-8")
 
     (LINKS_DIR / "http.txt").write_text(build_links(forward_all, "http"), encoding="utf-8")
     (LINKS_DIR / "socks5.txt").write_text(build_links(socks5_proxies, "socks5"), encoding="utf-8")
     (LINKS_DIR / "all.txt").write_text(build_links(clash_combined), encoding="utf-8")
+    (LINKS_DIR / "high-anon.txt").write_text(build_links(high_anon_proxies), encoding="utf-8")
+    (LINKS_DIR / "stable.txt").write_text(build_links(stable_proxies), encoding="utf-8")
 
     counts = {
         "http": len(http_proxies),
@@ -339,8 +390,18 @@ def generate_all(
         "socks4": len(socks4_proxies),
         "socks5": len(socks5_proxies),
         "all": len(all_proxies),
+        "fast": len(fast_proxies),
+        "high_anon": len(high_anon_proxies),
+        "stable": len(stable_proxies),
     }
-    manifest = build_manifest(updated_utc, counts)
+    categories = {
+        "all": {"zh": "全部", "en": "All"},
+        "by_type": {"zh": "按协议", "en": "By protocol"},
+        "by_tier": {"zh": "按延迟档", "en": "By latency tier"},
+        "by_anon": {"zh": "按匿名度", "en": "By anonymity"},
+        "stable": {"zh": "稳定代理", "en": "Stable proxies"},
+    }
+    manifest = build_manifest(updated_utc, counts, categories)
     (OUT_DIR / "subscriptions.json").write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
@@ -358,6 +419,8 @@ if __name__ == "__main__":
                 type=x["type"], host=x["ip"], port=x["port"], latency_ms=x.get("latency_ms"),
                 country=x.get("country", ""), country_code=x.get("country_code", ""),
                 source=x.get("source", ""),
+                anonymity=x.get("anonymity", "unknown"),
+                streak=x.get("streak", 0),
             )
             for x in json.loads(p.read_text(encoding="utf-8"))
         ]
