@@ -29,7 +29,7 @@
       sort_latency: "延迟（快→慢）", sort_type: "类型", sort_country: "国家",
       copy_all: "复制结果", download: "下载结果",
       th_proxy: "代理 (IP:Port)", th_type: "类型", th_country: "国家",
-      th_latency: "延迟", th_tier: "档位", th_actions: "操作",
+      th_latency: "延迟", th_tier: "档位", th_anon: "匿名度", th_actions: "操作",
       loading: "加载中…",
       prev: "上一页", next: "下一页",
       sources_title: "来源构成",
@@ -47,11 +47,17 @@
       subs_guide_title: "📌 各客户端导入步骤（点开查看）",
       subs_copy_url: "复制订阅链接",
       subs_open_raw: "查看原始",
+      subs_qr: "二维码",
+      subs_qr_fail: "二维码生成失败",
       subs_format_clash: "Clash/Mihomo 配置",
       subs_format_v2ray: "V2Ray base64 订阅",
       subs_format_links: "链接列表",
       subs_copied: "已复制订阅链接",
       subs_load_fail: "订阅列表加载失败",
+      risk_title: "安全风险提示",
+      risk_body: "免费代理可能由恶意方运营，能窥探甚至篡改你的流量。切勿用于登录、支付或任何敏感操作；仅适合爬虫测试、访问公开信息。详见 README 免责声明。",
+      freshness_label: "数据更新于",
+      freshness_stale: "（数据可能已过期，免费代理存活以分钟/小时计）",
     },
     en: {
       skip: "Skip to content",
@@ -64,7 +70,7 @@
       sort_latency: "Latency (fast→slow)", sort_type: "Type", sort_country: "Country",
       copy_all: "Copy results", download: "Download",
       th_proxy: "Proxy (IP:Port)", th_type: "Type", th_country: "Country",
-      th_latency: "Latency", th_tier: "Tier", th_actions: "Actions",
+      th_latency: "Latency", th_tier: "Tier", th_anon: "Anonymity", th_actions: "Actions",
       loading: "Loading…",
       prev: "Prev", next: "Next",
       sources_title: "Source breakdown",
@@ -82,11 +88,17 @@
       subs_guide_title: "📌 Import steps per client (click to expand)",
       subs_copy_url: "Copy subscription URL",
       subs_open_raw: "View raw",
+      subs_qr: "QR code",
+      subs_qr_fail: "QR code generation failed",
       subs_format_clash: "Clash/Mihomo config",
       subs_format_v2ray: "V2Ray base64 subscription",
       subs_format_links: "Link list",
       subs_copied: "Subscription URL copied",
       subs_load_fail: "Failed to load subscription list",
+      risk_title: "Security risk warning",
+      risk_body: "Free proxies may be operated by malicious parties who can inspect or tamper with your traffic. Never use them for logins, payments, or sensitive operations — only for crawler testing and public info. See the README disclaimer.",
+      freshness_label: "Data updated",
+      freshness_stale: "(data may be stale; free proxies live for minutes-to-hours)",
     },
   };
 
@@ -109,6 +121,7 @@
     typeFilter: $("#typeFilter"),
     countryFilter: $("#countryFilter"),
     tierFilter: $("#tierFilter"),
+    anonFilter: $("#anonFilter"),
     sortBy: $("#sortBy"),
     copyBtn: $("#copyBtn"),
     downloadBtn: $("#downloadBtn"),
@@ -126,6 +139,8 @@
     subsSection: $("#subsSection"),
     subsGrid: $("#subsGrid"),
     subsGuideBody: $("#subsGuideBody"),
+    riskBanner: $("#riskBanner"),
+    riskClose: $("#riskClose"),
     toast: $("#toast"),
     langToggle: $("#langToggle"),
     langLabel: $("#langLabel"),
@@ -209,7 +224,7 @@
       applyFilters();
     } catch (e) {
       console.error(e);
-      el.body.innerHTML = `<tr class="empty-row"><td colspan="7">${t("load_failed")}</td></tr>`;
+      el.body.innerHTML = `<tr class="empty-row"><td colspan="8">${t("load_failed")}</td></tr>`;
     }
   }
 
@@ -217,7 +232,15 @@
   function renderHero() {
     if (!summary) return;
     const c = summary.counts || {};
-    el.lastUpdate.textContent = `${t("stat_updated")}: ${formatDate(summary.updated_utc)}`;
+    // Freshness: show update time + a stale warning if older than 30 hours.
+    const ageHours = (Date.now() - new Date(summary.updated_utc).getTime()) / 3.6e6;
+    const stale = !isNaN(ageHours) && ageHours > 30;
+    el.lastUpdate.textContent = `${t("freshness_label")}: ${formatDate(summary.updated_utc)}`;
+    el.lastUpdate.classList.toggle("chip-warn", stale);
+    el.lastUpdate.title = stale ? t("freshness_stale") : "";
+    if (stale) {
+      el.lastUpdate.textContent += " ⚠";
+    }
     const cards = [
       { cls: "is-all", num: (c.all && c.all.working) || 0, lbl: t("stat_all") },
       { cls: "is-http", num: (c.http && c.http.working) || 0, lbl: "HTTP" },
@@ -281,28 +304,50 @@
       fmt === "clash" ? t("subs_format_clash") : fmt === "v2ray" ? t("subs_format_v2ray") : t("subs_format_links");
     const formatIcon = (fmt) => (fmt === "clash" ? "🌀" : fmt === "v2ray" ? "📡" : "🔗");
 
-    el.subsGrid.innerHTML = manifest.subscriptions
-      .map((s) => {
-        const name = lang === "zh" ? s.name : (s.name_en || s.name);
-        const url = s.pages || s.raw || "";
-        const escUrl = escapeAttr(url);
-        return `<div class="sub-card" data-format="${s.format}">
-          <div class="sub-head">
-            <span class="sub-icon">${formatIcon(s.format)}</span>
-            <div class="sub-meta">
-              <strong>${escapeHtml(name)}</strong>
-              <small>${formatLabel(s.format)} · ${s.path}</small>
-            </div>
+    // Group subscriptions by category for a cleaner layout.
+    const cats = manifest.categories || { all: { zh: "全部", en: "All" } };
+    const catOrder = ["all", "by_type", "by_tier", "by_anon", "stable"];
+    const byCat = {};
+    manifest.subscriptions.forEach((s) => {
+      const c = s.category || "all";
+      (byCat[c] = byCat[c] || []).push(s);
+    });
+
+    const cardHtml = (s) => {
+      const name = lang === "zh" ? s.name : (s.name_en || s.name);
+      const url = s.pages || s.raw || "";
+      const escUrl = escapeAttr(url);
+      return `<div class="sub-card" data-format="${s.format}">
+        <div class="sub-head">
+          <span class="sub-icon">${formatIcon(s.format)}</span>
+          <div class="sub-meta">
+            <strong>${escapeHtml(name)}</strong>
+            <small>${formatLabel(s.format)} · ${s.path}</small>
           </div>
-          <code class="sub-url" title="${escUrl}">${escUrl}</code>
-          <div class="sub-actions">
-            <button class="btn btn-primary btn-sm" data-sub-copy="${escUrl}" type="button">
-              📋 <span>${t("subs_copy_url")}</span>
-            </button>
-            <a class="btn btn-ghost btn-sm" href="${escUrl}" target="_blank" rel="noopener">
-              ↗ <span>${t("subs_open_raw")}</span>
-            </a>
-          </div>
+        </div>
+        <code class="sub-url" title="${escUrl}">${escUrl}</code>
+        <div class="sub-actions">
+          <button class="btn btn-primary btn-sm" data-sub-copy="${escUrl}" type="button">
+            📋 <span>${t("subs_copy_url")}</span>
+          </button>
+          <a class="btn btn-ghost btn-sm" href="${escUrl}" target="_blank" rel="noopener">
+            ↗ <span>${t("subs_open_raw")}</span>
+          </a>
+          <button class="btn btn-ghost btn-sm sub-qr-btn" data-sub-qr="${escUrl}" type="button">
+            📱 <span>${t("subs_qr")}</span>
+          </button>
+        </div>
+        <div class="sub-qr" hidden></div>
+      </div>`;
+    };
+
+    el.subsGrid.innerHTML = catOrder
+      .filter((c) => byCat[c] && byCat[c].length)
+      .map((c) => {
+        const label = (cats[c] && cats[c][lang]) || c;
+        return `<div class="sub-cat">
+          <h3 class="sub-cat-title">${escapeHtml(label)}</h3>
+          <div class="sub-cat-grid">${byCat[c].map(cardHtml).join("")}</div>
         </div>`;
       })
       .join("");
@@ -325,12 +370,14 @@
     const type = el.typeFilter.value;
     const cc = el.countryFilter.value;
     const tier = el.tierFilter.value;
+    const anon = el.anonFilter.value;
     const sort = el.sortBy.value;
 
     filtered = allProxies.filter((p) => {
       if (type !== "all" && p.type !== type) return false;
       if (cc !== "all" && (p.country_code || "UNKNOWN") !== cc) return false;
       if (tier !== "all" && tierOf(p) !== tier) return false;
+      if (anon !== "all" && (p.anonymity || "unknown") !== anon) return false;
       if (q) {
         const hay = `${p.ip}:${p.port} ${p.country || ""} ${p.country_code || ""} ${p.type}`.toLowerCase();
         if (!hay.includes(q)) return false;
@@ -357,11 +404,24 @@
     return "slow";
   }
 
+  // Anonymity badge: green=elite (safest), yellow=anonymous, red=transparent (leaks IP).
+  function anonBadgeHtml(level) {
+    const map = {
+      elite: { icon: "🟢", cls: "anon-elite", lbl: "高匿", lbl_en: "elite" },
+      anonymous: { icon: "🟡", cls: "anon-anon", lbl: "匿名", lbl_en: "anon" },
+      transparent: { icon: "🔴", cls: "anon-trans", lbl: "透明", lbl_en: "transparent" },
+      unknown: { icon: "⚪", cls: "anon-unknown", lbl: "未测", lbl_en: "unknown" },
+    };
+    const m = map[level] || map.unknown;
+    const lbl = lang === "zh" ? m.lbl : m.lbl_en;
+    return `<span class="anon-badge ${m.cls}" title="${escapeHtml(m.lbl_en)}">${m.icon} ${lbl}</span>`;
+  }
+
   // ----- Render: table -----
   function renderTable() {
     renderCount();
     if (!filtered.length) {
-      el.body.innerHTML = `<tr class="empty-row"><td colspan="7">${t("no_results")}</td></tr>`;
+      el.body.innerHTML = `<tr class="empty-row"><td colspan="8">${t("no_results")}</td></tr>`;
       el.pagination.hidden = true;
       return;
     }
@@ -381,6 +441,8 @@
         const cc = p.country_code || "UNKNOWN";
         const cname = p.country || (cc === "UNKNOWN" ? "?" : cc);
         const copyStr = escapeAttr(hp);
+        const anon = p.anonymity || "unknown";
+        const anonBadge = anonBadgeHtml(anon);
         return `<tr>
           <td class="idx">${idx}</td>
           <td class="hp">${hp}</td>
@@ -388,6 +450,7 @@
           <td><span class="country"><span class="flag">${flagEmoji(cc)}</span>${escapeHtml(cname)}</span></td>
           <td><span class="latency">${lat}<span class="latency-bar"><i style="width:${barPct}%;background:${barColor}"></i></span></span></td>
           <td><span class="tier-dot tier-${tier}">${tier}</span></td>
+          <td>${anonBadge}</td>
           <td><button class="copy-one" data-copy="${copyStr}" type="button">📋</button></td>
         </tr>`;
       })
@@ -470,17 +533,51 @@
     if (ok) toast(t("subs_copied"));
   }
 
+  async function onToggleQR(e) {
+    const btn = e.target.closest("[data-sub-qr]");
+    if (!btn || !globalThis.QR) return;
+    const url = btn.getAttribute("data-sub-qr");
+    const card = btn.closest(".sub-card");
+    const box = card && card.querySelector(".sub-qr");
+    if (!box) return;
+    if (!box.hidden && box.dataset.rendered === "1") {
+      box.hidden = true; box.innerHTML = "";
+      box.dataset.rendered = "";
+      return;
+    }
+    box.innerHTML = `<span class="muted">…</span>`;
+    box.hidden = false;
+    const svg = await globalThis.QR.render(url, { scale: 5, margin: 2 });
+    if (!svg) {
+      box.innerHTML = `<span class="muted">${t("subs_qr_fail")}</span>`;
+      box.dataset.rendered = "0";
+      return;
+    }
+    box.innerHTML = svg;
+    box.dataset.rendered = "1";
+  }
+
   // ----- Event wiring -----
   function bind() {
+    // Risk banner: dismissible, remembered per-browser.
+    if (localStorage.getItem("fpl-risk-dismissed") === "1") {
+      el.riskBanner.hidden = true;
+    }
+    el.riskClose.addEventListener("click", () => {
+      el.riskBanner.hidden = true;
+      localStorage.setItem("fpl-risk-dismissed", "1");
+    });
     el.search.addEventListener("input", debounce(applyFilters, 150));
     el.typeFilter.addEventListener("change", applyFilters);
     el.countryFilter.addEventListener("change", applyFilters);
     el.tierFilter.addEventListener("change", applyFilters);
+    el.anonFilter.addEventListener("change", applyFilters);
     el.sortBy.addEventListener("change", applyFilters);
     el.copyBtn.addEventListener("click", onCopyAll);
     el.downloadBtn.addEventListener("click", onDownload);
     el.body.addEventListener("click", onCopyOne);
     el.subsGrid.addEventListener("click", onCopySub);
+    el.subsGrid.addEventListener("click", onToggleQR);
     el.prevBtn.addEventListener("click", () => { if (page > 1) { page--; renderTable(); } });
     el.nextBtn.addEventListener("click", () => {
       const total = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));

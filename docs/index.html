@@ -38,6 +38,13 @@
   </header>
 
   <main id="main" class="container">
+    <!-- Risk banner -->
+    <div class="risk-banner" id="riskBanner" role="alert">
+      <span class="risk-icon">⚠️</span>
+      <p><strong data-i18n="risk_title">安全风险提示</strong> <span data-i18n="risk_body">免费代理可能由恶意方运营，能窥探甚至篡改你的流量。切勿用于登录、支付或任何敏感操作；仅适合爬虫测试、访问公开信息。详见 README 免责声明。</span></p>
+      <button class="risk-close" id="riskClose" type="button" aria-label="dismiss">✕</button>
+    </div>
+
     <!-- Hero / status -->
     <section class="hero">
       <div class="hero-text">
@@ -85,6 +92,16 @@
             <option value="unknown">? unknown</option>
           </select>
         </label>
+        <label>
+          <span data-i18n="anonymity">匿名度</span>
+          <select id="anonFilter">
+            <option value="all" data-i18n="all_types">全部</option>
+            <option value="elite">🟢 高匿 elite</option>
+            <option value="anonymous">🟡 匿名 anonymous</option>
+            <option value="transparent">🔴 透明 transparent</option>
+            <option value="unknown">? 未测 unknown</option>
+          </select>
+        </label>
         <label class="sort-label">
           <span data-i18n="sort">排序</span>
           <select id="sortBy">
@@ -121,11 +138,12 @@
             <th data-i18n="th_country">国家</th>
             <th data-i18n="th_latency">延迟</th>
             <th data-i18n="th_tier">档位</th>
+            <th data-i18n="th_anon">匿名度</th>
             <th data-i18n="th_actions">操作</th>
           </tr>
         </thead>
         <tbody id="proxyBody">
-          <tr class="loading-row"><td colspan="7" id="loadingCell" data-i18n="loading">加载中…</td></tr>
+          <tr class="loading-row"><td colspan="8" id="loadingCell" data-i18n="loading">加载中…</td></tr>
         </tbody>
       </table>
       <div class="pagination" id="pagination" hidden>
@@ -167,6 +185,7 @@
     <p class="muted small" data-i18n="disclaimer_short">免费代理不稳定且可能被滥用，请勿用于敏感流量。</p>
   </footer>
 
+  <script src="assets/qr.js" defer></script>
   <script src="assets/app.js" defer></script>
 </body>
 </html>
