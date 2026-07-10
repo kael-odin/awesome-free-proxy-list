@@ -392,6 +392,25 @@ def update_readme_stats(stats: dict) -> None:
     README.write_text(pre + block + post, encoding="utf-8")
 
 
+def sync_docs_data() -> None:
+    """Copy generated JSON outputs into docs/data/ so the static SPA can serve them.
+
+    The dashboard at docs/index.html fetches data/{summary,http,...}.json over the
+    same origin (GitHub Pages). Keeping this in sync with proxies/json/ means a
+    single `update.py` run leaves the site ready to deploy.
+    """
+    docs_data = ROOT / "docs" / "data"
+    docs_data.mkdir(parents=True, exist_ok=True)
+    for name in ("summary.json",):
+        src = OUT_DIR / name
+        if src.exists():
+            (docs_data / name).write_bytes(src.read_bytes())
+    for name in ("http.json", "https.json", "socks4.json", "socks5.json", "all.json"):
+        src = JSON_DIR / name
+        if src.exists():
+            (docs_data / name).write_bytes(src.read_bytes())
+
+
 async def main() -> None:
     JSON_DIR.mkdir(parents=True, exist_ok=True)
     updated_utc = utc_now_iso()
@@ -547,6 +566,7 @@ async def main() -> None:
         json.dumps(stats, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8"
     )
     update_readme_stats(stats)
+    sync_docs_data()
 
     geoip.close()
 
