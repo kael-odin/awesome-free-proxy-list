@@ -60,23 +60,32 @@ def _needs_download(path: Path) -> bool:
 def download_db(dest: Path | None = None) -> Optional[Path]:
     """Download the GeoLite2-Country mmdb to ``dest`` (default cache path).
 
-    Returns the path on success, or None if the download failed.
+    Returns the path on success, or None if the download failed after retries.
     """
+    import time
+
     dest = dest or _db_path()
-    try:
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        req = urllib.request.Request(
-            GEOIP_DB_URL,
-            headers={"User-Agent": "free-proxy-list-bot/1.0"},
-        )
-        with urllib.request.urlopen(req, timeout=60) as resp:  # noqa: S310 — trusted mirror
-            data = resp.read()
-        if len(data) < 1024:
-            return None
-        dest.write_bytes(data)
-        return dest
-    except Exception:
-        return None
+    dest.parent.mkdir(parents=True, exist_ok=True)
+
+    last_err: Exception | None = None
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(
+                GEOIP_DB_URL,
+                headers={"User-Agent": "free-proxy-list-bot/1.0"},
+            )
+            with urllib.request.urlopen(req, timeout=60) as resp:  # noqa: S310 — trusted mirror
+                data = resp.read()
+            if len(data) < 1024:
+                last_err = ValueError("downloaded file too small")
+                continue
+            dest.write_bytes(data)
+            return dest
+        except Exception as e:
+            last_err = e
+            # Brief backoff before retrying.
+            time.sleep(1.0 * (attempt + 1))
+    return None
 
 
 def ensure_db() -> Optional[Path]:
@@ -94,13 +103,19 @@ class GeoIP:
 
     def __init__(self) -> None:
         self._reader = None  # type: ignore[assignment]
-        self._tried = False
         self._db_path: Path | None = None
+        self._load_attempts = 0
+        self._max_load_attempts = 3
 
     def _load(self) -> bool:
-        if self._tried:
-            return self._reader is not None
-        self._tried = True
+        # If we already loaded a reader successfully, keep using it.
+        if self._reader is not None:
+            return True
+        # Allow a few retries: the first attempt may fail if the mmdb download
+        # is slow or the network blips. We do NOT permanently give up.
+        if self._load_attempts >= self._max_load_attempts:
+            return False
+        self._load_attempts += 1
         if not is_enabled():
             return False
         path = ensure_db()
