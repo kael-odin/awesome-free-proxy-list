@@ -64,7 +64,20 @@ jobs:
           test -f proxies/links/all.txt
           test -f proxies/subscriptions.json
           test -f docs/data/clash/all.yaml
-          echo "All expected outputs (incl. subscriptions) present."
+          # Anonymity / history outputs (may be empty in tiny runs, but must exist)
+          test -f proxies/high-anon.txt
+          test -f proxies/anonymous.txt
+          test -f proxies/transparent.txt
+          test -f proxies/stable.txt
+          test -f proxies/fast-only.txt
+          test -f proxies/history.json
+          test -f proxies/history-summary.json
+          test -f docs/data/history-summary.json
+          # summary.json must include the new enrichment keys
+          python -c "import json;d=json.load(open('proxies/summary.json'));assert 'by_anonymity' in d;assert 'history' in d;assert 'data_freshness' in d;print('summary keys OK')"
+          # JSON items must include anonymity + streak (if any proxies passed)
+          python -c "import json;d=json.load(open('proxies/json/all.json'));assert (not d) or ('anonymity' in d[0] and 'streak' in d[0]);print('json fields OK')"
+          echo "All expected outputs (incl. subscriptions + anonymity + history) present."
 
       - name: Validate Clash YAML is parseable
         run: |
