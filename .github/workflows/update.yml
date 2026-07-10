@@ -2,11 +2,22 @@ name: update-proxy-list
 
 on:
   workflow_dispatch:
+    inputs:
+      max_per_type:
+        description: "Max candidates per type (smaller = faster test run)"
+        required: false
+        default: "2000"
+      concurrency:
+        description: "Max concurrent validations"
+        required: false
+        default: "200"
   schedule:
     - cron: "15 0 * * *" # daily 00:15 UTC
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: update-proxy-list
@@ -31,9 +42,20 @@ jobs:
       - name: Update proxies
         env:
           PROXY_TIMEOUT_SEC: "8"
-          PROXY_CONCURRENCY: "200"
-          PROXY_MAX_PER_TYPE: "2000"
+          PROXY_CONCURRENCY: ${{ github.event.inputs.concurrency || '200' }}
+          PROXY_MAX_PER_TYPE: ${{ github.event.inputs.max_per_type || '2000' }}
         run: python scripts/update.py
+
+      - name: Upload summary artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: proxy-summary
+          path: |
+            proxies/summary.json
+            proxies/json/
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Commit changes (if any)
         run: |
@@ -47,3 +69,26 @@ jobs:
           git commit -m "chore: daily proxy list update"
           git push
 
+  deploy-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    # Pages deployment requires the environment; only run when there is a docs/ site.
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

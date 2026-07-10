@@ -1,0 +1,61 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/**"
+      - "requirements.txt"
+      - ".github/workflows/test.yml"
+  pull_request:
+    paths:
+      - "scripts/**"
+      - "requirements.txt"
+      - ".github/workflows/test.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff
+      - run: ruff check scripts/ || true   # non-blocking for now; surfaces issues
+
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - run: pip install -r requirements.txt
+
+      - name: Syntax check
+        run: python -m py_compile scripts/update.py scripts/geoip_lookup.py scripts/check.py scripts/test_proxies.py
+
+      - name: Tiny update run (5 candidates, no network stress)
+        env:
+          PROXY_MAX_PER_TYPE: "5"
+          PROXY_CONCURRENCY: "5"
+          PROXY_TIMEOUT_SEC: "6"
+        run: python scripts/update.py
+
+      - name: Verify outputs exist
+        run: |
+          test -f proxies/all.txt
+          test -f proxies/json/all.json
+          test -f proxies/all.csv
+          test -f proxies/summary.json
+          test -f docs/data/summary.json
+          echo "All expected outputs present."
