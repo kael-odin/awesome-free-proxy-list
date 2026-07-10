@@ -58,6 +58,15 @@
       risk_body: "免费代理可能由恶意方运营，能窥探甚至篡改你的流量。切勿用于登录、支付或任何敏感操作；仅适合爬虫测试、访问公开信息。详见 README 免责声明。",
       freshness_label: "数据更新于",
       freshness_stale: "（数据可能已过期，免费代理存活以分钟/小时计）",
+      detail_country: "国家", detail_latency: "延迟", detail_tier: "档位",
+      detail_anon: "匿名度", detail_streak: "连续存活", detail_source: "来源",
+      detail_check_curl: "复制 cURL 检测命令",
+      detail_check_py: "复制 Python 检测命令",
+      detail_check_hint: "在本地终端运行，实时验证该代理当下是否可用（浏览器无法直接测代理，须本地执行）。",
+      copied_check: "已复制检测命令",
+      sources_title: "来源构成",
+      chart_anon: "匿名度分布",
+      chart_country: "国家 Top 10",
     },
     en: {
       skip: "Skip to content",
@@ -99,6 +108,15 @@
       risk_body: "Free proxies may be operated by malicious parties who can inspect or tamper with your traffic. Never use them for logins, payments, or sensitive operations — only for crawler testing and public info. See the README disclaimer.",
       freshness_label: "Data updated",
       freshness_stale: "(data may be stale; free proxies live for minutes-to-hours)",
+      detail_country: "Country", detail_latency: "Latency", detail_tier: "Tier",
+      detail_anon: "Anonymity", detail_streak: "Streak", detail_source: "Source",
+      detail_check_curl: "Copy cURL check command",
+      detail_check_py: "Copy Python check command",
+      detail_check_hint: "Run in a local terminal to verify this proxy live (browsers cannot test proxies directly).",
+      copied_check: "Check command copied",
+      sources_title: "Source breakdown",
+      chart_anon: "Anonymity distribution",
+      chart_country: "Country Top 10",
     },
   };
 
@@ -136,6 +154,9 @@
     lastUpdate: $("#lastUpdate"),
     sourcesSection: $("#sourcesSection"),
     sourceBars: $("#sourceBars"),
+    chartsSection: $("#chartsSection"),
+    anonChart: $("#anonChart"),
+    countryChart: $("#countryChart"),
     subsSection: $("#subsSection"),
     subsGrid: $("#subsGrid"),
     subsGuideBody: $("#subsGuideBody"),
@@ -220,7 +241,9 @@
       renderHero();
       renderCountryFilter();
       renderSources();
+      renderCharts();
       renderSubs();
+      restoreHash();
       applyFilters();
     } catch (e) {
       console.error(e);
@@ -289,6 +312,52 @@
         </div>`;
       })
       .join("");
+  }
+
+  // ----- Render: distribution charts (anonymity + country) -----
+  function renderCharts() {
+    if (!summary) { el.chartsSection.hidden = true; return; }
+    const anon = (summary.by_anonymity && summary.by_anonymity.all) || {};
+    const country = (summary.by_country && summary.by_country.all) || {};
+
+    const anonRows = Object.entries(anon).sort((a, b) => b[1] - a[1]);
+    const anonMax = Math.max(...anonRows.map(([, n]) => n), 1);
+    const anonMeta = {
+      elite: { icon: "🟢", zh: "高匿", en: "elite" },
+      anonymous: { icon: "🟡", zh: "匿名", en: "anonymous" },
+      transparent: { icon: "🔴", zh: "透明", en: "transparent" },
+      unknown: { icon: "⚪", zh: "未测", en: "unknown" },
+    };
+    if (!anonRows.length) {
+      el.anonChart.innerHTML = `<span class="muted">—</span>`;
+    } else {
+      el.anonChart.innerHTML = anonRows.map(([k, n]) => {
+        const m = anonMeta[k] || { icon: "•", zh: k, en: k };
+        const lbl = lang === "zh" ? m.zh : m.en;
+        const pct = Math.max(2, Math.round((n / anonMax) * 100));
+        return `<div class="chart-row">
+          <span class="chart-label">${m.icon} ${escapeHtml(lbl)}</span>
+          <div class="chart-track"><div class="chart-fill" style="width:${pct}%"></div></div>
+          <span class="chart-count">${n.toLocaleString()}</span>
+        </div>`;
+      }).join("");
+    }
+
+    const ccRows = Object.entries(country).filter(([cc]) => cc && cc !== "UNKNOWN").sort((a, b) => b[1] - a[1]).slice(0, 10);
+    const ccMax = Math.max(...ccRows.map(([, n]) => n), 1);
+    if (!ccRows.length) {
+      el.countryChart.innerHTML = `<span class="muted">—</span>`;
+    } else {
+      el.countryChart.innerHTML = ccRows.map(([cc, n]) => {
+        const pct = Math.max(2, Math.round((n / ccMax) * 100));
+        return `<div class="chart-row">
+          <span class="chart-label">${flagEmoji(cc)} ${escapeHtml(cc)}</span>
+          <div class="chart-track"><div class="chart-fill chart-fill-accent" style="width:${pct}%"></div></div>
+          <span class="chart-count">${n.toLocaleString()}</span>
+        </div>`;
+      }).join("");
+    }
+    el.chartsSection.hidden = false;
   }
 
   // ----- Render: subscription center -----
@@ -395,6 +464,34 @@
     }
     page = 1;
     renderTable();
+    syncHash();
+  }
+
+  // ----- URL deep-linking (share filter state via location.hash) -----
+  function syncHash() {
+    const params = new URLSearchParams();
+    if (el.typeFilter.value !== "all") params.set("type", el.typeFilter.value);
+    if (el.countryFilter.value !== "all") params.set("cc", el.countryFilter.value);
+    if (el.tierFilter.value !== "all") params.set("tier", el.tierFilter.value);
+    if (el.anonFilter.value !== "all") params.set("anon", el.anonFilter.value);
+    const q = el.search.value.trim();
+    if (q) params.set("q", q);
+    const hash = params.toString();
+    const newHash = hash ? `#${hash}` : "";
+    if (location.hash !== newHash) {
+      history.replaceState(null, "", newHash || location.pathname);
+    }
+  }
+
+  function restoreHash() {
+    const hash = location.hash.replace(/^#/, "");
+    if (!hash) return;
+    const params = new URLSearchParams(hash);
+    if (params.has("type")) el.typeFilter.value = params.get("type");
+    if (params.has("cc")) el.countryFilter.value = params.get("cc");
+    if (params.has("tier")) el.tierFilter.value = params.get("tier");
+    if (params.has("anon")) el.anonFilter.value = params.get("anon");
+    if (params.has("q")) el.search.value = params.get("q");
   }
 
   function tierOf(p) {
@@ -415,6 +512,18 @@
     const m = map[level] || map.unknown;
     const lbl = lang === "zh" ? m.lbl : m.lbl_en;
     return `<span class="anon-badge ${m.cls}" title="${escapeHtml(m.lbl_en)}">${m.icon} ${lbl}</span>`;
+  }
+
+  // Shorten a source URL to something readable (host + path tail).
+  function shortSource(src) {
+    if (!src) return "—";
+    try {
+      const u = new URL(src);
+      const host = u.hostname.replace(/^raw\./, "").replace(/^(raw\.githubusercontent\.com)$/, "github");
+      return host.length > 28 ? host.slice(0, 26) + "…" : host;
+    } catch {
+      return src.length > 28 ? src.slice(0, 26) + "…" : src;
+    }
   }
 
   // ----- Render: table -----
@@ -443,7 +552,11 @@
         const copyStr = escapeAttr(hp);
         const anon = p.anonymity || "unknown";
         const anonBadge = anonBadgeHtml(anon);
-        return `<tr>
+        const proxyUrl = p.type === "socks5" ? `socks5://${hp}` : (p.type === "socks4" ? `socks4://${hp}` : `http://${hp}`);
+        const curlCmd = `curl -x ${proxyUrl} -s --max-time 10 https://httpbin.org/ip`;
+        const pyCmd = `python scripts/check.py ${hp}`;
+        const dataIdx = start + i;
+        return `<tr class="proxy-row" data-idx="${dataIdx}">
           <td class="idx">${idx}</td>
           <td class="hp">${hp}</td>
           <td><span class="badge badge-${p.type}">${p.type.toUpperCase()}</span></td>
@@ -451,7 +564,30 @@
           <td><span class="latency">${lat}<span class="latency-bar"><i style="width:${barPct}%;background:${barColor}"></i></span></span></td>
           <td><span class="tier-dot tier-${tier}">${tier}</span></td>
           <td>${anonBadge}</td>
-          <td><button class="copy-one" data-copy="${copyStr}" type="button">📋</button></td>
+          <td class="row-actions">
+            <button class="copy-one" data-copy="${copyStr}" type="button" title="${t("copy_all")}">📋</button>
+            <button class="detail-toggle" data-detail="${dataIdx}" type="button" title="…">ℹ️</button>
+          </td>
+        </tr>
+        <tr class="detail-row" data-detail-for="${dataIdx}" hidden>
+          <td colspan="8">
+            <div class="detail-grid">
+              <div><span class="muted">${t("detail_country")}</span><strong>${flagEmoji(cc)} ${escapeHtml(cname)} (${escapeHtml(cc)})</strong></div>
+              <div><span class="muted">${t("detail_latency")}</span><strong>${lat}</strong></div>
+              <div><span class="muted">${t("detail_tier")}</span><strong>${tier}</strong></div>
+              <div><span class="muted">${t("detail_anon")}</span><strong>${anonBadge}</strong></div>
+              <div><span class="muted">${t("detail_streak")}</span><strong>${p.streak || 0} day(s)</strong></div>
+              <div><span class="muted">${t("detail_source")}</span><strong class="detail-src" title="${escapeHtml(p.source || "")}">${escapeHtml(shortSource(p.source))}</strong></div>
+            </div>
+            <p class="detail-hint muted">💡 ${t("detail_check_hint")}</p>
+            <div class="detail-cmds">
+              <code class="detail-code">curl: ${escapeHtml(curlCmd)}</code>
+              <div class="detail-cmd-actions">
+                <button class="btn btn-ghost btn-sm" data-copy-cmd="${escapeAttr(curlCmd)}" type="button">📋 ${t("detail_check_curl")}</button>
+                <button class="btn btn-ghost btn-sm" data-copy-cmd="${escapeAttr(pyCmd)}" type="button">📋 ${t("detail_check_py")}</button>
+              </div>
+            </div>
+          </td>
         </tr>`;
       })
       .join("");
@@ -525,6 +661,26 @@
     if (ok) toast(t("copied_one") + val);
   }
 
+  function onToggleDetail(e) {
+    const btn = e.target.closest("[data-detail]");
+    if (!btn) return;
+    const idx = btn.getAttribute("data-detail");
+    const row = btn.closest("tr").nextElementSibling;
+    if (!row || row.getAttribute("data-detail-for") !== idx) return;
+    const open = !row.hidden;
+    // Close all other open detail rows (single-open policy).
+    el.body.querySelectorAll("tr.detail-row:not([hidden])").forEach((r) => { r.hidden = true; });
+    if (!open) row.hidden = false;
+  }
+
+  async function onCopyCmd(e) {
+    const btn = e.target.closest("[data-copy-cmd]");
+    if (!btn) return;
+    const val = btn.getAttribute("data-copy-cmd");
+    const ok = await copyText(val);
+    if (ok) toast(t("copied_check"));
+  }
+
   async function onCopySub(e) {
     const btn = e.target.closest("[data-sub-copy]");
     if (!btn) return;
@@ -576,6 +732,8 @@
     el.copyBtn.addEventListener("click", onCopyAll);
     el.downloadBtn.addEventListener("click", onDownload);
     el.body.addEventListener("click", onCopyOne);
+    el.body.addEventListener("click", onToggleDetail);
+    el.body.addEventListener("click", onCopyCmd);
     el.subsGrid.addEventListener("click", onCopySub);
     el.subsGrid.addEventListener("click", onToggleQR);
     el.prevBtn.addEventListener("click", () => { if (page > 1) { page--; renderTable(); } });
@@ -588,6 +746,7 @@
       localStorage.setItem("fpl-lang", lang);
       applyI18n();
       renderCountryFilter();
+      renderCharts();
       renderSubs();
     });
     el.themeToggle.addEventListener("click", () => {
