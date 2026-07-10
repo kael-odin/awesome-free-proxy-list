@@ -42,6 +42,16 @@
       copied_one: "已复制：", copied_all: (n) => `已复制 ${n} 条到剪贴板`,
       downloaded: (n) => `已下载 ${n} 条`,
       page_of: (a, b) => `${a} / ${b}`,
+      subs_title: "一键导入代理软件",
+      subs_intro: "复制订阅链接，粘贴到对应客户端即可导入。Clash Verge / V2RayN / Surge 等通用。",
+      subs_guide_title: "📌 各客户端导入步骤（点开查看）",
+      subs_copy_url: "复制订阅链接",
+      subs_open_raw: "查看原始",
+      subs_format_clash: "Clash/Mihomo 配置",
+      subs_format_v2ray: "V2Ray base64 订阅",
+      subs_format_links: "链接列表",
+      subs_copied: "已复制订阅链接",
+      subs_load_fail: "订阅列表加载失败",
     },
     en: {
       skip: "Skip to content",
@@ -67,6 +77,16 @@
       copied_one: "Copied: ", copied_all: (n) => `Copied ${n} proxies to clipboard`,
       downloaded: (n) => `Downloaded ${n} proxies`,
       page_of: (a, b) => `${a} / ${b}`,
+      subs_title: "Import into proxy clients",
+      subs_intro: "Copy a subscription URL and paste it into the matching client. Works with Clash Verge / V2RayN / Surge etc.",
+      subs_guide_title: "📌 Import steps per client (click to expand)",
+      subs_copy_url: "Copy subscription URL",
+      subs_open_raw: "View raw",
+      subs_format_clash: "Clash/Mihomo config",
+      subs_format_v2ray: "V2Ray base64 subscription",
+      subs_format_links: "Link list",
+      subs_copied: "Subscription URL copied",
+      subs_load_fail: "Failed to load subscription list",
     },
   };
 
@@ -74,6 +94,7 @@
   let allProxies = [];
   let filtered = [];
   let summary = null;
+  let subsManifest = null;
   let countries = [];
   let page = 1;
   let lang = localStorage.getItem("fpl-lang") || (navigator.language.startsWith("zh") ? "zh" : "en");
@@ -102,6 +123,9 @@
     lastUpdate: $("#lastUpdate"),
     sourcesSection: $("#sourcesSection"),
     sourceBars: $("#sourceBars"),
+    subsSection: $("#subsSection"),
+    subsGrid: $("#subsGrid"),
+    subsGuideBody: $("#subsGuideBody"),
     toast: $("#toast"),
     langToggle: $("#langToggle"),
     langLabel: $("#langLabel"),
@@ -164,10 +188,11 @@
   async function load() {
     try {
       summary = await fetchJSON(`${DATA_BASE}/summary.json`);
-      // Load all types in parallel.
-      const data = await Promise.all(
-        TYPES.map((tp) => fetchJSON(`${DATA_BASE}/${tp}.json`).catch(() => []))
-      );
+      // Load all types + subscriptions in parallel.
+      const [data, subsManifestResp] = await Promise.all([
+        Promise.all(TYPES.map((tp) => fetchJSON(`${DATA_BASE}/${tp}.json`).catch(() => []))),
+        fetchJSON(`${DATA_BASE}/subscriptions.json`).catch(() => null),
+      ]);
       allProxies = [];
       TYPES.forEach((tp, i) => {
         (data[i] || []).forEach((p) => allProxies.push({ ...p, type: p.type || tp }));
@@ -176,9 +201,11 @@
       const ccSet = new Set();
       allProxies.forEach((p) => ccSet.add(p.country_code || "UNKNOWN"));
       countries = [...ccSet].sort();
+      subsManifest = subsManifestResp;
       renderHero();
       renderCountryFilter();
       renderSources();
+      renderSubs();
       applyFilters();
     } catch (e) {
       console.error(e);
@@ -239,6 +266,57 @@
         </div>`;
       })
       .join("");
+  }
+
+  // ----- Render: subscription center -----
+  function renderSubs() {
+    const manifest = subsManifest;
+    if (!manifest || !manifest.subscriptions || !manifest.subscriptions.length) {
+      el.subsSection.hidden = true;
+      return;
+    }
+    el.subsSection.hidden = false;
+
+    const formatLabel = (fmt) =>
+      fmt === "clash" ? t("subs_format_clash") : fmt === "v2ray" ? t("subs_format_v2ray") : t("subs_format_links");
+    const formatIcon = (fmt) => (fmt === "clash" ? "🌀" : fmt === "v2ray" ? "📡" : "🔗");
+
+    el.subsGrid.innerHTML = manifest.subscriptions
+      .map((s) => {
+        const name = lang === "zh" ? s.name : (s.name_en || s.name);
+        const url = s.pages || s.raw || "";
+        const escUrl = escapeAttr(url);
+        return `<div class="sub-card" data-format="${s.format}">
+          <div class="sub-head">
+            <span class="sub-icon">${formatIcon(s.format)}</span>
+            <div class="sub-meta">
+              <strong>${escapeHtml(name)}</strong>
+              <small>${formatLabel(s.format)} · ${s.path}</small>
+            </div>
+          </div>
+          <code class="sub-url" title="${escUrl}">${escUrl}</code>
+          <div class="sub-actions">
+            <button class="btn btn-primary btn-sm" data-sub-copy="${escUrl}" type="button">
+              📋 <span>${t("subs_copy_url")}</span>
+            </button>
+            <a class="btn btn-ghost btn-sm" href="${escUrl}" target="_blank" rel="noopener">
+              ↗ <span>${t("subs_open_raw")}</span>
+            </a>
+          </div>
+        </div>`;
+      })
+      .join("");
+
+    // Import guides.
+    if (manifest.import_guides) {
+      const g = manifest.import_guides;
+      const guides = lang === "zh"
+        ? [["Clash Verge", g.clash_verge], ["V2RayN", g.v2rayn], ["Surge", g.surge]]
+        : [["Clash Verge", g.clash_verge_en || g.clash_verge], ["V2RayN", g.v2rayn], ["Surge", g.surge]];
+      el.subsGuideBody.innerHTML = guides
+        .map(([client, text]) => `<p><strong>${client}:</strong> ${escapeHtml(text || "")}</p>`)
+        .join("");
+    }
   }
 
   // ----- Filtering / sorting -----
@@ -384,6 +462,14 @@
     if (ok) toast(t("copied_one") + val);
   }
 
+  async function onCopySub(e) {
+    const btn = e.target.closest("[data-sub-copy]");
+    if (!btn) return;
+    const val = btn.getAttribute("data-sub-copy");
+    const ok = await copyText(val);
+    if (ok) toast(t("subs_copied"));
+  }
+
   // ----- Event wiring -----
   function bind() {
     el.search.addEventListener("input", debounce(applyFilters, 150));
@@ -394,6 +480,7 @@
     el.copyBtn.addEventListener("click", onCopyAll);
     el.downloadBtn.addEventListener("click", onDownload);
     el.body.addEventListener("click", onCopyOne);
+    el.subsGrid.addEventListener("click", onCopySub);
     el.prevBtn.addEventListener("click", () => { if (page > 1) { page--; renderTable(); } });
     el.nextBtn.addEventListener("click", () => {
       const total = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
@@ -404,6 +491,7 @@
       localStorage.setItem("fpl-lang", lang);
       applyI18n();
       renderCountryFilter();
+      renderSubs();
     });
     el.themeToggle.addEventListener("click", () => {
       theme = theme === "dark" ? "light" : "dark";
