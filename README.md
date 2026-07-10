@@ -10,7 +10,7 @@
 [![Last Update](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/kael-odin/awesome-free-proxy-list/main/proxies/summary.json&query=$.updated_utc&label=updated&color=blue)](proxies/summary.json)
 [![GitHub stars](https://img.shields.io/github/stars/kael-odin/awesome-free-proxy-list?style=social)](https://github.com/kael-odin/awesome-free-proxy-list/stargazers)
 
-🌐 [在线仪表盘 / Live Dashboard](https://kael-odin.github.io/awesome-free-proxy-list/) · 📦 [全部代理 / All proxies](proxies/all.txt) · 📊 [统计 / Summary](proxies/summary.json)
+🌐 [在线仪表盘 / Live Dashboard](https://kael-odin.github.io/awesome-free-proxy-list/) · 🔗 [Clash 订阅 / Clash sub](https://kael-odin.github.io/awesome-free-proxy-list/data/clash/all.yaml) · 📦 [全部代理 / All proxies](proxies/all.txt) · 📊 [统计 / Summary](proxies/summary.json)
 
 </div>
 
@@ -27,7 +27,8 @@
 - 🚦 **延迟分档** — 按延迟排序，分 fast / medium / slow 三档，提供最快子集
 - 📦 **多格式输出** — `txt` / `json` / `csv` / 按国家分文件 / 最快子集
 - 🖥️ **在线仪表盘** — 纯静态 SPA，搜索 / 筛选 / 排序 / 复制 / 一键下载，中英双语 + 暗色模式
-- 🔗 **零依赖消费** — 任一 `proxies/*.txt` 都是 `host:port` 一行一个，`curl` 直接用
+- 🔗 **一键导入客户端** — 预生成 Clash / V2Ray / Surge 订阅链接，粘贴即用，支持按类型/国家分组
+- ⚡ **零依赖消费** — 任一 `proxies/*.txt` 都是 `host:port` 一行一个，`curl` 直接用
 
 ## 📊 实时统计 / Stats
 
@@ -58,6 +59,10 @@ Last update (UTC): **2026-07-10T07:19:03+00:00**
 | `proxies/all.csv` | CSV（含国家/延迟/档位/来源），可导入 Excel/pandas |
 | `proxies/json/*.json` | 结构化 JSON，每项含 `ip/port/type/country/country_code/latency_ms/tier/source` |
 | `proxies/by-country/<CC>.txt` | 按国家代码分文件（如 `US.txt`、`CN.txt`） |
+| `proxies/clash/*.yaml` | **Clash/Mihomo 配置**（含 proxy-groups 按类型/国家分组 + AUTO 测速 + rules） |
+| `proxies/v2ray/all.txt` | **V2Ray base64 订阅**（一行 base64，包含全部 URL） |
+| `proxies/links/*.txt` | **链接列表**（`http://ip:port`、`socks5://ip:port`，通用） |
+| `proxies/subscriptions.json` | 订阅清单（所有订阅的 Pages/raw URL + 导入指南） |
 | `proxies/summary.json` | 汇总统计（含 `by_tier`/`by_country`/`top_fastest`/`sources`） |
 
 ### curl 一行下载
@@ -101,6 +106,24 @@ console.log(data);
 
 不想下载？直接用浏览器打开 **[在线仪表盘](https://kael-odin.github.io/awesome-free-proxy-list/)**：
 搜索 IP / 国家 / 端口，按类型、国家、延迟档筛选，一键复制或下载当前结果。支持暗色模式与中英双语切换。
+
+### 🔗 一键导入代理软件（Clash Verge / V2RayN / Surge）
+
+本仓库为常见代理客户端预生成订阅文件，**复制链接粘贴即可导入**，无需手动逐条添加：
+
+| 客户端 | 订阅链接 | 格式 |
+|---|---|---|
+| **Clash Verge / Mihomo** | `https://kael-odin.github.io/awesome-free-proxy-list/data/clash/all.yaml` | Clash YAML（HTTP+SOCKS5） |
+| Clash Verge（仅 HTTP） | `https://kael-odin.github.io/awesome-free-proxy-list/data/clash/http.yaml` | Clash YAML |
+| **V2RayN / V2Ray** | `https://kael-odin.github.io/awesome-free-proxy-list/data/v2ray/all.txt` | base64 订阅 |
+| Surge / 通用链接 | `https://kael-odin.github.io/awesome-free-proxy-list/data/links/http.txt` | `http://ip:port` 列表 |
+
+**导入步骤**：
+1. **Clash Verge**：打开 → 配置（订阅）→ 粘贴上面的 Clash YAML 链接 → 更新 → 在代理页选中该配置 → 选「🚀 PROXY」或「♻️ AUTO」分组（AUTO 会自动测速选最快节点）
+2. **V2RayN**：订阅 → 订阅设置 → 粘贴 v2ray base64 链接 → 更新（注意勾选 SOCKS5）
+3. **Surge**：策略 → 新建外部代理列表 → 粘贴 links/http.txt 链接
+
+> 仪表盘「🔗 一键导入代理软件」区也有全部链接 + 一键复制按钮 + 导入指南。免费代理质量参差，建议用「♻️ AUTO」自动测速组。
 
 ## ⚙️ 工作原理
 

@@ -42,7 +42,7 @@ jobs:
       - run: pip install -r requirements.txt
 
       - name: Syntax check
-        run: python -m py_compile scripts/update.py scripts/geoip_lookup.py scripts/check.py scripts/test_proxies.py
+        run: python -m py_compile scripts/update.py scripts/geoip_lookup.py scripts/check.py scripts/test_proxies.py scripts/subscription.py
 
       - name: Tiny update run (5 candidates, no network stress)
         env:
@@ -58,4 +58,23 @@ jobs:
           test -f proxies/all.csv
           test -f proxies/summary.json
           test -f docs/data/summary.json
-          echo "All expected outputs present."
+          # Subscription endpoints
+          test -f proxies/clash/all.yaml
+          test -f proxies/v2ray/all.txt
+          test -f proxies/links/all.txt
+          test -f proxies/subscriptions.json
+          test -f docs/data/clash/all.yaml
+          echo "All expected outputs (incl. subscriptions) present."
+
+      - name: Validate Clash YAML is parseable
+        run: |
+          pip install pyyaml
+          python - <<'PY'
+          import yaml, glob
+          for f in glob.glob("proxies/clash/*.yaml"):
+              with open(f, encoding="utf-8") as fh:
+                  d = yaml.safe_load(fh)
+              assert "proxies" in d and "proxy-groups" in d, f"{f}: missing keys"
+              assert isinstance(d["proxies"], list), f"{f}: proxies not a list"
+              print(f"OK {f}: {len(d['proxies'])} proxies, {len(d['proxy-groups'])} groups")
+          PY
