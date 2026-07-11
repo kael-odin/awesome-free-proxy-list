@@ -1,0 +1,79 @@
+name: refresh-proxy-list
+
+# Lightweight re-validation: re-tests only proxies already in proxies/json/ (no
+# scraping), so it runs ~5x faster than the daily update. Keeps the list fresher
+# than once-a-day given free proxies live for minutes-to-hours.
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Every 6 hours at off-round minutes to spread API load (not :00/:30).
+    - cron: "23 */6 * * *"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  # Separate group from update-proxy-list so the two never cancel each other.
+  group: refresh-proxy-list
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Refresh proxies (re-validate existing set only)
+        env:
+          PROXY_TIMEOUT_SEC: "8"
+          PROXY_CONCURRENCY: "200"
+        run: python scripts/update.py --refresh
+
+      - name: Commit changes (if any)
+        run: |
+          if git diff --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: 6h proxy refresh (re-validate existing)"
+          git pull --rebase origin main || (echo "Rebase failed; abandoning this run." && exit 0)
+          git push
+
+  deploy-pages:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

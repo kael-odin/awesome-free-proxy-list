@@ -186,13 +186,20 @@ python scripts/update.py         # 全量；小规模试跑可设环境变量（
 | `PROXY_TOP_HTTP_LIMIT` | `100` | 最快 HTTP 子集大小 |
 | `PROXY_GEOIP_ENABLE` | `1` | `0`/`false` 关闭 GeoIP |
 | `PROXY_GEOIP_DB` | （缓存） | 指定本地 `.mmdb` 路径，跳过下载 |
-| `PROXY_ANON_PROBE_TOP` | `100` | 每类型取 top-N 探针匿名度（控制耗时） |
+| `PROXY_ANON_PROBE_TOP` | `0` | `0`=匿名度探针覆盖全部已验证代理；`N`=仅每类型 top-N（匿名度已在验证时内联判定，此为 fallback） |
+| `PROXY_ANON_CONCURRENCY` | `40` | 匿名度 fallback 探针并发数 |
 | `PROXY_STABLE_MIN_STREAK` | `2` | 计入 `stable.txt` 的最小连续存活天数 |
 
 小规模试跑示例：
 
 ```bash
 PROXY_MAX_PER_TYPE=50 PROXY_CONCURRENCY=50 python scripts/update.py
+```
+
+轻量刷新（只重验现有代理，不重新抓取，约快 5 倍）：
+
+```bash
+python scripts/update.py --refresh
 ```
 
 ### 本地预览仪表盘
@@ -234,7 +241,7 @@ cd docs && python -m http.server 8088   # 浏览器打开 http://localhost:8088
   `https.txt` 里每个代理至少通过了 HTTP 测试。多数 HTTP 正向代理也能通过 CONNECT 处理 HTTPS；当没有任何代理显式通过 HTTPS 测试时，HTTP 验证列表会作为 HTTPS 候选暴露，避免空文件的同时保持合理质量门槛。
 
 - **数据多久更新一次？可能过期吗？**
-  GitHub Actions 每日 00:15 UTC 自动验证。免费代理存活以分钟/小时计，故列表实时可用性有限——仪表盘顶部会显示更新时间，超过 30 小时标记 ⚠ 提醒数据可能过期。需要实时可用代理请用商业服务。
+  两档更新：**每日 00:15 UTC 全量**（重新抓取 10+ 来源 + 验证）+ **每 6 小时轻量刷新**（只重验现有代理，不抓取，跑得快）。免费代理存活以分钟/小时计，故列表实时可用性仍有限——仪表盘顶部会显示更新时间，超过 30 小时标记 ⚠ 提醒数据可能过期。需要实时可用代理请用商业服务。
 
 - **在系统代理 / VPN（如 Clash / TUN 模式）下能用吗？**
   可以，但流量会先过系统代理/VPN，再过免费代理（代理链）。若你的系统代理/VPN 出口 IP 被某些公共代理或 `httpbin.org` 封禁，失败率会上升。更纯净的测试可临时关闭系统代理。

@@ -24,6 +24,7 @@ import csv
 import json
 import os
 import re
+import sys
 import time
 import dataclasses
 import json as _json
@@ -434,6 +435,32 @@ async def validate_forward(
     return http_ok, https_pass
 
 
+def _load_existing_as_candidates() -> tuple[dict[str, dict[str, str]], dict[str, int]]:
+    """Load previously-verified proxies from proxies/json/ as scrape-shaped candidates.
+
+    Used by --refresh mode to re-validate the existing set without scraping sources.
+    Returns (buckets, counts) where buckets = {"forward": {hp: source}, "socks4": ...,
+    "socks5": ...} matching scrape_all_sources()'s shape.
+    """
+    buckets: dict[str, dict[str, str]] = {"forward": {}, "socks4": {}, "socks5": {}}
+    counts: dict[str, int] = {}
+    for name, bucket in (("http", "forward"), ("https", "forward"), ("socks4", "socks4"), ("socks5", "socks5")):
+        path = JSON_DIR / f"{name}.json"
+        if not path.exists():
+            counts[name] = 0
+            continue
+        try:
+            items = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            counts[name] = 0
+            continue
+        for x in items:
+            hp = f"{x['ip']}:{x['port']}"
+            buckets[bucket].setdefault(hp, x.get("source") or "refresh")
+        counts[name] = len(items)
+    return buckets, counts
+
+
 def to_proxies(proxy_type: ProxyType, hostports_with_source: dict[str, str]) -> list[Proxy]:
     out: list[Proxy] = []
     for hp, src in hostports_with_source.items():
@@ -607,13 +634,22 @@ def sync_docs_data() -> None:
                     shutil.copy2(f, dst_dir / f.name)
 
 
-async def main() -> None:
+async def main(refresh: bool = False) -> None:
     JSON_DIR.mkdir(parents=True, exist_ok=True)
     updated_utc = utc_now_iso()
 
     geoip = GeoIP()
 
-    scraped, source_counts = await scrape_all_sources()
+    if refresh:
+        # Lightweight re-validation: skip scraping, only re-test proxies already in
+        # proxies/json/*.json. Runs ~5x faster than a full update since the candidate
+        # pool is just the previously-verified set (no source fetching/parsing).
+        scraped, source_counts = _load_existing_as_candidates()
+        if not any(scraped.values()):
+            print("Refresh mode: no existing proxies to re-validate; skipping.")
+            return
+    else:
+        scraped, source_counts = await scrape_all_sources()
 
     # Cap candidates to keep runtime stable. Sort for deterministic ordering.
     forward_candidates = dict(sorted(scraped["forward"].items())[:MAX_PER_TYPE])
@@ -881,4 +917,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    refresh = "--refresh" in sys.argv
+    asyncio.run(main(refresh=refresh))
