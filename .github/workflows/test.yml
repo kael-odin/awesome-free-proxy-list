@@ -5,11 +5,13 @@ on:
     branches: [main]
     paths:
       - "scripts/**"
+      - "tests/**"
       - "requirements.txt"
       - ".github/workflows/test.yml"
   pull_request:
     paths:
       - "scripts/**"
+      - "tests/**"
       - "requirements.txt"
       - ".github/workflows/test.yml"
 
@@ -40,9 +42,13 @@ jobs:
           python-version: "3.11"
           cache: "pip"
       - run: pip install -r requirements.txt
+      - run: pip install pytest pyyaml
 
       - name: Syntax check
         run: python -m py_compile scripts/update.py scripts/geoip_lookup.py scripts/check.py scripts/test_proxies.py scripts/subscription.py
+
+      - name: Unit tests
+        run: python -m pytest tests/ -v
 
       - name: Tiny update run (5 candidates, no network stress)
         env:
