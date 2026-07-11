@@ -67,8 +67,10 @@ ANON_PROBE_URLS = [
     "http://httpbin.org/headers",
     "https://httpbin.org/headers",
 ]
-# How many top proxies (per type, by latency) get the anonymity probe.
-ANON_PROBE_TOP = int(os.getenv("PROXY_ANON_PROBE_TOP", "100"))
+# How many proxies (per type, by latency) get the anonymity probe. Default 0 = all
+# verified proxies (full coverage so the dashboard doesn't show a sea of "未测").
+ANON_PROBE_TOP = int(os.getenv("PROXY_ANON_PROBE_TOP", "0"))
+ANON_PROBE_CONCURRENCY = int(os.getenv("PROXY_ANON_CONCURRENCY", "80"))
 
 PROXY_RE = re.compile(r"^\s*(?P<host>\d{1,3}(?:\.\d{1,3}){3})\s*:\s*(?P<port>\d{2,5})\s*$")
 
@@ -617,14 +619,20 @@ async def main() -> None:
     # is the single most actionable signal for user safety, so it's worth the
     # extra requests on a bounded subset.
     real_ip = await get_real_ip()
+    # Build anonymity probe pool. ANON_PROBE_TOP=0 means probe ALL verified proxies
+    # (full coverage); otherwise probe the top-N fastest per type.
+    def _slice(ps: list[Proxy]) -> list[Proxy]:
+        return ps if ANON_PROBE_TOP <= 0 else ps[:ANON_PROBE_TOP]
+
     anon_pool = (
-        http_proxies[:ANON_PROBE_TOP]
-        + socks5_proxies_ok[:ANON_PROBE_TOP]
-        + https_proxies[:ANON_PROBE_TOP // 2]
+        _slice(http_proxies)
+        + _slice(https_proxies)
+        + _slice(socks4_proxies_ok)
+        + _slice(socks5_proxies_ok)
     )
     anon_map: dict[str, str] = {}
     if anon_pool:
-        anon_map = await detect_anonymity(anon_pool, DEFAULT_TIMEOUT_SEC, CONCURRENCY, real_ip)
+        anon_map = await detect_anonymity(anon_pool, DEFAULT_TIMEOUT_SEC, ANON_PROBE_CONCURRENCY, real_ip)
 
     def _with_anon(proxies: list[Proxy]) -> list[Proxy]:
         return [
