@@ -64,13 +64,17 @@ TEST_URL_HTTP = os.getenv("PROXY_TEST_URL_HTTP", "http://api.ipify.org?format=js
 # We inspect whether proxy-related headers (Via / X-Forwarded-For / X-Forwarded)
 # are present to classify the proxy. Fallback list — first reachable wins.
 ANON_PROBE_URLS = [
+    # Multiple endpoints that echo request headers back as JSON. Spreading load
+    # across hosts avoids httpbin rate-limiting (which leaves proxies as "unknown").
     "http://httpbin.org/headers",
     "https://httpbin.org/headers",
+    "https://eu.httpbin.org/headers",
+    "http://eu.httpbin.org/headers",
 ]
 # How many proxies (per type, by latency) get the anonymity probe. Default 0 = all
 # verified proxies (full coverage so the dashboard doesn't show a sea of "未测").
 ANON_PROBE_TOP = int(os.getenv("PROXY_ANON_PROBE_TOP", "0"))
-ANON_PROBE_CONCURRENCY = int(os.getenv("PROXY_ANON_CONCURRENCY", "80"))
+ANON_PROBE_CONCURRENCY = int(os.getenv("PROXY_ANON_CONCURRENCY", "40"))
 
 PROXY_RE = re.compile(r"^\s*(?P<host>\d{1,3}(?:\.\d{1,3}){3})\s*:\s*(?P<port>\d{2,5})\s*$")
 
@@ -276,15 +280,18 @@ PROXY_HEADER_NAMES = ("via", "x-forwarded-for", "x-forwarded", "forwarded")
 
 
 async def _detect_anonymity_one(
-    session: aiohttp.ClientSession, proxy_url: str, real_ip: str | None
+    session: aiohttp.ClientSession, proxy_url: str, real_ip: str | None, *, start_idx: int = 0
 ) -> str:
     """Probe a proxy for anonymity level by inspecting forwarded headers.
 
     Returns one of: 'elite' (no proxy headers leaked), 'anonymous' (proxy headers
     present but real IP not leaked), 'transparent' (real IP leaked via X-Forwarded-For),
-    'unknown' (probe failed).
+    'unknown' (probe failed). Rotates the probe URL list from start_idx so that
+    concurrent probes don't all hammer the same endpoint first (rate-limit spread).
     """
-    for url in ANON_PROBE_URLS:
+    n = len(ANON_PROBE_URLS)
+    for off in range(n):
+        url = ANON_PROBE_URLS[(start_idx + off) % n]
         try:
             async with session.get(url, proxy=proxy_url) as resp:
                 if resp.status >= 400:
@@ -315,12 +322,12 @@ async def detect_anonymity(
     connector = aiohttp.TCPConnector(ssl=False)
 
     async with aiohttp.ClientSession(timeout=timeout, connector=connector, trust_env=False) as session:
-        async def run_one(p: Proxy) -> None:
+        async def run_one(p: Proxy, idx: int) -> None:
             async with sem:
-                level = await _detect_anonymity_one(session, p.url, real_ip)
+                level = await _detect_anonymity_one(session, p.url, real_ip, start_idx=idx)
                 results[p.hostport] = level
 
-        await asyncio.gather(*(run_one(p) for p in proxies))
+        await asyncio.gather(*(run_one(p, i) for i, p in enumerate(proxies)))
     return results
 
 
