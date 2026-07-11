@@ -67,6 +67,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git commit -m "chore: daily proxy list update"
+          # Rebase onto any commits pushed while this run was in progress, then push.
+          git pull --rebase origin main || (echo "Rebase failed; abandoning this run." && exit 0)
           git push
 
   deploy-pages:
