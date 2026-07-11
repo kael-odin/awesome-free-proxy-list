@@ -217,6 +217,52 @@ async def scrape_all_sources() -> tuple[dict[str, dict[str, str]], dict[str, int
     return buckets, dict(counts)
 
 
+def classify_anonymity(headers_json: dict | None, real_ip: str | None) -> str:
+    """Classify anonymity from a headers-echo JSON response.
+
+    'elite'         — no proxy headers (X-Forwarded-For / Via) leaked
+    'anonymous'     — proxy headers present but real IP not in them
+    'transparent'   — real IP leaked via X-Forwarded-For
+    'unknown'       — response missing/unparseable
+    """
+    if not headers_json:
+        return "unknown"
+    headers = {k.lower(): v for k, v in (headers_json.get("headers") or {}).items()}
+    if not headers:
+        return "unknown"
+    xff = headers.get("x-forwarded-for") or headers.get("forwarded") or ""
+    via = headers.get("via") or headers.get("x-forwarded") or ""
+    has_proxy_header = bool(xff or via)
+    if real_ip and real_ip in xff:
+        return "transparent"
+    if has_proxy_header:
+        return "anonymous"
+    return "elite"
+
+
+async def _fetch_headers_via_proxy(
+    session: aiohttp.ClientSession, *, proxy_url: str | None, real_ip: str | None, start_idx: int = 0
+) -> str:
+    """Fetch a headers-echo endpoint through the proxy and classify anonymity.
+
+    Called right after a proxy passes validation, reusing the live session so the
+    proxy is known-good — this lifts anonymity coverage from ~30% (standalone probe
+    that re-connects and often times out) to near the validation success rate.
+    """
+    n = len(ANON_PROBE_URLS)
+    for off in range(n):
+        url = ANON_PROBE_URLS[(start_idx + off) % n]
+        try:
+            async with session.get(url, proxy=proxy_url) as resp:
+                if resp.status >= 400:
+                    continue
+                data = await resp.json(content_type=None)
+            return classify_anonymity(data, real_ip)
+        except Exception:
+            continue
+    return "unknown"
+
+
 async def _check_via_proxy(
     session: aiohttp.ClientSession,
     *,
@@ -230,21 +276,28 @@ async def _check_via_proxy(
         return True
 
 
-async def check_forward_proxy(proxy: Proxy, timeout_s: float) -> tuple[float | None, float | None]:
+async def check_forward_proxy(proxy: Proxy, timeout_s: float, real_ip: str | None = None) -> tuple[float | None, float | None, str]:
     """
-    Returns (http_ms, https_ms). Either can be None if that protocol test fails.
+    Returns (http_ms, https_ms, anonymity). Either ms can be None if that protocol
+    test fails. anonymity is classified inline (reusing the live session) so coverage
+    tracks the validation success rate rather than a separate probe that often times out.
     """
     timeout = aiohttp.ClientTimeout(total=timeout_s)
     connector = aiohttp.TCPConnector(ssl=False)
     async with aiohttp.ClientSession(timeout=timeout, connector=connector, trust_env=True) as session:
         http_ms: float | None = None
         https_ms: float | None = None
+        anonymity = "unknown"
 
         start = time.perf_counter()
         try:
             ok = await _check_via_proxy(session, url=TEST_URL_HTTP, proxy_url=proxy.url)
             if ok:
                 http_ms = (time.perf_counter() - start) * 1000.0
+                # Proxy just confirmed working — probe headers on the same session.
+                anonymity = await _fetch_headers_via_proxy(
+                    session, proxy_url=proxy.url, real_ip=real_ip, start_idx=id(proxy) % len(ANON_PROBE_URLS)
+                )
         except Exception:
             pass
 
@@ -253,13 +306,18 @@ async def check_forward_proxy(proxy: Proxy, timeout_s: float) -> tuple[float | N
             ok = await _check_via_proxy(session, url=TEST_URL_HTTPS, proxy_url=proxy.url)
             if ok:
                 https_ms = (time.perf_counter() - start) * 1000.0
+                if anonymity == "unknown":
+                    anonymity = await _fetch_headers_via_proxy(
+                        session, proxy_url=proxy.url, real_ip=real_ip, start_idx=id(proxy) % len(ANON_PROBE_URLS)
+                    )
         except Exception:
             pass
 
-        return http_ms, https_ms
+        return http_ms, https_ms, anonymity
 
 
-async def check_socks(proxy: Proxy, timeout_s: float) -> float | None:
+async def check_socks(proxy: Proxy, timeout_s: float, real_ip: str | None = None) -> tuple[float | None, str]:
+    """Returns (latency_ms, anonymity). latency_ms is None if the proxy fails."""
     timeout = aiohttp.ClientTimeout(total=timeout_s)
     connector = ProxyConnector.from_url(proxy.url, rdns=True)
     async with aiohttp.ClientSession(timeout=timeout, connector=connector, trust_env=True) as session:
@@ -270,10 +328,15 @@ async def check_socks(proxy: Proxy, timeout_s: float) -> float | None:
                     if resp.status >= 400:
                         continue
                     await resp.read()
-                    return (time.perf_counter() - start) * 1000.0
+                    ms = (time.perf_counter() - start) * 1000.0
+                    # Proxy just confirmed working — probe headers on the same session.
+                    anon = await _fetch_headers_via_proxy(
+                        session, proxy_url=None, real_ip=real_ip, start_idx=id(proxy) % len(ANON_PROBE_URLS)
+                    )
+                    return ms, anon
             except Exception:
                 continue
-    return None
+    return None, "unknown"
 
 
 PROXY_HEADER_NAMES = ("via", "x-forwarded-for", "x-forwarded", "forwarded")
@@ -282,34 +345,14 @@ PROXY_HEADER_NAMES = ("via", "x-forwarded-for", "x-forwarded", "forwarded")
 async def _detect_anonymity_one(
     session: aiohttp.ClientSession, proxy_url: str, real_ip: str | None, *, start_idx: int = 0
 ) -> str:
-    """Probe a proxy for anonymity level by inspecting forwarded headers.
+    """Standalone anonymity probe (fallback for proxies that didn't get one inline).
 
-    Returns one of: 'elite' (no proxy headers leaked), 'anonymous' (proxy headers
-    present but real IP not leaked), 'transparent' (real IP leaked via X-Forwarded-For),
-    'unknown' (probe failed). Rotates the probe URL list from start_idx so that
-    concurrent probes don't all hammer the same endpoint first (rate-limit spread).
+    Rotates the probe URL list from start_idx so concurrent probes don't all hammer
+    the same endpoint first (rate-limit spread).
     """
-    n = len(ANON_PROBE_URLS)
-    for off in range(n):
-        url = ANON_PROBE_URLS[(start_idx + off) % n]
-        try:
-            async with session.get(url, proxy=proxy_url) as resp:
-                if resp.status >= 400:
-                    continue
-                data = await resp.json(content_type=None)
-            headers = {k.lower(): v for k, v in (data.get("headers") or {}).items()}
-            xff = headers.get("x-forwarded-for") or headers.get("forwarded") or ""
-            via = headers.get("via") or headers.get("x-forwarded") or ""
-            has_proxy_header = bool(xff or via)
-            # Transparent: real IP appears in X-Forwarded-For.
-            if real_ip and real_ip in xff:
-                return "transparent"
-            if has_proxy_header:
-                return "anonymous"
-            return "elite"
-        except Exception:
-            continue
-    return "unknown"
+    return await _fetch_headers_via_proxy(
+        session, proxy_url=proxy_url, real_ip=real_ip, start_idx=start_idx
+    )
 
 
 async def detect_anonymity(
@@ -347,16 +390,17 @@ async def get_real_ip(timeout_s: float = 10.0) -> str | None:
 
 
 async def validate_socks(
-    proxies: Iterable[Proxy], timeout_s: float, concurrency: int
-) -> list[tuple[Proxy, float]]:
+    proxies: Iterable[Proxy], timeout_s: float, concurrency: int, real_ip: str | None = None
+) -> list[tuple[Proxy, float, str]]:
+    """Returns list of (proxy, latency_ms, anonymity) for proxies that passed."""
     sem = asyncio.Semaphore(concurrency)
-    ok: list[tuple[Proxy, float]] = []
+    ok: list[tuple[Proxy, float, str]] = []
 
     async def run_one(p: Proxy) -> None:
         async with sem:
-            ms = await check_socks(p, timeout_s)
+            ms, anon = await check_socks(p, timeout_s, real_ip)
             if ms is not None:
-                ok.append((p, ms))
+                ok.append((p, ms, anon))
 
     await asyncio.gather(*(run_one(p) for p in proxies))
     ok.sort(key=lambda x: x[1])
@@ -364,24 +408,24 @@ async def validate_socks(
 
 
 async def validate_forward(
-    proxies: Iterable[Proxy], timeout_s: float, concurrency: int
-) -> tuple[list[tuple[Proxy, float, float | None]], set[str]]:
+    proxies: Iterable[Proxy], timeout_s: float, concurrency: int, real_ip: str | None = None
+) -> tuple[list[tuple[Proxy, float, float | None, str]], set[str]]:
     """
     Returns (ok_list, https_pass_set).
 
-    ok_list: (proxy, http_ms, https_ms) for proxies that passed the HTTP test,
-             sorted by HTTP latency ascending. https_ms may be None.
+    ok_list: (proxy, http_ms, https_ms, anonymity) for proxies that passed the HTTP
+             test, sorted by HTTP latency ascending. https_ms may be None.
     https_pass_set: hostports that explicitly passed the HTTPS test.
     """
     sem = asyncio.Semaphore(concurrency)
-    http_ok: list[tuple[Proxy, float, float | None]] = []
+    http_ok: list[tuple[Proxy, float, float | None, str]] = []
     https_pass: set[str] = set()
 
     async def run_one(p: Proxy) -> None:
         async with sem:
-            http_ms, https_ms = await check_forward_proxy(p, timeout_s)
+            http_ms, https_ms, anon = await check_forward_proxy(p, timeout_s, real_ip)
             if http_ms is not None:
-                http_ok.append((p, http_ms, https_ms))
+                http_ok.append((p, http_ms, https_ms, anon))
             if https_ms is not None:
                 https_pass.add(p.hostport)
 
@@ -580,38 +624,42 @@ async def main() -> None:
     socks4_proxies = to_proxies("socks4", socks4_candidates)
     socks5_proxies = to_proxies("socks5", socks5_candidates)
 
-    forward_ok, _https_pass = await validate_forward(
-        forward_proxies, DEFAULT_TIMEOUT_SEC, CONCURRENCY
-    )
-    socks4_ok = await validate_socks(socks4_proxies, DEFAULT_TIMEOUT_SEC, CONCURRENCY)
-    socks5_ok = await validate_socks(socks5_proxies, DEFAULT_TIMEOUT_SEC, CONCURRENCY)
+    # Real IP fetched once before validation so anonymity can be classified inline
+    # during each proxy's validation (no separate probe pass that times out).
+    real_ip = await get_real_ip()
 
-    # Build validated Proxy lists with latency, sorted fastest-first.
+    forward_ok, _https_pass = await validate_forward(
+        forward_proxies, DEFAULT_TIMEOUT_SEC, CONCURRENCY, real_ip
+    )
+    socks4_ok = await validate_socks(socks4_proxies, DEFAULT_TIMEOUT_SEC, CONCURRENCY, real_ip)
+    socks5_ok = await validate_socks(socks5_proxies, DEFAULT_TIMEOUT_SEC, CONCURRENCY, real_ip)
+
+    # Build validated Proxy lists with latency + inline anonymity, sorted fastest-first.
     http_proxies: list[Proxy] = [
-        Proxy(type="http", host=p.host, port=p.port, latency_ms=http_ms, source=p.source)
-        for p, http_ms, _https_ms in forward_ok
+        Proxy(type="http", host=p.host, port=p.port, latency_ms=http_ms, anonymity=anon, source=p.source)
+        for p, http_ms, _https_ms, anon in forward_ok
     ]
     # HTTPS list = forward proxies that explicitly passed the HTTPS test.
     https_proxies: list[Proxy] = [
-        Proxy(type="https", host=p.host, port=p.port, latency_ms=https_ms, source=p.source)
-        for p, _http_ms, https_ms in forward_ok
+        Proxy(type="https", host=p.host, port=p.port, latency_ms=https_ms, anonymity=anon, source=p.source)
+        for p, _http_ms, https_ms, anon in forward_ok
         if https_ms is not None
     ]
     # Fallback: expose HTTP list as HTTPS candidates when none passed HTTPS test,
     # since most HTTP forward proxies support HTTPS via CONNECT. Avoids empty https.txt.
     if not https_proxies and http_proxies:
         https_proxies = [
-            Proxy(type="https", host=p.host, port=p.port, latency_ms=p.latency_ms, source=p.source)
+            Proxy(type="https", host=p.host, port=p.port, latency_ms=p.latency_ms, anonymity=p.anonymity, source=p.source)
             for p in http_proxies
         ]
 
     socks4_proxies_ok: list[Proxy] = [
-        Proxy(type="socks4", host=p.host, port=p.port, latency_ms=ms, source=p.source)
-        for p, ms in socks4_ok
+        Proxy(type="socks4", host=p.host, port=p.port, latency_ms=ms, anonymity=anon, source=p.source)
+        for p, ms, anon in socks4_ok
     ]
     socks5_proxies_ok: list[Proxy] = [
-        Proxy(type="socks5", host=p.host, port=p.port, latency_ms=ms, source=p.source)
-        for p, ms in socks5_ok
+        Proxy(type="socks5", host=p.host, port=p.port, latency_ms=ms, anonymity=anon, source=p.source)
+        for p, ms, anon in socks5_ok
     ]
 
     # Enrich all working proxies with GeoIP country.
@@ -621,22 +669,20 @@ async def main() -> None:
     socks4_proxies_ok = rebuild_with_enrichment(socks4_proxies_ok, geoip)
     socks5_proxies_ok = rebuild_with_enrichment(socks5_proxies_ok, geoip)
 
-    # --- Anonymity detection (only on top-N per type to bound runtime) ---
-    # We probe the fastest proxies for whether they leak proxy headers. This
-    # is the single most actionable signal for user safety, so it's worth the
-    # extra requests on a bounded subset.
-    real_ip = await get_real_ip()
-    # Build anonymity probe pool. ANON_PROBE_TOP=0 means probe ALL verified proxies
-    # (full coverage); otherwise probe the top-N fastest per type.
+    # --- Anonymity fallback probe ---
+    # Anonymity was classified inline during validation (reusing each proxy's live
+    # session). A separate probe pass now only re-attempts the proxies that came back
+    # "unknown" (probe timed out under rate-limiting) — bounded by ANON_PROBE_TOP.
     def _slice(ps: list[Proxy]) -> list[Proxy]:
         return ps if ANON_PROBE_TOP <= 0 else ps[:ANON_PROBE_TOP]
 
-    anon_pool = (
-        _slice(http_proxies)
-        + _slice(https_proxies)
-        + _slice(socks4_proxies_ok)
-        + _slice(socks5_proxies_ok)
-    )
+    anon_pool = [
+        p for p in (
+            _slice(http_proxies) + _slice(https_proxies)
+            + _slice(socks4_proxies_ok) + _slice(socks5_proxies_ok)
+        )
+        if p.anonymity == "unknown"
+    ]
     anon_map: dict[str, str] = {}
     if anon_pool:
         anon_map = await detect_anonymity(anon_pool, DEFAULT_TIMEOUT_SEC, ANON_PROBE_CONCURRENCY, real_ip)
