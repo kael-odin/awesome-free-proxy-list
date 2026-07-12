@@ -46,15 +46,15 @@
 ## 📊 实时统计 / Stats
 
 <!-- STATS:START -->
-Last update (UTC): **2026-07-11T19:35:14+00:00**
+Last update (UTC): **2026-07-12T04:02:17+00:00**
 
 | Type | Working | Total Candidates |
 |---|---:|---:|
-| HTTP | 121 | 137 |
-| HTTPS | 90 | 137 |
-| SOCKS4 | 91 | 97 |
-| SOCKS5 | 74 | 114 |
-| ALL | 267 | 348 |
+| HTTP | 61 | 121 |
+| HTTPS | 33 | 121 |
+| SOCKS4 | 89 | 91 |
+| SOCKS5 | 63 | 74 |
+| ALL | 196 | 286 |
 <!-- STATS:END -->
 
 > 统计由 `scripts/update.py` 在每次运行后自动注入，无需手工维护。
