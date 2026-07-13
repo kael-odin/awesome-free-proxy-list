@@ -37,7 +37,7 @@ from typing import Iterable, Literal
 import aiohttp
 from aiohttp_socks import ProxyConnector
 
-from geoip_lookup import GeoIP
+from geoip_lookup import GeoIP, GeoASN
 
 ProxyType = Literal["http", "https", "socks4", "socks5"]
 
@@ -95,6 +95,10 @@ class Proxy:
     anonymity: str = "unknown"
     # Consecutive days this proxy has been seen working (for the stable subset).
     streak: int = 0
+    # ASN enrichment (inferred from GeoLite2-ASN). asn=0 / org="" if unavailable.
+    asn: int = 0
+    asn_org: str = ""
+    ip_type: str = "unknown"  # 'datacenter' | 'residential' | 'unknown'
 
     @property
     def hostport(self) -> str:
@@ -123,6 +127,9 @@ class Proxy:
             "tier": self.tier,
             "anonymity": self.anonymity,
             "streak": self.streak,
+            "asn": self.asn,
+            "asn_org": self.asn_org,
+            "ip_type": self.ip_type,
             "source": self.source,
             "updated_utc": updated_utc,
         }
@@ -469,12 +476,16 @@ def to_proxies(proxy_type: ProxyType, hostports_with_source: dict[str, str]) -> 
     return out
 
 
-def rebuild_with_enrichment(proxies: list[Proxy], geoip: GeoIP) -> list[Proxy]:
-    """Return a new list of Proxy objects with country filled in (best-effort)."""
+def rebuild_with_enrichment(
+    proxies: list[Proxy], geoip: GeoIP, geoasn: GeoASN | None = None
+) -> list[Proxy]:
+    """Return a new list of Proxy objects with country + ASN filled in (best-effort)."""
     have_geoip = geoip.available
+    have_asn = geoasn is not None and geoasn.available
     out: list[Proxy] = []
     for p in proxies:
         country, code = (geoip.lookup(p.host) if have_geoip else ("", ""))
+        asn, org, ip_type = (geoasn.lookup(p.host) if have_asn else (0, "", "unknown"))
         out.append(
             Proxy(
                 type=p.type,
@@ -486,6 +497,9 @@ def rebuild_with_enrichment(proxies: list[Proxy], geoip: GeoIP) -> list[Proxy]:
                 source=p.source,
                 anonymity=p.anonymity,
                 streak=p.streak,
+                asn=asn,
+                asn_org=org,
+                ip_type=ip_type,
             )
         )
     return out
@@ -500,7 +514,7 @@ def write_json(path: Path, items: list[dict]) -> None:
 
 
 def write_csv(path: Path, items: list[dict]) -> None:
-    fieldnames = ["ip", "port", "type", "country", "country_code", "latency_ms", "tier", "anonymity", "streak", "source", "updated_utc"]
+    fieldnames = ["ip", "port", "type", "country", "country_code", "latency_ms", "tier", "anonymity", "streak", "asn", "asn_org", "ip_type", "source", "updated_utc"]
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
@@ -542,9 +556,13 @@ def update_readme_stats(stats: dict) -> None:
         return
 
     c = stats["counts"]
+    trusted = c["all"].get("top_trusted", 0)
     block = (
         f"{start}\n"
         f"Last update (UTC): **{stats['updated_utc']}**\n\n"
+        f"> 🏆 **Top trusted: {trusted}** — fast ∩ high-anon ∩ survived ≥2 days. "
+        f"The highest-success subset [`proxies/top-trusted.txt`](proxies/top-trusted.txt) "
+        f"(may be 0 on a fresh install before streaks accumulate).\n\n"
         f"| Type | Working | Total Candidates |\n"
         f"|---|---:|---:|\n"
         f"| HTTP | {c['http']['working']} | {c['http']['candidates']} |\n"
@@ -639,6 +657,7 @@ async def main(refresh: bool = False) -> None:
     updated_utc = utc_now_iso()
 
     geoip = GeoIP()
+    geoasn = GeoASN()
 
     if refresh:
         # Lightweight re-validation: skip scraping, only re-test proxies already in
@@ -698,12 +717,13 @@ async def main(refresh: bool = False) -> None:
         for p, ms, anon in socks5_ok
     ]
 
-    # Enrich all working proxies with GeoIP country.
+    # Enrich all working proxies with GeoIP country (+ ASN ip-type inference).
     geoip_on = geoip.available
-    http_proxies = rebuild_with_enrichment(http_proxies, geoip)
-    https_proxies = rebuild_with_enrichment(https_proxies, geoip)
-    socks4_proxies_ok = rebuild_with_enrichment(socks4_proxies_ok, geoip)
-    socks5_proxies_ok = rebuild_with_enrichment(socks5_proxies_ok, geoip)
+    asn_on = geoasn.available
+    http_proxies = rebuild_with_enrichment(http_proxies, geoip, geoasn)
+    https_proxies = rebuild_with_enrichment(https_proxies, geoip, geoasn)
+    socks4_proxies_ok = rebuild_with_enrichment(socks4_proxies_ok, geoip, geoasn)
+    socks5_proxies_ok = rebuild_with_enrichment(socks5_proxies_ok, geoip, geoasn)
 
     # --- Anonymity fallback probe ---
     # Anonymity was classified inline during validation (reusing each proxy's live
@@ -803,6 +823,7 @@ async def main(refresh: bool = False) -> None:
                 f"Skipping overwrite to preserve prior data."
             )
             geoip.close()
+            geoasn.close()
             return
 
     write_txt(OUT_DIR / "http.txt", http_hostports)
@@ -827,6 +848,19 @@ async def main(refresh: bool = False) -> None:
     write_txt(OUT_DIR / "transparent.txt", transparent)
     # stable.txt is already written by save_history().
     write_txt(OUT_DIR / "fast-only.txt", [p.hostport for p in all_proxies if p.tier == "fast"])
+
+    # Top-trusted intersection: fast latency ∩ elite (high-anon) ∩ streak ≥ 2.
+    # The "trust anchor" — a small subset where success rate is materially
+    # higher than a random pick from all.txt. Honest: free proxies still fail,
+    # but this set filters out the slowest, the identity-leaking, and the
+    # one-day wonders. May be empty on a fresh install (streak needs ≥2 days).
+    top_trusted = [
+        p.hostport for p in all_proxies
+        if p.tier == "fast"
+        and p.anonymity == "elite"
+        and p.streak >= STABLE_MIN_STREAK
+    ]
+    write_txt(OUT_DIR / "top-trusted.txt", top_trusted)
 
     # Structured JSON outputs.
     write_json(JSON_DIR / "http.json", [p.to_dict(updated_utc) for p in http_proxies])
@@ -853,6 +887,12 @@ async def main(refresh: bool = False) -> None:
             out[p.anonymity] += 1
         return dict(out)
 
+    def _ip_type_counts(proxies: list[Proxy]) -> dict[str, int]:
+        out: dict[str, int] = defaultdict(int)
+        for p in proxies:
+            out[p.ip_type] += 1
+        return dict(out)
+
     top_country_counts = dict(sorted(by_country.items(), key=lambda kv: -kv[1])[:15])
 
     stats = {
@@ -864,6 +904,7 @@ async def main(refresh: bool = False) -> None:
             "test_url_https": TEST_URL_HTTPS,
             "test_url_http": TEST_URL_HTTP,
             "geoip_enabled": geoip_on,
+            "asn_enabled": asn_on,
             "tier_thresholds_ms": {"fast": TIER_FAST_MS, "medium": TIER_MEDIUM_MS},
         },
         "sources": {
@@ -882,6 +923,7 @@ async def main(refresh: bool = False) -> None:
                 + len(socks4_candidates)
                 + len(socks5_candidates),
                 "working": len(all_proxies),
+                "top_trusted": len(top_trusted),
             },
         },
         "by_tier": {
@@ -898,6 +940,15 @@ async def main(refresh: bool = False) -> None:
             "all": anon_counts(all_proxies),
             "note": "elite=high-anon(no proxy headers); anonymous=headers but hides real IP; transparent=leaks real IP; unknown=not probed (only top-N per type probed to bound runtime)",
             "probed_top_n": ANON_PROBE_TOP,
+        },
+        # IP type inferred from ASN (datacenter / residential / unknown).
+        # Honest: free public proxy pools are overwhelmingly datacenter IPs;
+        # 'unknown' = ASN not in our keyword tables (often small/hosting ISPs).
+        # This is inference from the ASN org string, NOT a ground-truth classification.
+        "by_ip_type": {
+            "all": _ip_type_counts(all_proxies),
+            "asn_db_available": asn_on,
+            "note": "datacenter=ASN org matches cloud/VPS/hosting keywords; residential=consumer/mobile ISP keywords; unknown=ASN unavailable or not in keyword tables. Inference, not ground truth.",
         },
         "history": (
             _json.loads((OUT_DIR / "history-summary.json").read_text(encoding="utf-8"))
@@ -927,11 +978,13 @@ async def main(refresh: bool = False) -> None:
     sync_docs_data()
 
     geoip.close()
+    geoasn.close()
 
     print(
         f"Done. http={len(http_proxies)} https={len(https_proxies)} "
         f"socks4={len(socks4_proxies_ok)} socks5={len(socks5_proxies_ok)} "
         f"all={len(all_proxies)} geoip={'on' if geoip_on else 'off'}"
+        f" asn={'on' if asn_on else 'off'}"
     )
 
 

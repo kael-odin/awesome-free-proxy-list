@@ -248,6 +248,19 @@ a:hover { text-decoration: underline; }
 .stat-card.is-socks4 .num { color: var(--socks4); }
 .stat-card.is-socks5 .num { color: var(--socks5); }
 .stat-card.is-all .num { color: var(--accent); }
+.stat-card.is-trusted { border-color: var(--accent); }
+.stat-card.is-trusted .num { color: var(--accent); }
+.volatility-note {
+  margin-top: 12px;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  background: var(--surface-alt, transparent);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--border);
+}
+[data-theme="dark"] .volatility-note { border-left-color: var(--accent); }
 
 /* ===== Controls ===== */
 .controls {
@@ -393,6 +406,10 @@ a:hover { text-decoration: underline; }
 .anon-anon { color: #ca8a04; background: color-mix(in srgb, #ca8a04 14%, transparent); }
 .anon-trans { color: #dc2626; background: color-mix(in srgb, #dc2626 14%, transparent); }
 .anon-unknown { color: var(--text-muted); background: color-mix(in srgb, var(--text-muted) 12%, transparent); }
+/* IP-type badges (ASN-inferred datacenter/residential) */
+.iptype-dc { color: #2563eb; background: color-mix(in srgb, #2563eb 14%, transparent); }
+.iptype-res { color: #db2777; background: color-mix(in srgb, #db2777 14%, transparent); }
+.iptype-unknown { color: var(--text-muted); background: color-mix(in srgb, var(--text-muted) 12%, transparent); }
 .tier-fast { color: var(--fast); }
 .tier-medium { color: var(--medium); }
 .tier-slow { color: var(--slow); }

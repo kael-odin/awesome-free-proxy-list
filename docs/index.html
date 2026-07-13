@@ -102,6 +102,15 @@
             <option value="unknown">? 未测 unknown</option>
           </select>
         </label>
+        <label>
+          <span data-i18n="ip_type">IP品类</span>
+          <select id="ipTypeFilter">
+            <option value="all" data-i18n="all_types">全部</option>
+            <option value="datacenter">🏢 数据中心 datacenter</option>
+            <option value="residential">🏠 住宅 residential</option>
+            <option value="unknown">? 未知 unknown</option>
+          </select>
+        </label>
         <label class="sort-label">
           <span data-i18n="sort">排序</span>
           <select id="sortBy">
@@ -139,11 +148,12 @@
             <th data-i18n="th_latency">延迟</th>
             <th data-i18n="th_tier">档位</th>
             <th data-i18n="th_anon">匿名度</th>
+            <th data-i18n="th_ip_type">IP品类</th>
             <th data-i18n="th_actions">操作</th>
           </tr>
         </thead>
         <tbody id="proxyBody">
-          <tr class="loading-row"><td colspan="8" id="loadingCell" data-i18n="loading">加载中…</td></tr>
+          <tr class="loading-row"><td colspan="9" id="loadingCell" data-i18n="loading">加载中…</td></tr>
         </tbody>
       </table>
       <div class="pagination" id="pagination" hidden>

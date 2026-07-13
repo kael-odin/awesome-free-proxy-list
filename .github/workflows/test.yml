@@ -63,6 +63,7 @@ jobs:
           test -f proxies/json/all.json
           test -f proxies/all.csv
           test -f proxies/summary.json
+          test -f proxies/top-trusted.txt
           test -f docs/data/summary.json
           # Subscription endpoints
           test -f proxies/clash/all.yaml

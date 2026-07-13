@@ -24,18 +24,20 @@
       hero_title: "免费代理列表 · 每日自动验证",
       hero_desc: "聚合 10+ 公开来源，自动验证 HTTP / HTTPS / SOCKS4 / SOCKS5 可用性，标注国家归属与延迟分档。一键搜索、筛选、复制、下载。",
       search_ph: "搜索 IP / 国家 / 端口…",
-      type: "类型", country: "国家", tier: "延迟档", sort: "排序",
+      type: "类型", country: "国家", tier: "延迟档", anonymity: "匿名度", ip_type: "IP品类", sort: "排序",
       all_types: "全部",
       sort_latency: "延迟（快→慢）", sort_type: "类型", sort_country: "国家",
       copy_all: "复制结果", download: "下载结果",
       th_proxy: "代理 (IP:Port)", th_type: "类型", th_country: "国家",
-      th_latency: "延迟", th_tier: "档位", th_anon: "匿名度", th_actions: "操作",
+      th_latency: "延迟", th_tier: "档位", th_anon: "匿名度", th_ip_type: "IP品类", th_actions: "操作",
       loading: "加载中…",
       prev: "上一页", next: "下一页",
       sources_title: "来源构成",
       footer_data: "数据由 GitHub Actions 每日自动验证生成",
       disclaimer_short: "免费代理不稳定且可能被滥用，请勿用于敏感流量。",
       stat_all: "全部可用", stat_updated: "最后更新",
+      stat_trusted: "🏆 信任锚点",
+      volatility_note: "免费代理存活以小时计，数字随每次验证自然波动；信任锚点 = 快 + 高匿 + 连存≥2天",
       result_count: (n, t) => `共 ${n.toLocaleString()} 条结果（总 ${t.toLocaleString()}）`,
       no_results: "没有匹配的代理。试试调整筛选条件。",
       load_failed: "数据加载失败。请稍后刷新或访问 GitHub raw 文件。",
@@ -74,18 +76,20 @@
       hero_title: "Free Proxy List · Daily Verified",
       hero_desc: "Aggregates 10+ public sources, auto-verifies HTTP / HTTPS / SOCKS4 / SOCKS5 availability, with GeoIP country and latency tiers. Search, filter, copy, download.",
       search_ph: "Search IP / country / port…",
-      type: "Type", country: "Country", tier: "Latency", sort: "Sort",
+      type: "Type", country: "Country", tier: "Latency", anonymity: "Anonymity", ip_type: "IP type", sort: "Sort",
       all_types: "All",
       sort_latency: "Latency (fast→slow)", sort_type: "Type", sort_country: "Country",
       copy_all: "Copy results", download: "Download",
       th_proxy: "Proxy (IP:Port)", th_type: "Type", th_country: "Country",
-      th_latency: "Latency", th_tier: "Tier", th_anon: "Anonymity", th_actions: "Actions",
+      th_latency: "Latency", th_tier: "Tier", th_anon: "Anonymity", th_ip_type: "IP type", th_actions: "Actions",
       loading: "Loading…",
       prev: "Prev", next: "Next",
       sources_title: "Source breakdown",
       footer_data: "Data is auto-verified daily by GitHub Actions",
       disclaimer_short: "Free proxies are unstable and may be abused. Do not use for sensitive traffic.",
       stat_all: "Working", stat_updated: "Last update",
+      stat_trusted: "🏆 Top trusted",
+      volatility_note: "Free proxies live for hours, so counts fluctuate each verification; top trusted = fast + elite + streak≥2d",
       result_count: (n, t) => `${n.toLocaleString()} of ${t.toLocaleString()} proxies`,
       no_results: "No matching proxies. Try adjusting the filters.",
       load_failed: "Failed to load data. Please refresh later or use the GitHub raw files.",
@@ -140,6 +144,7 @@
     countryFilter: $("#countryFilter"),
     tierFilter: $("#tierFilter"),
     anonFilter: $("#anonFilter"),
+    ipTypeFilter: $("#ipTypeFilter"),
     sortBy: $("#sortBy"),
     copyBtn: $("#copyBtn"),
     downloadBtn: $("#downloadBtn"),
@@ -266,6 +271,7 @@
     }
     const cards = [
       { cls: "is-all", num: (c.all && c.all.working) || 0, lbl: t("stat_all") },
+      { cls: "is-trusted", num: (c.all && c.all.top_trusted) || 0, lbl: t("stat_trusted") },
       { cls: "is-http", num: (c.http && c.http.working) || 0, lbl: "HTTP" },
       { cls: "is-https", num: (c.https && c.https.working) || 0, lbl: "HTTPS" },
       { cls: "is-socks4", num: (c.socks4 && c.socks4.working) || 0, lbl: "SOCKS4" },
@@ -274,6 +280,14 @@
     el.heroStats.innerHTML = cards
       .map((s) => `<div class="stat-card ${s.cls}"><div class="num">${s.num.toLocaleString()}</div><span class="lbl">${s.lbl}</span></div>`)
       .join("");
+    // Volatility note: tell users counts fluctuate by nature, not because the list is broken.
+    let note = el.heroStats.nextElementSibling;
+    if (!note || !note.classList.contains("volatility-note")) {
+      note = document.createElement("div");
+      note.className = "volatility-note";
+      el.heroStats.after(note);
+    }
+    note.textContent = t("volatility_note");
   }
 
   function renderCountryFilter() {
@@ -440,6 +454,7 @@
     const cc = el.countryFilter.value;
     const tier = el.tierFilter.value;
     const anon = el.anonFilter.value;
+    const ipType = el.ipTypeFilter.value;
     const sort = el.sortBy.value;
 
     filtered = allProxies.filter((p) => {
@@ -447,6 +462,7 @@
       if (cc !== "all" && (p.country_code || "UNKNOWN") !== cc) return false;
       if (tier !== "all" && tierOf(p) !== tier) return false;
       if (anon !== "all" && (p.anonymity || "unknown") !== anon) return false;
+      if (ipType !== "all" && (p.ip_type || "unknown") !== ipType) return false;
       if (q) {
         const hay = `${p.ip}:${p.port} ${p.country || ""} ${p.country_code || ""} ${p.type}`.toLowerCase();
         if (!hay.includes(q)) return false;
@@ -474,6 +490,7 @@
     if (el.countryFilter.value !== "all") params.set("cc", el.countryFilter.value);
     if (el.tierFilter.value !== "all") params.set("tier", el.tierFilter.value);
     if (el.anonFilter.value !== "all") params.set("anon", el.anonFilter.value);
+    if (el.ipTypeFilter.value !== "all") params.set("iptype", el.ipTypeFilter.value);
     const q = el.search.value.trim();
     if (q) params.set("q", q);
     const hash = params.toString();
@@ -491,6 +508,7 @@
     if (params.has("cc")) el.countryFilter.value = params.get("cc");
     if (params.has("tier")) el.tierFilter.value = params.get("tier");
     if (params.has("anon")) el.anonFilter.value = params.get("anon");
+    if (params.has("iptype")) el.ipTypeFilter.value = params.get("iptype");
     if (params.has("q")) el.search.value = params.get("q");
   }
 
@@ -514,6 +532,17 @@
     return `<span class="anon-badge ${m.cls}" title="${escapeHtml(m.lbl_en)}">${m.icon} ${lbl}</span>`;
   }
 
+  function ipTypeBadgeHtml(ipType) {
+    const map = {
+      datacenter: { icon: "🏢", cls: "iptype-dc", lbl: "数据中心", lbl_en: "datacenter" },
+      residential: { icon: "🏠", cls: "iptype-res", lbl: "住宅", lbl_en: "residential" },
+      unknown: { icon: "⚪", cls: "iptype-unknown", lbl: "未知", lbl_en: "unknown" },
+    };
+    const m = map[ipType] || map.unknown;
+    const lbl = lang === "zh" ? m.lbl : m.lbl_en;
+    return `<span class="anon-badge ${m.cls}" title="${escapeHtml(m.lbl_en)}">${m.icon} ${lbl}</span>`;
+  }
+
   // Shorten a source URL to something readable (host + path tail).
   function shortSource(src) {
     if (!src) return "—";
@@ -530,7 +559,7 @@
   function renderTable() {
     renderCount();
     if (!filtered.length) {
-      el.body.innerHTML = `<tr class="empty-row"><td colspan="8">${t("no_results")}</td></tr>`;
+      el.body.innerHTML = `<tr class="empty-row"><td colspan="9">${t("no_results")}</td></tr>`;
       el.pagination.hidden = true;
       return;
     }
@@ -552,6 +581,7 @@
         const copyStr = escapeAttr(hp);
         const anon = p.anonymity || "unknown";
         const anonBadge = anonBadgeHtml(anon);
+        const ipTypeBadge = ipTypeBadgeHtml(p.ip_type || "unknown");
         const proxyUrl = p.type === "socks5" ? `socks5://${hp}` : (p.type === "socks4" ? `socks4://${hp}` : `http://${hp}`);
         const curlCmd = `curl -x ${proxyUrl} -s --max-time 10 https://httpbin.org/ip`;
         const pyCmd = `python scripts/check.py ${hp}`;
@@ -564,13 +594,14 @@
           <td><span class="latency">${lat}<span class="latency-bar"><i style="width:${barPct}%;background:${barColor}"></i></span></span></td>
           <td><span class="tier-dot tier-${tier}">${tier}</span></td>
           <td>${anonBadge}</td>
+          <td>${ipTypeBadge}</td>
           <td class="row-actions">
             <button class="copy-one" data-copy="${copyStr}" type="button" title="${t("copy_all")}">📋</button>
             <button class="detail-toggle" data-detail="${dataIdx}" type="button" title="…">ℹ️</button>
           </td>
         </tr>
         <tr class="detail-row" data-detail-for="${dataIdx}" hidden>
-          <td colspan="8">
+          <td colspan="9">
             <div class="detail-grid">
               <div><span class="muted">${t("detail_country")}</span><strong>${flagEmoji(cc)} ${escapeHtml(cname)} (${escapeHtml(cc)})</strong></div>
               <div><span class="muted">${t("detail_latency")}</span><strong>${lat}</strong></div>
@@ -728,6 +759,7 @@
     el.countryFilter.addEventListener("change", applyFilters);
     el.tierFilter.addEventListener("change", applyFilters);
     el.anonFilter.addEventListener("change", applyFilters);
+    el.ipTypeFilter.addEventListener("change", applyFilters);
     el.sortBy.addEventListener("change", applyFilters);
     el.copyBtn.addEventListener("click", onCopyAll);
     el.downloadBtn.addEventListener("click", onDownload);

@@ -18,7 +18,26 @@
 
 > [English](#-english) · [中文](#-中文)
 >
-> 本仓库聚合 10+ 个公开代理来源，由 GitHub Actions **每日自动验证**可用性（HTTP/HTTPS/SOCKS4/SOCKS5），标注国家归属与延迟分档，输出多种格式。**零服务器成本**，开箱即用。
+> 市面上 99% 的免费代理仓库只给你一串裸 `ip:port` 文本——没有国家、没有延迟、不知道安不安全、不能直接导入客户端。**本仓库做上游不做的增值**：每个代理都带 GeoIP 国家归属、延迟分档、匿名度评级、连续存活天数、IP 品类推断（数据中心/住宅），预生成 Clash/V2Ray 订阅，配一个能搜索筛选的在线仪表盘。GitHub Actions 每日 + 每 6 小时自动验证，**零服务器成本**，开箱即用。
+
+## 🆚 为什么用这个，而不是 star 5k+ 的那些？
+
+TheSpeedX、clarketm、monosans 是优秀的上游来源（本仓库也聚合它们），但它们**只发布裸 `ip:port` 文本**。本仓库在原始列表之上做了完整的消费侧增值——下面每一项 ✅ 都是上游列表 ❌ 完全没有的：
+
+| 能力 | TheSpeedX (5.6k★) | clarketm (2.4k★) | monosans (1.4k★) | **本仓库** |
+|---|:---:|:---:|:---:|:---:|
+| 裸 `ip:port` 列表 | ✅ | ✅ | ✅ | ✅ |
+| 每日自动验证 | ✅ | ✅ | ✅ | ✅ |
+| **GeoIP 国家归属** | ❌ | ❌ | ❌ | ✅ |
+| **延迟分档 fast/medium/slow** | ❌ | ❌ | ❌ | ✅ |
+| **匿名度评级（高匿/匿名/透明）** | ❌ | ❌ | ❌ | ✅ |
+| **连续存活天数 streak** | ❌ | ❌ | ❌ | ✅ |
+| **IP 品类标注（数据中心/住宅，基于 ASN）** | ❌ | ❌ | ❌ | ✅ |
+| **Clash/V2Ray/Surge 订阅** | ❌ | ❌ | ❌ | ✅ |
+| **在线仪表盘（搜索/筛选/复制）** | ❌ | ❌ | ❌ | ✅ |
+| **诚实风险与匿名度声明** | ❌ | ❌ | ❌ | ✅ |
+
+> 简而言之：要"最多 IP"——去上游 TheSpeedX；要"带元数据、安全标注、能直接导入、有仪表盘"——用本仓库。
 
 > ## ⚠️ 风险与免责声明（务必阅读）
 >
@@ -31,15 +50,17 @@
 >
 > 使用即视为已阅读并接受上述声明。建议优先使用合规的商业代理服务。
 
-## 🌟 特性
+## 🌟 特性（上游不做的事）
 
-- ⚡ **每日自动验证** — GitHub Actions 定时抓取 + 实测，仅保留可用代理
+- ⚡ **每日 + 每 6 小时自动验证** — GitHub Actions 定时抓取 + 实测，仅保留可用代理，比日更上游更鲜
 - 🌍 **GeoIP 国家归属** — 每个代理标注国家与代码（纯 Python 离线 MaxMind GeoLite2，无需 license key）
 - 🚦 **延迟分档** — 按延迟排序，分 fast / medium / slow 三档，提供最快子集
 - 🛡️ **匿名度检测** — 每个代理标注高匿 / 匿名 / 透明，`high-anon.txt` 仅含高匿节点（更安全）
 - 📈 **存活历史** — 记录连续存活天数，`stable.txt` 标记连续多日可用代理（更稳定）
+- 🏆 **信任锚点子集** — `top-trusted.txt` = fast ∩ 高匿 ∩ streak≥2，成功率显著高于随机取
+- 🏷️ **IP 品类标注** — 每个代理标注数据中心 / 住宅推断（基于 GeoLite2-ASN + ISP 关键词表，诚实告知几乎全为数据中心，不伪装住宅）
 - 📦 **多格式输出** — `txt` / `json` / `csv` / 按国家分文件 / 最快子集 / 匿名度 / 稳定子集
-- 🖥️ **在线仪表盘** — 纯静态 SPA，搜索 / 筛选（含匿名度）/ 排序 / 复制 / 一键下载，中英双语 + 暗色模式
+- 🖥️ **在线仪表盘** — 纯静态 SPA，搜索 / 筛选（含匿名度+IP品类）/ 排序 / 复制 / 一键下载，中英双语 + 暗色模式
 - 🔗 **一键导入客户端** — 预生成 Clash / V2Ray / Surge 订阅链接，粘贴即用，按类型/国家/延迟/匿名度分组
 - ⚡ **零依赖消费** — 任一 `proxies/*.txt` 都是 `host:port` 一行一个，`curl` 直接用
 
@@ -70,9 +91,9 @@ Last update (UTC): **2026-07-13T15:15:16+00:00**
 | `proxies/socks4.txt` · `socks5.txt` | SOCKS4 / SOCKS5 代理 |
 | `proxies/top-http.txt` · `top-https.txt` · `top-socks5.txt` | 最快子集（默认前 100） |
 | `proxies/high-anon.txt` · `anonymous.txt` · `transparent.txt` | **按匿名度分**（高匿最安全，透明会泄露真实 IP，慎用） |
-| `proxies/stable.txt` · `fast-only.txt` | 连续多日可用 / 仅 fast 档 |
-| `proxies/all.csv` | CSV（含国家/延迟/档位/匿名度/存活天数/来源），可导入 Excel/pandas |
-| `proxies/json/*.json` | 结构化 JSON，每项含 `ip/port/type/country/country_code/latency_ms/tier/anonymity/streak/source` |
+| `proxies/stable.txt` · `fast-only.txt` · `top-trusted.txt` | 连续多日可用 / 仅 fast 档 / **三者交集（fast+高匿+streak≥2，信任锚点）** |
+| `proxies/all.csv` | CSV（含国家/延迟/档位/匿名度/存活天数/ASN/IP品类/来源），可导入 Excel/pandas |
+| `proxies/json/*.json` | 结构化 JSON，每项含 `ip/port/type/country/country_code/latency_ms/tier/anonymity/streak/asn/asn_org/ip_type/source` |
 | `proxies/by-country/<CC>.txt` | 按国家代码分文件（如 `US.txt`、`CN.txt`） |
 | `proxies/clash/*.yaml` | **Clash/Mihomo 配置**（all/http/socks5/fast/high-anon/stable，含 proxy-groups + AUTO 测速 + rules） |
 | `proxies/v2ray/all.txt` | **V2Ray base64 订阅**（一行 base64，包含全部 URL） |
@@ -220,6 +241,18 @@ cd docs && python -m http.server 8088   # 浏览器打开 http://localhost:8088
 
 > workflow 已配置 `deploy-pages` job，无需额外 action。
 
+## 🏷️ IP 品类说明（数据中心 vs 住宅）
+
+本仓库为每个 IP 标注 `ip_type` 字段，值为 `datacenter` / `residential` / `unknown`，基于 **GeoLite2-ASN 数据库**的 ASN 组织字符串做关键词匹配推断（不调用任何付费 IP 信誉 API）。
+
+**诚实告知**：
+- 免费**公开**代理池本质上**几乎全是数据中心 IP**（云厂商、VPS、被误配或被入侵的开放端口）。真实的住宅 IP 极少且即便有也存活极短，**免费列表无法稳定提供住宅 IP**。本仓库实测的代理 IP 100% 落在 datacenter/unknown，没有标注为 residential 的——这与"免费代理生态"的客观事实一致。
+- `datacenter`：ASN 组织名命中云/VPS/托管关键词（AWS、Google、Microsoft、DigitalOcean、OVH、Hetzner、Cloudflare、阿里云、腾讯云等）。
+- `residential`：ASN 组织名命中消费级/移动 ISP 关键词（Comcast、AT&T、中国电信、Vodafone 等）——本池中几乎为 0。
+- `unknown`：ASN 不可用，或组织名不在两张关键词表（多为小型/混合 ISP）。这是**推断**，不是精确定性。
+
+> 需要真正的住宅 IP 用于高可信场景（广告验证、反欺诈、长期稳定会话）？**免费列表不是正确来源**，请使用付费住宅代理服务（如 Bright Data、Smartproxy、Oxylabs 等，它们按流量售卖带 ASN 标注的住宅池）。
+
 ## ❓ FAQ
 
 - **🛡️ 免费代理安全吗？能用它登录 / 支付吗？**
@@ -268,7 +301,25 @@ cd docs && python -m http.server 8088   # 浏览器打开 http://localhost:8088
 
 ## 🇬🇧 English
 
-A **free proxy list** that is **automatically verified daily** via GitHub Actions (zero server cost). Aggregates 10+ public sources, validates HTTP / HTTPS / SOCKS4 / SOCKS5, tags each proxy with GeoIP country and a latency tier, and ships multiple output formats.
+A **free proxy list** that is **automatically verified daily + every 6h** via GitHub Actions (zero server cost).
+
+**Why this, not the 5k★ upstream lists?** TheSpeedX / clarketm / monosans are great *sources* (this repo aggregates them), but they only publish raw `ip:port` text — no country, no latency, no anonymity tag, no IP-type, no client subscription, no dashboard. This repo layers the value the upstreams don't:
+
+| Capability | TheSpeedX (5.6k★) | clarketm (2.4k★) | **This repo** |
+|---|:---:|:---:|:---:|
+| Raw `ip:port` list | ✅ | ✅ | ✅ |
+| Daily auto-verify | ✅ | ✅ | ✅ |
+| **GeoIP country** | ❌ | ❌ | ✅ |
+| **Latency tier (fast/med/slow)** | ❌ | ❌ | ✅ |
+| **Anonymity rating (elite/anon/transparent)** | ❌ | ❌ | ✅ |
+| **Survival streak** | ❌ | ❌ | ✅ |
+| **IP-type (datacenter/residential via ASN)** | ❌ | ❌ | ✅ |
+| **Clash/V2Ray/Surge subscription** | ❌ | ❌ | ✅ |
+| **Live dashboard (search/filter/copy)** | ❌ | ❌ | ✅ |
+
+> Want the *most* IPs → upstream TheSpeedX. Want *metadata + safety tags + IP-type + one-click import + dashboard* → this repo.
+
+**IP type tag:** each IP is classified `datacenter` / `residential` / `unknown` from its ASN org string (GeoLite2-ASN, no paid API). Honest finding: free public proxy pools are **almost entirely datacenter IPs** — real residential IPs are rare and short-lived here. If you need genuine residential IPs for high-trust use cases, use a paid residential proxy service.
 
 ### Quick start
 

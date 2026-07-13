@@ -16,6 +16,7 @@ sys.path.insert(0, str(SCRIPTS))
 import update  # noqa: E402
 import subscription  # noqa: E402
 from update import Proxy, classify_anonymity, tier_of  # noqa: E402
+from geoip_lookup import classify_ip_type  # noqa: E402
 from subscription import flag_emoji  # noqa: E402
 
 
@@ -204,3 +205,27 @@ class TestSubscriptionBuilders:
         b64 = subscription.build_v2ray_sub([])
         decoded = base64.b64decode(b64).decode("utf-8")
         assert decoded == ""
+
+
+# ---------- classify_ip_type (ASN-based datacenter/residential inference) ----------
+class TestClassifyIpType:
+    def test_empty_is_unknown(self):
+        assert classify_ip_type("") == "unknown"
+
+    def test_datacenter_cloud_providers(self):
+        for org in ["Amazon.com Inc.", "Google LLC", "Microsoft Corporation",
+                    "DigitalOcean LLC", "Cloudflare, Inc.", "OVH SAS", "Hetzner Online GmbH",
+                    "Alibaba (US) Technology Co., Ltd.", "Tencent Building", "Huawei Cloud"]:
+            assert classify_ip_type(org) == "datacenter", f"{org!r} should be datacenter"
+
+    def test_residential_isps(self):
+        for org in ["Comcast Cable Communications", "AT&T Services Inc.",
+                    "China Telecom Group", "Vodafone Group", "Verizon Business"]:
+            assert classify_ip_type(org) == "residential", f"{org!r} should be residential"
+
+    def test_unknown_for_unlisted_org(self):
+        assert classify_ip_type("Some Random Small ISP Co.") == "unknown"
+
+    def test_case_insensitive(self):
+        assert classify_ip_type("AMAZON.COM INC.") == "datacenter"
+        assert classify_ip_type("comcast cable") == "residential"
