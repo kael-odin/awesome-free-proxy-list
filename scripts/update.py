@@ -786,6 +786,25 @@ async def main(refresh: bool = False) -> None:
         all_proxies.append(p)
     all_hostports = [p.hostport for p in all_proxies]
 
+    # Safety guard for --refresh mode: if re-validation returned ZERO or near-zero
+    # proxies despite having had candidates, it's almost certainly a transient runner
+    # issue (network/rate-limit made every proxy look dead) — do NOT overwrite the
+    # prior good data with an empty list. The daily full update re-scrapes sources and
+    # is the authority for the real candidate pool. (A normal refresh that culls half
+    # the set is fine — those proxies really did die — so the threshold is near-zero.)
+    if refresh:
+        candidate_total = (
+            len(forward_candidates) + len(socks4_candidates) + len(socks5_candidates)
+        )
+        if candidate_total > 0 and len(all_proxies) < 10:
+            print(
+                f"Refresh guard: only {len(all_proxies)}/{candidate_total} proxies "
+                f"survived re-validation — likely a transient runner issue. "
+                f"Skipping overwrite to preserve prior data."
+            )
+            geoip.close()
+            return
+
     write_txt(OUT_DIR / "http.txt", http_hostports)
     write_txt(OUT_DIR / "https.txt", https_hostports)
     write_txt(OUT_DIR / "socks4.txt", socks4_hostports)
