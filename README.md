@@ -67,15 +67,17 @@ TheSpeedX、clarketm、monosans 是优秀的上游来源（本仓库也聚合它
 ## 📊 实时统计 / Stats
 
 <!-- STATS:START -->
-Last update (UTC): **2026-07-13T15:15:16+00:00**
+Last update (UTC): **2026-07-13T19:52:57+00:00**
+
+> 🏆 **Top trusted: 16** — fast ∩ high-anon ∩ survived ≥2 days. The highest-success subset [`proxies/top-trusted.txt`](proxies/top-trusted.txt) (may be 0 on a fresh install before streaks accumulate).
 
 | Type | Working | Total Candidates |
 |---|---:|---:|
-| HTTP | 94 | 110 |
-| HTTPS | 38 | 110 |
-| SOCKS4 | 102 | 108 |
-| SOCKS5 | 70 | 147 |
-| ALL | 252 | 365 |
+| HTTP | 72 | 94 |
+| HTTPS | 36 | 94 |
+| SOCKS4 | 98 | 102 |
+| SOCKS5 | 58 | 70 |
+| ALL | 214 | 266 |
 <!-- STATS:END -->
 
 > 统计由 `scripts/update.py` 在每次运行后自动注入，无需手工维护。
