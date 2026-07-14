@@ -18,26 +18,25 @@
 
 > [English](#-english) · [中文](#-中文)
 >
-> 市面上 99% 的免费代理仓库只给你一串裸 `ip:port` 文本——没有国家、没有延迟、不知道安不安全、不能直接导入客户端。**本仓库做上游不做的增值**：每个代理都带 GeoIP 国家归属、延迟分档、匿名度评级、连续存活天数、IP 品类推断（数据中心/住宅），预生成 Clash/V2Ray 订阅，配一个能搜索筛选的在线仪表盘。GitHub Actions 每日 + 每 6 小时自动验证，**零服务器成本**，开箱即用。
+> 市面上 99% 的免费代理仓库只给你一串裸 `ip:port` 文本——没有国家、没有延迟、不知道安不安全、不能直接导入客户端。**本仓库不止给列表，更给每个代理配齐了元数据**：GeoIP 国家归属、延迟分档、匿名度评级、连续存活天数、IP 品类推断（数据中心/住宅），预生成 Clash/V2Ray 订阅，配一个能搜索筛选的在线仪表盘。GitHub Actions 每日 + 每 6 小时自动验证，**零服务器成本**，开箱即用。
 
-## 🆚 为什么用这个，而不是 star 5k+ 的那些？
+## ✨ 你将获得
 
-TheSpeedX、clarketm、monosans 是优秀的上游来源（本仓库也聚合它们），但它们**只发布裸 `ip:port` 文本**。本仓库在原始列表之上做了完整的消费侧增值——下面每一项 ✅ 都是上游列表 ❌ 完全没有的：
+不止一串 `ip:port`，而是每个代理都带完整元数据、安全标注与一键导入能力的完整方案：
 
-| 能力 | TheSpeedX (5.6k★) | clarketm (2.4k★) | monosans (1.4k★) | **本仓库** |
-|---|:---:|:---:|:---:|:---:|
-| 裸 `ip:port` 列表 | ✅ | ✅ | ✅ | ✅ |
-| 每日自动验证 | ✅ | ✅ | ✅ | ✅ |
-| **GeoIP 国家归属** | ❌ | ❌ | ❌ | ✅ |
-| **延迟分档 fast/medium/slow** | ❌ | ❌ | ❌ | ✅ |
-| **匿名度评级（高匿/匿名/透明）** | ❌ | ❌ | ❌ | ✅ |
-| **连续存活天数 streak** | ❌ | ❌ | ❌ | ✅ |
-| **IP 品类标注（数据中心/住宅，基于 ASN）** | ❌ | ❌ | ❌ | ✅ |
-| **Clash/V2Ray/Surge 订阅** | ❌ | ❌ | ❌ | ✅ |
-| **在线仪表盘（搜索/筛选/复制）** | ❌ | ❌ | ❌ | ✅ |
-| **诚实风险与匿名度声明** | ❌ | ❌ | ❌ | ✅ |
-
-> 简而言之：要"最多 IP"——去上游 TheSpeedX；要"带元数据、安全标注、能直接导入、有仪表盘"——用本仓库。
+| 能力 | 本仓库 |
+|---|:---:|
+| 裸 `ip:port` 列表 | ✅ |
+| 每日 + 每 6 小时自动验证 | ✅ |
+| **GeoIP 国家归属** | ✅ |
+| **延迟分档 fast/medium/slow** | ✅ |
+| **匿名度评级（高匿/匿名/透明）** | ✅ |
+| **连续存活天数 streak** | ✅ |
+| **信任锚点子集（fast + 高匿 + streak≥2）** | ✅ |
+| **IP 品类标注（数据中心/住宅，基于 ASN）** | ✅ |
+| **Clash/V2Ray/Surge 订阅** | ✅ |
+| **在线仪表盘（搜索/筛选/复制/下载）** | ✅ |
+| **诚实风险与匿名度声明** | ✅ |
 
 > ## ⚠️ 风险与免责声明（务必阅读）
 >
@@ -50,9 +49,9 @@ TheSpeedX、clarketm、monosans 是优秀的上游来源（本仓库也聚合它
 >
 > 使用即视为已阅读并接受上述声明。建议优先使用合规的商业代理服务。
 
-## 🌟 特性（上游不做的事）
+## 🌟 特性
 
-- ⚡ **每日 + 每 6 小时自动验证** — GitHub Actions 定时抓取 + 实测，仅保留可用代理，比日更上游更鲜
+- ⚡ **每日 + 每 6 小时自动验证** — GitHub Actions 定时抓取 + 实测，仅保留可用代理，每 6 小时刷新剔除失效
 - 🌍 **GeoIP 国家归属** — 每个代理标注国家与代码（纯 Python 离线 MaxMind GeoLite2，无需 license key）
 - 🚦 **延迟分档** — 按延迟排序，分 fast / medium / slow 三档，提供最快子集
 - 🛡️ **匿名度检测** — 每个代理标注高匿 / 匿名 / 透明，`high-anon.txt` 仅含高匿节点（更安全）
@@ -305,21 +304,20 @@ cd docs && python -m http.server 8088   # 浏览器打开 http://localhost:8088
 
 A **free proxy list** that is **automatically verified daily + every 6h** via GitHub Actions (zero server cost).
 
-**Why this, not the 5k★ upstream lists?** TheSpeedX / clarketm / monosans are great *sources* (this repo aggregates them), but they only publish raw `ip:port` text — no country, no latency, no anonymity tag, no IP-type, no client subscription, no dashboard. This repo layers the value the upstreams don't:
+**More than a raw list.** Not just `ip:port` text — every proxy comes with country, latency tier, anonymity rating, survival streak, and IP-type inference, plus prebuilt Clash/V2Ray subscriptions and a live dashboard:
 
-| Capability | TheSpeedX (5.6k★) | clarketm (2.4k★) | **This repo** |
-|---|:---:|:---:|:---:|
-| Raw `ip:port` list | ✅ | ✅ | ✅ |
-| Daily auto-verify | ✅ | ✅ | ✅ |
-| **GeoIP country** | ❌ | ❌ | ✅ |
-| **Latency tier (fast/med/slow)** | ❌ | ❌ | ✅ |
-| **Anonymity rating (elite/anon/transparent)** | ❌ | ❌ | ✅ |
-| **Survival streak** | ❌ | ❌ | ✅ |
-| **IP-type (datacenter/residential via ASN)** | ❌ | ❌ | ✅ |
-| **Clash/V2Ray/Surge subscription** | ❌ | ❌ | ✅ |
-| **Live dashboard (search/filter/copy)** | ❌ | ❌ | ✅ |
-
-> Want the *most* IPs → upstream TheSpeedX. Want *metadata + safety tags + IP-type + one-click import + dashboard* → this repo.
+| Capability | This repo |
+|---|:---:|
+| Raw `ip:port` list | ✅ |
+| Daily + 6h auto-verify | ✅ |
+| **GeoIP country** | ✅ |
+| **Latency tier (fast/med/slow)** | ✅ |
+| **Anonymity rating (elite/anon/transparent)** | ✅ |
+| **Survival streak** | ✅ |
+| **Top-trusted subset (fast + elite + streak≥2)** | ✅ |
+| **IP-type (datacenter/residential via ASN)** | ✅ |
+| **Clash/V2Ray/Surge subscription** | ✅ |
+| **Live dashboard (search/filter/copy)** | ✅ |
 
 **IP type tag:** each IP is classified `datacenter` / `residential` / `unknown` from its ASN org string (GeoLite2-ASN, no paid API). Honest finding: free public proxy pools are **almost entirely datacenter IPs** — real residential IPs are rare and short-lived here. If you need genuine residential IPs for high-trust use cases, use a paid residential proxy service.
 
