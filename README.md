@@ -66,17 +66,17 @@
 ## 📊 实时统计 / Stats
 
 <!-- STATS:START -->
-Last update (UTC): **2026-07-14T19:47:10+00:00**
+Last update (UTC): **2026-07-15T03:40:17+00:00**
 
-> 🏆 **Top trusted: 20** — fast ∩ high-anon ∩ survived ≥2 days. The highest-success subset [`proxies/top-trusted.txt`](proxies/top-trusted.txt) (may be 0 on a fresh install before streaks accumulate).
+> 🏆 **Top trusted: 22** — fast ∩ high-anon ∩ survived ≥2 days. The highest-success subset [`proxies/top-trusted.txt`](proxies/top-trusted.txt) (may be 0 on a fresh install before streaks accumulate).
 
 | Type | Working | Total Candidates |
 |---|---:|---:|
-| HTTP | 51 | 54 |
-| HTTPS | 23 | 54 |
+| HTTP | 51 | 51 |
+| HTTPS | 23 | 51 |
 | SOCKS4 | 93 | 93 |
-| SOCKS5 | 39 | 42 |
-| ALL | 171 | 189 |
+| SOCKS5 | 37 | 39 |
+| ALL | 169 | 183 |
 <!-- STATS:END -->
 
 > 统计由 `scripts/update.py` 在每次运行后自动注入，无需手工维护。
