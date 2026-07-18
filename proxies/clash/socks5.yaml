@@ -1,6 +1,6 @@
 # Free Proxy List — SOCKS5
-# Generated: 2026-07-18T13:53:05+00:00
-# Proxies: 167
+# Generated: 2026-07-18T19:35:08+00:00
+# Proxies: 136
 # Source: kael-odin/awesome-free-proxy-list
 
 mixed-port: 7890
@@ -9,45 +9,95 @@ mode: rule
 log-level: warning
 external-controller: "127.0.0.1:9090"
 proxies:
+  - name: "🇺🇸 SOCKS5 204.48.29.137:1088 F"
+    type: socks5
+    server: 204.48.29.137
+    port: 1088
+    udp: false
   - name: "🇷🇺 SOCKS5 147.45.60.246:1082 F"
     type: socks5
     server: 147.45.60.246
     port: 1082
     udp: false
-  - name: "🇺🇸 SOCKS5 141.148.158.143:1080 F"
+  - name: "🇷🇺 SOCKS5 147.45.60.139:1081 F"
     type: socks5
-    server: 141.148.158.143
-    port: 1080
+    server: 147.45.60.139
+    port: 1081
     udp: false
-  - name: "🇺🇸 SOCKS5 178.130.47.41:1082 F"
-    type: socks5
-    server: 178.130.47.41
-    port: 1082
-    udp: false
-  - name: "🇺🇸 SOCKS5 144.24.15.246:1080 F"
-    type: socks5
-    server: 144.24.15.246
-    port: 1080
-    udp: false
-  - name: "🇺🇸 SOCKS5 204.48.29.137:1088 M"
-    type: socks5
-    server: 204.48.29.137
-    port: 1088
-    udp: false
-  - name: "🇨🇦 SOCKS5 167.114.172.208:1088 M"
+  - name: "🇨🇦 SOCKS5 167.114.172.208:1088 F"
     type: socks5
     server: 167.114.172.208
     port: 1088
     udp: false
-  - name: "🇨🇦 SOCKS5 184.95.235.194:1080 M"
+  - name: "🇺🇸 SOCKS5 178.130.47.21:1082 F"
     type: socks5
-    server: 184.95.235.194
+    server: 178.130.47.21
+    port: 1082
+    udp: false
+  - name: "🇨🇿 SOCKS5 194.58.57.52:1080 M"
+    type: socks5
+    server: 194.58.57.52
+    port: 1080
+    udp: false
+  - name: "🇳🇱 SOCKS5 109.71.244.97:1080 M"
+    type: socks5
+    server: 109.71.244.97
     port: 1080
     udp: false
   - name: "🇺🇸 SOCKS5 193.25.215.182:22222 M"
     type: socks5
     server: 193.25.215.182
     port: 22222
+    udp: false
+  - name: "🇺🇸 SOCKS5 141.148.158.143:1080 M"
+    type: socks5
+    server: 141.148.158.143
+    port: 1080
+    udp: false
+  - name: "🇫🇷 SOCKS5 185.185.80.58:1088 M"
+    type: socks5
+    server: 185.185.80.58
+    port: 1088
+    udp: false
+  - name: "🇳🇱 SOCKS5 144.124.232.204:443 M"
+    type: socks5
+    server: 144.124.232.204
+    port: 443
+    udp: false
+  - name: "🇩🇪 SOCKS5 144.76.159.120:1082 M"
+    type: socks5
+    server: 144.76.159.120
+    port: 1082
+    udp: false
+  - name: "🇩🇪 SOCKS5 144.76.159.120:1085 M"
+    type: socks5
+    server: 144.76.159.120
+    port: 1085
+    udp: false
+  - name: "🇧🇷 SOCKS5 147.15.17.132:1094 M"
+    type: socks5
+    server: 147.15.17.132
+    port: 1094
+    udp: false
+  - name: "🇳🇱 SOCKS5 144.124.232.204:1080 M"
+    type: socks5
+    server: 144.124.232.204
+    port: 1080
+    udp: false
+  - name: "🇧🇷 SOCKS5 147.15.17.132:1081 M"
+    type: socks5
+    server: 147.15.17.132
+    port: 1081
+    udp: false
+  - name: "🇧🇷 SOCKS5 147.15.17.132:1092 M"
+    type: socks5
+    server: 147.15.17.132
+    port: 1092
+    udp: false
+  - name: "🇺🇸 SOCKS5 104.200.152.30:4145 M"
+    type: socks5
+    server: 104.200.152.30
+    port: 4145
     udp: false
   - name: "🇺🇸 SOCKS5 162.253.68.97:4145 M"
     type: socks5
@@ -59,20 +109,80 @@ proxies:
     server: 107.181.161.81
     port: 4145
     udp: false
-  - name: "🇺🇸 SOCKS5 107.152.98.5:4145 M"
-    type: socks5
-    server: 107.152.98.5
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 104.200.152.30:4145 M"
-    type: socks5
-    server: 104.200.152.30
-    port: 4145
-    udp: false
   - name: "🇺🇸 SOCKS5 104.37.135.145:4145 M"
     type: socks5
     server: 104.37.135.145
     port: 4145
+    udp: false
+  - name: "🇨🇴 SOCKS5 149.130.182.81:1080 M"
+    type: socks5
+    server: 149.130.182.81
+    port: 1080
+    udp: false
+  - name: "🇩🇪 SOCKS5 144.76.159.120:1081 M"
+    type: socks5
+    server: 144.76.159.120
+    port: 1081
+    udp: false
+  - name: "🇺🇸 SOCKS5 199.66.183.226:4145 M"
+    type: socks5
+    server: 199.66.183.226
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS5 192.111.130.5:17002 M"
+    type: socks5
+    server: 192.111.130.5
+    port: 17002
+    udp: false
+  - name: "🇺🇸 SOCKS5 192.111.130.2:4145 M"
+    type: socks5
+    server: 192.111.130.2
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS5 184.170.248.5:4145 M"
+    type: socks5
+    server: 184.170.248.5
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS5 184.170.245.148:4145 M"
+    type: socks5
+    server: 184.170.245.148
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS5 184.170.249.65:4145 M"
+    type: socks5
+    server: 184.170.249.65
+    port: 4145
+    udp: false
+  - name: "🇩🇪 SOCKS5 144.76.159.120:1088 M"
+    type: socks5
+    server: 144.76.159.120
+    port: 1088
+    udp: false
+  - name: "🇺🇸 SOCKS5 192.111.137.35:4145 M"
+    type: socks5
+    server: 192.111.137.35
+    port: 4145
+    udp: false
+  - name: "🇩🇪 SOCKS5 144.76.159.120:1100 M"
+    type: socks5
+    server: 144.76.159.120
+    port: 1100
+    udp: false
+  - name: "🇫🇮 SOCKS5 193.221.203.192:1080 M"
+    type: socks5
+    server: 193.221.203.192
+    port: 1080
+    udp: false
+  - name: "🇩🇪 SOCKS5 144.76.159.120:1080 M"
+    type: socks5
+    server: 144.76.159.120
+    port: 1080
+    udp: false
+  - name: "🇩🇪 SOCKS5 144.76.159.120:1090 M"
+    type: socks5
+    server: 144.76.159.120
+    port: 1090
     udp: false
   - name: "🇯🇵 SOCKS5 101.36.104.239:10808 M"
     type: socks5
@@ -84,24 +194,49 @@ proxies:
     server: 101.36.104.46
     port: 10808
     udp: false
-  - name: "🇺🇸 SOCKS5 142.54.226.214:4145 M"
+  - name: "🇺🇸 SOCKS5 174.75.211.193:4145 M"
     type: socks5
-    server: 142.54.226.214
+    server: 174.75.211.193
     port: 4145
     udp: false
-  - name: "🇯🇵 SOCKS5 193.111.30.139:2080 M"
+  - name: "🇺🇸 SOCKS5 174.77.111.196:4145 M"
     type: socks5
-    server: 193.111.30.139
-    port: 2080
+    server: 174.77.111.196
+    port: 4145
     udp: false
-  - name: "🇫🇷 SOCKS5 13.140.164.179:3622 M"
+  - name: "🇺🇸 SOCKS5 174.77.111.197:4145 M"
     type: socks5
-    server: 13.140.164.179
-    port: 3622
+    server: 174.77.111.197
+    port: 4145
     udp: false
-  - name: "🇳🇱 SOCKS5 109.71.244.97:1080 M"
+  - name: "🇺🇸 SOCKS5 174.77.111.198:49547 M"
     type: socks5
-    server: 109.71.244.97
+    server: 174.77.111.198
+    port: 49547
+    udp: false
+  - name: "🇺🇸 SOCKS5 174.64.199.79:4145 M"
+    type: socks5
+    server: 174.64.199.79
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS5 174.64.199.82:4145 M"
+    type: socks5
+    server: 174.64.199.82
+    port: 4145
+    udp: false
+  - name: "🇷🇺 SOCKS5 147.45.60.110:1081 M"
+    type: socks5
+    server: 147.45.60.110
+    port: 1081
+    udp: false
+  - name: "🇮🇳 SOCKS5 144.24.111.128:1088 M"
+    type: socks5
+    server: 144.24.111.128
+    port: 1088
+    udp: false
+  - name: "🇭🇰 SOCKS5 119.28.13.138:1080 M"
+    type: socks5
+    server: 119.28.13.138
     port: 1080
     udp: false
   - name: "🇭🇰 SOCKS5 123.58.219.171:10808 M"
@@ -109,14 +244,9 @@ proxies:
     server: 123.58.219.171
     port: 10808
     udp: false
-  - name: "🇫🇮 SOCKS5 193.221.203.192:1080 M"
+  - name: "🇭🇰 SOCKS5 124.156.185.140:1080 M"
     type: socks5
-    server: 193.221.203.192
-    port: 1080
-    udp: false
-  - name: "🇳🇱 SOCKS5 144.124.232.204:1080 M"
-    type: socks5
-    server: 144.124.232.204
+    server: 124.156.185.140
     port: 1080
     udp: false
   - name: "🇭🇰 SOCKS5 172.81.111.156:10001 M"
@@ -129,234 +259,34 @@ proxies:
     server: 178.128.106.142
     port: 1080
     udp: false
-  - name: "🇳🇱 SOCKS5 144.124.232.204:443 M"
-    type: socks5
-    server: 144.124.232.204
-    port: 443
-    udp: false
-  - name: "🇩🇪 SOCKS5 144.76.159.120:1082 M"
-    type: socks5
-    server: 144.76.159.120
-    port: 1082
-    udp: false
-  - name: "🇭🇰 SOCKS5 119.28.13.138:1080 M"
-    type: socks5
-    server: 119.28.13.138
-    port: 1080
-    udp: false
-  - name: "🇩🇪 SOCKS5 144.76.159.120:1085 M"
-    type: socks5
-    server: 144.76.159.120
-    port: 1085
-    udp: false
-  - name: "🇵🇱 SOCKS5 194.59.186.35:1080 M"
-    type: socks5
-    server: 194.59.186.35
-    port: 1080
-    udp: false
-  - name: "🇫🇷 SOCKS5 185.185.80.58:1088 M"
-    type: socks5
-    server: 185.185.80.58
-    port: 1088
-    udp: false
-  - name: "🇧🇷 SOCKS5 190.89.4.185:1080 M"
-    type: socks5
-    server: 190.89.4.185
-    port: 1080
-    udp: false
-  - name: "🇩🇪 SOCKS5 144.76.159.120:1081 M"
-    type: socks5
-    server: 144.76.159.120
-    port: 1081
-    udp: false
-  - name: "🇮🇳 SOCKS5 144.24.111.128:1088 M"
-    type: socks5
-    server: 144.24.111.128
-    port: 1088
-    udp: false
-  - name: "🇻🇳 SOCKS5 118.70.67.11:1080 M"
-    type: socks5
-    server: 118.70.67.11
-    port: 1080
-    udp: false
-  - name: "🇩🇪 SOCKS5 167.86.79.35:1080 M"
-    type: socks5
-    server: 167.86.79.35
-    port: 1080
-    udp: false
-  - name: "🇩🇪 SOCKS5 144.76.159.120:1088 M"
-    type: socks5
-    server: 144.76.159.120
-    port: 1088
-    udp: false
-  - name: "🇰🇭 SOCKS5 202.79.27.12:1080 M"
-    type: socks5
-    server: 202.79.27.12
-    port: 1080
-    udp: false
-  - name: "🇺🇸 SOCKS5 199.66.183.226:4145 M"
-    type: socks5
-    server: 199.66.183.226
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 184.170.249.65:4145 M"
-    type: socks5
-    server: 184.170.249.65
-    port: 4145
-    udp: false
-  - name: "🇧🇩 SOCKS5 182.48.78.141:8008 M"
-    type: socks5
-    server: 182.48.78.141
-    port: 8008
-    udp: false
-  - name: "🇮🇩 SOCKS5 103.66.46.150:69 M"
-    type: socks5
-    server: 103.66.46.150
-    port: 69
-    udp: false
-  - name: "🇺🇸 SOCKS5 184.170.248.5:4145 M"
-    type: socks5
-    server: 184.170.248.5
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 184.170.245.148:4145 M"
-    type: socks5
-    server: 184.170.245.148
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 192.111.130.2:4145 M"
-    type: socks5
-    server: 192.111.130.2
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 184.181.217.220:4145 M"
-    type: socks5
-    server: 184.181.217.220
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 174.64.199.82:4145 M"
-    type: socks5
-    server: 174.64.199.82
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 184.178.172.11:4145 M"
-    type: socks5
-    server: 184.178.172.11
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 192.111.130.5:17002 M"
-    type: socks5
-    server: 192.111.130.5
-    port: 17002
-    udp: false
-  - name: "🇺🇸 SOCKS5 174.75.211.193:4145 M"
-    type: socks5
-    server: 174.75.211.193
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 174.77.111.197:4145 M"
-    type: socks5
-    server: 174.77.111.197
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 174.77.111.196:4145 M"
-    type: socks5
-    server: 174.77.111.196
-    port: 4145
-    udp: false
-  - name: "🇺🇦 SOCKS5 185.210.85.26:56981 M"
-    type: socks5
-    server: 185.210.85.26
-    port: 56981
-    udp: false
-  - name: "🇺🇸 SOCKS5 174.64.199.79:4145 M"
-    type: socks5
-    server: 174.64.199.79
-    port: 4145
-    udp: false
-  - name: "🇩🇪 SOCKS5 144.76.159.120:1100 M"
-    type: socks5
-    server: 144.76.159.120
-    port: 1100
-    udp: false
-  - name: "🇭🇰 SOCKS5 124.156.185.140:1080 M"
-    type: socks5
-    server: 124.156.185.140
-    port: 1080
-    udp: false
-  - name: "🇺🇸 SOCKS5 192.111.137.35:4145 M"
-    type: socks5
-    server: 192.111.137.35
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 174.77.111.198:49547 M"
-    type: socks5
-    server: 174.77.111.198
-    port: 49547
-    udp: false
-  - name: "🇻🇳 SOCKS5 118.71.44.153:1098 M"
-    type: socks5
-    server: 118.71.44.153
-    port: 1098
-    udp: false
-  - name: "🇩🇪 SOCKS5 144.76.159.120:1090 M"
-    type: socks5
-    server: 144.76.159.120
-    port: 1090
-    udp: false
-  - name: "🇩🇪 SOCKS5 144.76.159.120:1080 M"
-    type: socks5
-    server: 144.76.159.120
-    port: 1080
-    udp: false
   - name: "🇸🇪 SOCKS5 171.25.158.95:1080 M"
     type: socks5
     server: 171.25.158.95
     port: 1080
     udp: false
-  - name: "🇹🇷 SOCKS5 139.28.240.202:1081 S"
+  - name: "🇩🇪 SOCKS5 147.45.178.104:1082 M"
     type: socks5
-    server: 139.28.240.202
-    port: 1081
-    udp: false
-  - name: "🇹🇷 SOCKS5 139.28.241.247:1082 S"
-    type: socks5
-    server: 139.28.241.247
+    server: 147.45.178.104
     port: 1082
     udp: false
-  - name: "🇺🇸 SOCKS5 107.151.148.153:1080 S"
+  - name: "🇫🇷 SOCKS5 13.140.164.179:3622 M"
     type: socks5
-    server: 107.151.148.153
-    port: 1080
+    server: 13.140.164.179
+    port: 3622
     udp: false
-  - name: "🇩🇪 SOCKS5 144.76.159.120:1083 S"
+  - name: "🇩🇪 SOCKS5 144.76.159.120:1083 M"
     type: socks5
     server: 144.76.159.120
     port: 1083
     udp: false
-  - name: "🇮🇩 SOCKS5 103.134.220.49:1080 S"
+  - name: "🇮🇩 SOCKS5 103.66.46.150:69 S"
     type: socks5
-    server: 103.134.220.49
-    port: 1080
+    server: 103.66.46.150
+    port: 69
     udp: false
-  - name: "🇻🇳 SOCKS5 118.71.44.153:1054 S"
+  - name: "🇰🇭 SOCKS5 202.79.27.12:1080 S"
     type: socks5
-    server: 118.71.44.153
-    port: 1054
-    udp: false
-  - name: "🇰🇷 SOCKS5 121.169.46.116:1090 S"
-    type: socks5
-    server: 121.169.46.116
-    port: 1090
-    udp: false
-  - name: "🇰🇭 SOCKS5 110.235.247.206:1080 S"
-    type: socks5
-    server: 110.235.247.206
-    port: 1080
-    udp: false
-  - name: "🇯🇵 SOCKS5 152.70.107.226:1080 S"
-    type: socks5
-    server: 152.70.107.226
+    server: 202.79.27.12
     port: 1080
     udp: false
   - name: "🇺🇸 SOCKS5 107.175.215.29:8443 S"
@@ -364,24 +294,9 @@ proxies:
     server: 107.175.215.29
     port: 8443
     udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.225:4956 S"
-    type: socks5
-    server: 206.123.156.225
-    port: 4956
-    udp: false
-  - name: "🇺🇸 SOCKS5 152.53.209.196:1080 S"
-    type: socks5
-    server: 152.53.209.196
-    port: 1080
-    udp: false
   - name: "🇺🇸 SOCKS5 184.182.240.12:4145 S"
     type: socks5
     server: 184.182.240.12
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS5 184.182.240.211:4145 S"
-    type: socks5
-    server: 184.182.240.211
     port: 4145
     udp: false
   - name: "🇺🇸 SOCKS5 184.185.2.12:4145 S"
@@ -389,114 +304,94 @@ proxies:
     server: 184.185.2.12
     port: 4145
     udp: false
-  - name: "🇯🇵 SOCKS5 152.32.203.130:10808 S"
+  - name: "🇺🇸 SOCKS5 184.182.240.211:4145 S"
     type: socks5
-    server: 152.32.203.130
-    port: 10808
+    server: 184.182.240.211
+    port: 4145
     udp: false
-  - name: "🇧🇩 SOCKS5 103.136.107.70:1080 S"
+  - name: "🇨🇳 SOCKS5 171.213.209.63:10801 S"
     type: socks5
-    server: 103.136.107.70
-    port: 1080
+    server: 171.213.209.63
+    port: 10801
     udp: false
-  - name: "🇨🇴 SOCKS5 149.130.182.81:1080 S"
+  - name: "🇺🇸 SOCKS5 178.130.47.41:1082 S"
     type: socks5
-    server: 149.130.182.81
-    port: 1080
-    udp: false
-  - name: "🇧🇷 SOCKS5 147.15.17.132:1081 S"
-    type: socks5
-    server: 147.15.17.132
-    port: 1081
-    udp: false
-  - name: "🇧🇷 SOCKS5 147.15.17.132:1094 S"
-    type: socks5
-    server: 147.15.17.132
-    port: 1094
-    udp: false
-  - name: "🇸🇪 SOCKS5 188.93.140.146:1080 S"
-    type: socks5
-    server: 188.93.140.146
-    port: 1080
-    udp: false
-  - name: "🇧🇷 SOCKS5 147.15.17.132:1092 S"
-    type: socks5
-    server: 147.15.17.132
-    port: 1092
-    udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.223:4182 S"
-    type: socks5
-    server: 206.123.156.223
-    port: 4182
-    udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.228:4235 S"
-    type: socks5
-    server: 206.123.156.228
-    port: 4235
-    udp: false
-  - name: "🇩🇪 SOCKS5 147.45.178.104:1082 S"
-    type: socks5
-    server: 147.45.178.104
+    server: 178.130.47.41
     port: 1082
-    udp: false
-  - name: "🇺🇸 SOCKS5 178.130.47.50:1081 S"
-    type: socks5
-    server: 178.130.47.50
-    port: 1081
-    udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.225:4915 S"
-    type: socks5
-    server: 206.123.156.225
-    port: 4915
-    udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.223:5195 S"
-    type: socks5
-    server: 206.123.156.223
-    port: 5195
-    udp: false
-  - name: "🇷🇺 SOCKS5 147.45.60.110:1081 S"
-    type: socks5
-    server: 147.45.60.110
-    port: 1081
     udp: false
   - name: "🇷🇺 SOCKS5 147.45.60.136:1081 S"
     type: socks5
     server: 147.45.60.136
     port: 1081
     udp: false
-  - name: "🇷🇺 SOCKS5 147.45.60.136:1082 S"
+  - name: "🇺🇸 SOCKS5 144.24.15.246:1080 S"
     type: socks5
-    server: 147.45.60.136
+    server: 144.24.15.246
+    port: 1080
+    udp: false
+  - name: "🇮🇩 SOCKS5 103.134.220.49:1080 S"
+    type: socks5
+    server: 103.134.220.49
+    port: 1080
+    udp: false
+  - name: "🇧🇩 SOCKS5 123.136.24.161:1080 S"
+    type: socks5
+    server: 123.136.24.161
+    port: 1080
+    udp: false
+  - name: "🇷🇺 SOCKS5 147.45.60.110:1082 S"
+    type: socks5
+    server: 147.45.60.110
     port: 1082
     udp: false
-  - name: "🇧🇩 SOCKS5 103.243.82.38:8008 S"
+  - name: "🇰🇭 SOCKS5 110.235.247.206:1080 S"
     type: socks5
-    server: 103.243.82.38
-    port: 8008
-    udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.202:7873 S"
-    type: socks5
-    server: 206.123.156.202
-    port: 7873
-    udp: false
-  - name: "🇨🇿 SOCKS5 194.58.57.52:1080 S"
-    type: socks5
-    server: 194.58.57.52
+    server: 110.235.247.206
     port: 1080
+    udp: false
+  - name: "🇺🇸 SOCKS5 178.130.47.50:1081 S"
+    type: socks5
+    server: 178.130.47.50
+    port: 1081
+    udp: false
+  - name: "🇺🇸 SOCKS5 184.181.217.220:4145 S"
+    type: socks5
+    server: 184.181.217.220
+    port: 4145
     udp: false
   - name: "🇰🇷 SOCKS5 152.70.237.238:3128 S"
     type: socks5
     server: 152.70.237.238
     port: 3128
     udp: false
+  - name: "🇵🇱 SOCKS5 194.59.186.35:1080 S"
+    type: socks5
+    server: 194.59.186.35
+    port: 1080
+    udp: false
+  - name: "🇷🇺 SOCKS5 147.45.60.136:1082 S"
+    type: socks5
+    server: 147.45.60.136
+    port: 1082
+    udp: false
+  - name: "🇹🇷 SOCKS5 139.28.240.202:1081 S"
+    type: socks5
+    server: 139.28.240.202
+    port: 1081
+    udp: false
+  - name: "🇰🇷 SOCKS5 121.169.46.116:1090 S"
+    type: socks5
+    server: 121.169.46.116
+    port: 1090
+    udp: false
   - name: "🇷🇺 SOCKS5 130.49.218.166:1082 S"
     type: socks5
     server: 130.49.218.166
     port: 1082
     udp: false
-  - name: "🇸🇨 SOCKS5 156.225.20.83:1080 S"
+  - name: "🇩🇪 SOCKS5 167.86.79.35:1080 S"
     type: socks5
-    server: 156.225.20.83
+    server: 167.86.79.35
     port: 1080
     udp: false
   - name: "🇮🇷 SOCKS5 206.123.156.228:6947 S"
@@ -504,84 +399,99 @@ proxies:
     server: 206.123.156.228
     port: 6947
     udp: false
-  - name: "🇮🇩 SOCKS5 103.103.146.149:7080 S"
-    type: socks5
-    server: 103.103.146.149
-    port: 7080
-    udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.223:5284 S"
-    type: socks5
-    server: 206.123.156.223
-    port: 5284
-    udp: false
-  - name: "🇺🇸 SOCKS5 178.130.47.21:1082 S"
-    type: socks5
-    server: 178.130.47.21
-    port: 1082
-    udp: false
   - name: "🇺🇸 SOCKS5 178.130.47.42:1081 S"
     type: socks5
     server: 178.130.47.42
     port: 1081
     udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.202:4664 S"
+  - name: "🇸🇨 SOCKS5 156.225.20.83:1080 S"
     type: socks5
-    server: 206.123.156.202
-    port: 4664
-    udp: false
-  - name: "🇩🇪 SOCKS5 147.45.178.104:1081 S"
-    type: socks5
-    server: 147.45.178.104
-    port: 1081
-    udp: false
-  - name: "🇨🇳 SOCKS5 171.213.209.63:10801 S"
-    type: socks5
-    server: 171.213.209.63
-    port: 10801
-    udp: false
-  - name: "🇷🇺 SOCKS5 147.45.60.139:1081 S"
-    type: socks5
-    server: 147.45.60.139
-    port: 1081
-    udp: false
-  - name: "🇧🇩 SOCKS5 123.136.24.161:1080 S"
-    type: socks5
-    server: 123.136.24.161
+    server: 156.225.20.83
     port: 1080
     udp: false
-  - name: "🇳🇬 SOCKS5 102.69.146.59:7080 S"
+  - name: "🇯🇵 SOCKS5 152.32.203.130:10808 S"
     type: socks5
-    server: 102.69.146.59
-    port: 7080
+    server: 152.32.203.130
+    port: 10808
     udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.231:4519 S"
+  - name: "🇮🇷 SOCKS5 206.123.156.225:4915 S"
     type: socks5
-    server: 206.123.156.231
-    port: 4519
+    server: 206.123.156.225
+    port: 4915
     udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.209:4176 S"
+  - name: "🇺🇸 SOCKS5 107.151.148.153:1080 S"
     type: socks5
-    server: 206.123.156.209
-    port: 4176
+    server: 107.151.148.153
+    port: 1080
     udp: false
-  - name: "🇮🇷 SOCKS5 206.123.156.223:5079 S"
+  - name: "🇮🇷 SOCKS5 206.123.156.202:7873 S"
     type: socks5
-    server: 206.123.156.223
-    port: 5079
+    server: 206.123.156.202
+    port: 7873
     udp: false
-  - name: "🇷🇺 SOCKS5 147.45.60.110:1082 S"
+  - name: "🇻🇳 SOCKS5 118.70.67.11:1080 S"
     type: socks5
-    server: 147.45.60.110
-    port: 1082
+    server: 118.70.67.11
+    port: 1080
     udp: false
-  - name: "🇺🇸 SOCKS4 104.200.135.46:4145 M"
+  - name: "🇺🇸 SOCKS4 198.8.94.170:4145 M"
     type: socks4
-    server: 104.200.135.46
+    server: 198.8.94.170
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS4 192.111.135.17:18302 M"
+    type: socks4
+    server: 192.111.135.17
+    port: 18302
+    udp: false
+  - name: "🇺🇸 SOCKS4 192.111.135.18:18301 M"
+    type: socks4
+    server: 192.111.135.18
+    port: 18301
+    udp: false
+  - name: "🇺🇸 SOCKS4 142.54.228.193:4145 M"
+    type: socks4
+    server: 142.54.228.193
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS4 107.152.98.5:4145 M"
+    type: socks4
+    server: 107.152.98.5
     port: 4145
     udp: false
   - name: "🇺🇸 SOCKS4 142.54.229.249:4145 M"
     type: socks4
     server: 142.54.229.249
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS4 107.181.168.145:4145 M"
+    type: socks4
+    server: 107.181.168.145
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS4 192.111.129.145:16894 M"
+    type: socks4
+    server: 192.111.129.145
+    port: 16894
+    udp: false
+  - name: "🇺🇸 SOCKS4 184.170.251.30:11288 M"
+    type: socks4
+    server: 184.170.251.30
+    port: 11288
+    udp: false
+  - name: "🇺🇸 SOCKS4 192.252.214.20:15864 M"
+    type: socks4
+    server: 192.252.214.20
+    port: 15864
+    udp: false
+  - name: "🇺🇸 SOCKS4 192.111.137.37:18762 M"
+    type: socks4
+    server: 192.111.137.37
+    port: 18762
+    udp: false
+  - name: "🇺🇸 SOCKS4 192.111.134.10:4145 M"
+    type: socks4
+    server: 192.111.134.10
     port: 4145
     udp: false
   - name: "🇺🇸 SOCKS4 142.54.231.38:4145 M"
@@ -594,74 +504,24 @@ proxies:
     server: 142.54.239.1
     port: 4145
     udp: false
-  - name: "🇺🇸 SOCKS4 107.181.168.145:4145 M"
+  - name: "🇺🇸 SOCKS4 104.200.135.46:4145 M"
     type: socks4
-    server: 107.181.168.145
+    server: 104.200.135.46
     port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS4 192.111.134.10:4145 M"
-    type: socks4
-    server: 192.111.134.10
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS4 142.54.228.193:4145 M"
-    type: socks4
-    server: 142.54.228.193
-    port: 4145
-    udp: false
-  - name: "🇸🇬 SOCKS4 140.245.99.105:7890 M"
-    type: socks4
-    server: 140.245.99.105
-    port: 7890
-    udp: false
-  - name: "🇺🇸 SOCKS4 209.38.74.191:1080 M"
-    type: socks4
-    server: 209.38.74.191
-    port: 1080
     udp: false
   - name: "🇷🇺 SOCKS4 176.12.65.24:443 M"
     type: socks4
     server: 176.12.65.24
     port: 443
     udp: false
-  - name: "🇺🇸 SOCKS4 198.8.94.170:4145 M"
+  - name: "🇺🇸 SOCKS4 184.178.172.17:4145 M"
     type: socks4
-    server: 198.8.94.170
+    server: 184.178.172.17
     port: 4145
     udp: false
-  - name: "🇺🇸 SOCKS4 192.111.129.145:16894 M"
+  - name: "🇺🇸 SOCKS4 24.249.199.12:4145 M"
     type: socks4
-    server: 192.111.129.145
-    port: 16894
-    udp: false
-  - name: "🇺🇸 SOCKS4 192.111.135.17:18302 M"
-    type: socks4
-    server: 192.111.135.17
-    port: 18302
-    udp: false
-  - name: "🇺🇸 SOCKS4 192.252.214.20:15864 M"
-    type: socks4
-    server: 192.252.214.20
-    port: 15864
-    udp: false
-  - name: "🇺🇸 SOCKS4 192.111.137.37:18762 M"
-    type: socks4
-    server: 192.111.137.37
-    port: 18762
-    udp: false
-  - name: "🇺🇸 SOCKS4 192.111.135.18:18301 M"
-    type: socks4
-    server: 192.111.135.18
-    port: 18301
-    udp: false
-  - name: "🇺🇸 SOCKS4 184.170.251.30:11288 M"
-    type: socks4
-    server: 184.170.251.30
-    port: 11288
-    udp: false
-  - name: "🇺🇸 SOCKS4 184.178.172.26:4145 M"
-    type: socks4
-    server: 184.178.172.26
+    server: 24.249.199.12
     port: 4145
     udp: false
   - name: "🇺🇸 SOCKS4 184.178.172.25:15291 M"
@@ -674,15 +534,40 @@ proxies:
     server: 184.178.172.14
     port: 4145
     udp: false
-  - name: "🇺🇸 SOCKS4 184.178.172.28:15294 M"
+  - name: "🇺🇸 SOCKS4 184.178.172.3:4145 M"
     type: socks4
-    server: 184.178.172.28
-    port: 15294
+    server: 184.178.172.3
+    port: 4145
     udp: false
   - name: "🇺🇸 SOCKS4 184.178.172.5:15303 M"
     type: socks4
     server: 184.178.172.5
     port: 15303
+    udp: false
+  - name: "🇺🇸 SOCKS4 184.178.172.28:15294 M"
+    type: socks4
+    server: 184.178.172.28
+    port: 15294
+    udp: false
+  - name: "🇺🇸 SOCKS4 184.181.217.194:4145 M"
+    type: socks4
+    server: 184.181.217.194
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS4 184.178.172.18:15280 M"
+    type: socks4
+    server: 184.178.172.18
+    port: 15280
+    udp: false
+  - name: "🇺🇸 SOCKS4 24.249.199.4:4145 M"
+    type: socks4
+    server: 24.249.199.4
+    port: 4145
+    udp: false
+  - name: "🇺🇸 SOCKS4 184.178.172.26:4145 M"
+    type: socks4
+    server: 184.178.172.26
+    port: 4145
     udp: false
   - name: "🇺🇸 SOCKS4 184.178.172.23:4145 M"
     type: socks4
@@ -694,84 +579,54 @@ proxies:
     server: 184.178.172.13
     port: 15311
     udp: false
-  - name: "🇺🇸 SOCKS4 24.249.199.4:4145 M"
+  - name: "🇺🇸 SOCKS4 184.181.217.201:4145 M"
     type: socks4
-    server: 24.249.199.4
+    server: 184.181.217.201
     port: 4145
     udp: false
-  - name: "🇺🇸 SOCKS4 184.178.172.3:4145 M"
+  - name: "🇺🇸 SOCKS4 184.178.172.11:4145 M"
     type: socks4
-    server: 184.178.172.3
+    server: 184.178.172.11
     port: 4145
     udp: false
-  - name: "🇺🇸 SOCKS4 184.181.217.194:4145 M"
+  - name: "🇷🇺 SOCKS4 147.45.60.252:1082 M"
     type: socks4
-    server: 184.181.217.194
-    port: 4145
+    server: 147.45.60.252
+    port: 1082
     udp: false
   - name: "🇷🇺 SOCKS4 147.45.60.250:1081 M"
     type: socks4
     server: 147.45.60.250
     port: 1081
     udp: false
-  - name: "🇺🇸 SOCKS4 184.178.172.17:4145 M"
+  - name: "🇸🇬 SOCKS4 140.245.99.105:7890 M"
     type: socks4
-    server: 184.178.172.17
-    port: 4145
+    server: 140.245.99.105
+    port: 7890
     udp: false
-  - name: "🇺🇸 SOCKS4 184.178.172.18:15280 M"
+  - name: "🇺🇸 SOCKS4 209.38.74.191:1080 M"
     type: socks4
-    server: 184.178.172.18
-    port: 15280
-    udp: false
-  - name: "🇺🇸 SOCKS4 184.181.217.201:4145 M"
-    type: socks4
-    server: 184.181.217.201
-    port: 4145
-    udp: false
-  - name: "🇺🇸 SOCKS4 24.249.199.12:4145 M"
-    type: socks4
-    server: 24.249.199.12
-    port: 4145
-    udp: false
-  - name: "🇩🇪 SOCKS4 147.45.66.115:1081 M"
-    type: socks4
-    server: 147.45.66.115
-    port: 1081
-    udp: false
-  - name: "🇩🇪 SOCKS4 159.195.61.240:1080 S"
-    type: socks4
-    server: 159.195.61.240
+    server: 209.38.74.191
     port: 1080
     udp: false
-  - name: "🇷🇺 SOCKS4 147.45.60.252:1082 S"
+  - name: "🇷🇺 SOCKS4 147.45.60.246:1081 S"
     type: socks4
-    server: 147.45.60.252
-    port: 1082
-    udp: false
-  - name: "🇹🇷 SOCKS4 139.28.241.247:1081 S"
-    type: socks4
-    server: 139.28.241.247
+    server: 147.45.60.246
     port: 1081
     udp: false
-  - name: "🇩🇪 SOCKS4 147.45.66.115:1082 S"
+  - name: "🇫🇮 SOCKS4 185.230.190.195:1080 S"
     type: socks4
-    server: 147.45.66.115
-    port: 1082
+    server: 185.230.190.195
+    port: 1080
+    udp: false
+  - name: "🇷🇺 SOCKS4 147.45.60.252:1081 S"
+    type: socks4
+    server: 147.45.60.252
+    port: 1081
     udp: false
   - name: "🇨🇳 SOCKS4 39.102.211.162:8080 S"
     type: socks4
     server: 39.102.211.162
-    port: 8080
-    udp: false
-  - name: "🇨🇳 SOCKS4 39.102.208.23:8443 S"
-    type: socks4
-    server: 39.102.208.23
-    port: 8443
-    udp: false
-  - name: "🇨🇳 SOCKS4 39.102.214.192:8080 S"
-    type: socks4
-    server: 39.102.214.192
     port: 8080
     udp: false
   - name: "🇨🇳 SOCKS4 39.102.213.213:8443 S"
@@ -779,10 +634,15 @@ proxies:
     server: 39.102.213.213
     port: 8443
     udp: false
-  - name: "🇨🇳 SOCKS4 39.100.88.89:34567 S"
+  - name: "🇨🇳 SOCKS4 39.102.208.23:8443 S"
     type: socks4
-    server: 39.100.88.89
-    port: 34567
+    server: 39.102.208.23
+    port: 8443
+    udp: false
+  - name: "🇨🇳 SOCKS4 39.102.214.152:8008 S"
+    type: socks4
+    server: 39.102.214.152
+    port: 8008
     udp: false
   - name: "🇨🇳 SOCKS4 39.102.211.64:8443 S"
     type: socks4
@@ -794,55 +654,40 @@ proxies:
     server: 39.102.210.176
     port: 8008
     udp: false
+  - name: "🇨🇳 SOCKS4 39.102.214.192:8080 S"
+    type: socks4
+    server: 39.102.214.192
+    port: 8080
+    udp: false
   - name: "🇨🇳 SOCKS4 39.104.16.201:80 S"
     type: socks4
     server: 39.104.16.201
     port: 80
     udp: false
-  - name: "🇨🇳 SOCKS4 39.102.214.152:8008 S"
+  - name: "🇨🇳 SOCKS4 39.100.88.89:34567 S"
     type: socks4
-    server: 39.102.214.152
-    port: 8008
-    udp: false
-  - name: "🇺🇸 SOCKS4 186.241.90.120:7890 S"
-    type: socks4
-    server: 186.241.90.120
-    port: 7890
-    udp: false
-  - name: "🇷🇺 SOCKS4 130.49.218.166:1081 S"
-    type: socks4
-    server: 130.49.218.166
-    port: 1081
-    udp: false
-  - name: "🇷🇺 SOCKS4 147.45.60.241:1081 S"
-    type: socks4
-    server: 147.45.60.241
-    port: 1081
-    udp: false
-  - name: "🇷🇺 SOCKS4 147.45.60.252:1081 S"
-    type: socks4
-    server: 147.45.60.252
-    port: 1081
-    udp: false
-  - name: "🇩🇪 SOCKS4 116.202.20.234:9082 S"
-    type: socks4
-    server: 116.202.20.234
-    port: 9082
-    udp: false
-  - name: "🇷🇺 SOCKS4 147.45.60.246:1081 S"
-    type: socks4
-    server: 147.45.60.246
-    port: 1081
+    server: 39.100.88.89
+    port: 34567
     udp: false
   - name: "🇺🇸 SOCKS4 178.130.47.23:1081 S"
     type: socks4
     server: 178.130.47.23
     port: 1081
     udp: false
-  - name: "🇫🇮 SOCKS4 185.230.190.195:1080 S"
+  - name: "🇩🇪 SOCKS4 147.45.66.115:1081 S"
     type: socks4
-    server: 185.230.190.195
-    port: 1080
+    server: 147.45.66.115
+    port: 1081
+    udp: false
+  - name: "🇩🇪 SOCKS4 147.45.66.115:1082 S"
+    type: socks4
+    server: 147.45.66.115
+    port: 1082
+    udp: false
+  - name: "🇺🇸 SOCKS4 186.241.90.120:7890 S"
+    type: socks4
+    server: 186.241.90.120
+    port: 7890
     udp: false
 proxy-groups:
   - name: 🚀 PROXY
@@ -850,672 +695,560 @@ proxy-groups:
     proxies:
       - ♻️ AUTO
       - DIRECT
+      - "🇺🇸 SOCKS5 204.48.29.137:1088 F"
       - "🇷🇺 SOCKS5 147.45.60.246:1082 F"
-      - "🇺🇸 SOCKS5 141.148.158.143:1080 F"
-      - "🇺🇸 SOCKS5 178.130.47.41:1082 F"
-      - "🇺🇸 SOCKS5 144.24.15.246:1080 F"
-      - "🇺🇸 SOCKS5 204.48.29.137:1088 M"
-      - "🇨🇦 SOCKS5 167.114.172.208:1088 M"
-      - "🇨🇦 SOCKS5 184.95.235.194:1080 M"
-      - "🇺🇸 SOCKS5 193.25.215.182:22222 M"
-      - "🇺🇸 SOCKS5 162.253.68.97:4145 M"
-      - "🇺🇸 SOCKS5 107.181.161.81:4145 M"
-      - "🇺🇸 SOCKS5 107.152.98.5:4145 M"
-      - "🇺🇸 SOCKS5 104.200.152.30:4145 M"
-      - "🇺🇸 SOCKS5 104.37.135.145:4145 M"
-      - "🇯🇵 SOCKS5 101.36.104.239:10808 M"
-      - "🇯🇵 SOCKS5 101.36.104.46:10808 M"
-      - "🇺🇸 SOCKS5 142.54.226.214:4145 M"
-      - "🇯🇵 SOCKS5 193.111.30.139:2080 M"
-      - "🇫🇷 SOCKS5 13.140.164.179:3622 M"
+      - "🇷🇺 SOCKS5 147.45.60.139:1081 F"
+      - "🇨🇦 SOCKS5 167.114.172.208:1088 F"
+      - "🇺🇸 SOCKS5 178.130.47.21:1082 F"
+      - "🇨🇿 SOCKS5 194.58.57.52:1080 M"
       - "🇳🇱 SOCKS5 109.71.244.97:1080 M"
-      - "🇭🇰 SOCKS5 123.58.219.171:10808 M"
-      - "🇫🇮 SOCKS5 193.221.203.192:1080 M"
-      - "🇳🇱 SOCKS5 144.124.232.204:1080 M"
-      - "🇭🇰 SOCKS5 172.81.111.156:10001 M"
-      - "🇸🇬 SOCKS5 178.128.106.142:1080 M"
+      - "🇺🇸 SOCKS5 193.25.215.182:22222 M"
+      - "🇺🇸 SOCKS5 141.148.158.143:1080 M"
+      - "🇫🇷 SOCKS5 185.185.80.58:1088 M"
       - "🇳🇱 SOCKS5 144.124.232.204:443 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1082 M"
-      - "🇭🇰 SOCKS5 119.28.13.138:1080 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1085 M"
-      - "🇵🇱 SOCKS5 194.59.186.35:1080 M"
-      - "🇫🇷 SOCKS5 185.185.80.58:1088 M"
-      - "🇧🇷 SOCKS5 190.89.4.185:1080 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1094 M"
+      - "🇳🇱 SOCKS5 144.124.232.204:1080 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1081 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1092 M"
+      - "🇺🇸 SOCKS5 104.200.152.30:4145 M"
+      - "🇺🇸 SOCKS5 162.253.68.97:4145 M"
+      - "🇺🇸 SOCKS5 107.181.161.81:4145 M"
+      - "🇺🇸 SOCKS5 104.37.135.145:4145 M"
+      - "🇨🇴 SOCKS5 149.130.182.81:1080 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1081 M"
-      - "🇮🇳 SOCKS5 144.24.111.128:1088 M"
-      - "🇻🇳 SOCKS5 118.70.67.11:1080 M"
-      - "🇩🇪 SOCKS5 167.86.79.35:1080 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1088 M"
-      - "🇰🇭 SOCKS5 202.79.27.12:1080 M"
       - "🇺🇸 SOCKS5 199.66.183.226:4145 M"
-      - "🇺🇸 SOCKS5 184.170.249.65:4145 M"
-      - "🇧🇩 SOCKS5 182.48.78.141:8008 M"
-      - "🇮🇩 SOCKS5 103.66.46.150:69 M"
+      - "🇺🇸 SOCKS5 192.111.130.5:17002 M"
+      - "🇺🇸 SOCKS5 192.111.130.2:4145 M"
       - "🇺🇸 SOCKS5 184.170.248.5:4145 M"
       - "🇺🇸 SOCKS5 184.170.245.148:4145 M"
-      - "🇺🇸 SOCKS5 192.111.130.2:4145 M"
-      - "🇺🇸 SOCKS5 184.181.217.220:4145 M"
-      - "🇺🇸 SOCKS5 174.64.199.82:4145 M"
-      - "🇺🇸 SOCKS5 184.178.172.11:4145 M"
-      - "🇺🇸 SOCKS5 192.111.130.5:17002 M"
-      - "🇺🇸 SOCKS5 174.75.211.193:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.197:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.196:4145 M"
-      - "🇺🇦 SOCKS5 185.210.85.26:56981 M"
-      - "🇺🇸 SOCKS5 174.64.199.79:4145 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1100 M"
-      - "🇭🇰 SOCKS5 124.156.185.140:1080 M"
+      - "🇺🇸 SOCKS5 184.170.249.65:4145 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1088 M"
       - "🇺🇸 SOCKS5 192.111.137.35:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.198:49547 M"
-      - "🇻🇳 SOCKS5 118.71.44.153:1098 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1090 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1100 M"
+      - "🇫🇮 SOCKS5 193.221.203.192:1080 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1080 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1090 M"
+      - "🇯🇵 SOCKS5 101.36.104.239:10808 M"
+      - "🇯🇵 SOCKS5 101.36.104.46:10808 M"
+      - "🇺🇸 SOCKS5 174.75.211.193:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.196:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.197:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.198:49547 M"
+      - "🇺🇸 SOCKS5 174.64.199.79:4145 M"
+      - "🇺🇸 SOCKS5 174.64.199.82:4145 M"
+      - "🇷🇺 SOCKS5 147.45.60.110:1081 M"
+      - "🇮🇳 SOCKS5 144.24.111.128:1088 M"
+      - "🇭🇰 SOCKS5 119.28.13.138:1080 M"
+      - "🇭🇰 SOCKS5 123.58.219.171:10808 M"
+      - "🇭🇰 SOCKS5 124.156.185.140:1080 M"
+      - "🇭🇰 SOCKS5 172.81.111.156:10001 M"
+      - "🇸🇬 SOCKS5 178.128.106.142:1080 M"
       - "🇸🇪 SOCKS5 171.25.158.95:1080 M"
-      - "🇹🇷 SOCKS5 139.28.240.202:1081 S"
-      - "🇹🇷 SOCKS5 139.28.241.247:1082 S"
-      - "🇺🇸 SOCKS5 107.151.148.153:1080 S"
-      - "🇩🇪 SOCKS5 144.76.159.120:1083 S"
-      - "🇮🇩 SOCKS5 103.134.220.49:1080 S"
-      - "🇻🇳 SOCKS5 118.71.44.153:1054 S"
-      - "🇰🇷 SOCKS5 121.169.46.116:1090 S"
-      - "🇰🇭 SOCKS5 110.235.247.206:1080 S"
-      - "🇯🇵 SOCKS5 152.70.107.226:1080 S"
+      - "🇩🇪 SOCKS5 147.45.178.104:1082 M"
+      - "🇫🇷 SOCKS5 13.140.164.179:3622 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1083 M"
+      - "🇮🇩 SOCKS5 103.66.46.150:69 S"
+      - "🇰🇭 SOCKS5 202.79.27.12:1080 S"
       - "🇺🇸 SOCKS5 107.175.215.29:8443 S"
-      - "🇮🇷 SOCKS5 206.123.156.225:4956 S"
-      - "🇺🇸 SOCKS5 152.53.209.196:1080 S"
       - "🇺🇸 SOCKS5 184.182.240.12:4145 S"
-      - "🇺🇸 SOCKS5 184.182.240.211:4145 S"
       - "🇺🇸 SOCKS5 184.185.2.12:4145 S"
-      - "🇯🇵 SOCKS5 152.32.203.130:10808 S"
-      - "🇧🇩 SOCKS5 103.136.107.70:1080 S"
-      - "🇨🇴 SOCKS5 149.130.182.81:1080 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1081 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1094 S"
-      - "🇸🇪 SOCKS5 188.93.140.146:1080 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1092 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:4182 S"
-      - "🇮🇷 SOCKS5 206.123.156.228:4235 S"
-      - "🇩🇪 SOCKS5 147.45.178.104:1082 S"
-      - "🇺🇸 SOCKS5 178.130.47.50:1081 S"
-      - "🇮🇷 SOCKS5 206.123.156.225:4915 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5195 S"
-      - "🇷🇺 SOCKS5 147.45.60.110:1081 S"
-      - "🇷🇺 SOCKS5 147.45.60.136:1081 S"
-      - "🇷🇺 SOCKS5 147.45.60.136:1082 S"
-      - "🇧🇩 SOCKS5 103.243.82.38:8008 S"
-      - "🇮🇷 SOCKS5 206.123.156.202:7873 S"
-      - "🇨🇿 SOCKS5 194.58.57.52:1080 S"
-      - "🇰🇷 SOCKS5 152.70.237.238:3128 S"
-      - "🇷🇺 SOCKS5 130.49.218.166:1082 S"
-      - "🇸🇨 SOCKS5 156.225.20.83:1080 S"
-      - "🇮🇷 SOCKS5 206.123.156.228:6947 S"
-      - "🇮🇩 SOCKS5 103.103.146.149:7080 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5284 S"
-      - "🇺🇸 SOCKS5 178.130.47.21:1082 S"
-      - "🇺🇸 SOCKS5 178.130.47.42:1081 S"
-      - "🇮🇷 SOCKS5 206.123.156.202:4664 S"
-      - "🇩🇪 SOCKS5 147.45.178.104:1081 S"
+      - "🇺🇸 SOCKS5 184.182.240.211:4145 S"
       - "🇨🇳 SOCKS5 171.213.209.63:10801 S"
-      - "🇷🇺 SOCKS5 147.45.60.139:1081 S"
+      - "🇺🇸 SOCKS5 178.130.47.41:1082 S"
+      - "🇷🇺 SOCKS5 147.45.60.136:1081 S"
+      - "🇺🇸 SOCKS5 144.24.15.246:1080 S"
+      - "🇮🇩 SOCKS5 103.134.220.49:1080 S"
       - "🇧🇩 SOCKS5 123.136.24.161:1080 S"
-      - "🇳🇬 SOCKS5 102.69.146.59:7080 S"
-      - "🇮🇷 SOCKS5 206.123.156.231:4519 S"
-      - "🇮🇷 SOCKS5 206.123.156.209:4176 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5079 S"
       - "🇷🇺 SOCKS5 147.45.60.110:1082 S"
-      - "🇺🇸 SOCKS4 104.200.135.46:4145 M"
-      - "🇺🇸 SOCKS4 142.54.229.249:4145 M"
-      - "🇺🇸 SOCKS4 142.54.231.38:4145 M"
-      - "🇺🇸 SOCKS4 142.54.239.1:4145 M"
-      - "🇺🇸 SOCKS4 107.181.168.145:4145 M"
-      - "🇺🇸 SOCKS4 192.111.134.10:4145 M"
-      - "🇺🇸 SOCKS4 142.54.228.193:4145 M"
-      - "🇸🇬 SOCKS4 140.245.99.105:7890 M"
-      - "🇺🇸 SOCKS4 209.38.74.191:1080 M"
-      - "🇷🇺 SOCKS4 176.12.65.24:443 M"
+      - "🇰🇭 SOCKS5 110.235.247.206:1080 S"
+      - "🇺🇸 SOCKS5 178.130.47.50:1081 S"
+      - "🇺🇸 SOCKS5 184.181.217.220:4145 S"
+      - "🇰🇷 SOCKS5 152.70.237.238:3128 S"
+      - "🇵🇱 SOCKS5 194.59.186.35:1080 S"
+      - "🇷🇺 SOCKS5 147.45.60.136:1082 S"
+      - "🇹🇷 SOCKS5 139.28.240.202:1081 S"
+      - "🇰🇷 SOCKS5 121.169.46.116:1090 S"
+      - "🇷🇺 SOCKS5 130.49.218.166:1082 S"
+      - "🇩🇪 SOCKS5 167.86.79.35:1080 S"
+      - "🇮🇷 SOCKS5 206.123.156.228:6947 S"
+      - "🇺🇸 SOCKS5 178.130.47.42:1081 S"
+      - "🇸🇨 SOCKS5 156.225.20.83:1080 S"
+      - "🇯🇵 SOCKS5 152.32.203.130:10808 S"
+      - "🇮🇷 SOCKS5 206.123.156.225:4915 S"
+      - "🇺🇸 SOCKS5 107.151.148.153:1080 S"
+      - "🇮🇷 SOCKS5 206.123.156.202:7873 S"
+      - "🇻🇳 SOCKS5 118.70.67.11:1080 S"
       - "🇺🇸 SOCKS4 198.8.94.170:4145 M"
-      - "🇺🇸 SOCKS4 192.111.129.145:16894 M"
       - "🇺🇸 SOCKS4 192.111.135.17:18302 M"
+      - "🇺🇸 SOCKS4 192.111.135.18:18301 M"
+      - "🇺🇸 SOCKS4 142.54.228.193:4145 M"
+      - "🇺🇸 SOCKS4 107.152.98.5:4145 M"
+      - "🇺🇸 SOCKS4 142.54.229.249:4145 M"
+      - "🇺🇸 SOCKS4 107.181.168.145:4145 M"
+      - "🇺🇸 SOCKS4 192.111.129.145:16894 M"
+      - "🇺🇸 SOCKS4 184.170.251.30:11288 M"
       - "🇺🇸 SOCKS4 192.252.214.20:15864 M"
       - "🇺🇸 SOCKS4 192.111.137.37:18762 M"
-      - "🇺🇸 SOCKS4 192.111.135.18:18301 M"
-      - "🇺🇸 SOCKS4 184.170.251.30:11288 M"
-      - "🇺🇸 SOCKS4 184.178.172.26:4145 M"
+      - "🇺🇸 SOCKS4 192.111.134.10:4145 M"
+      - "🇺🇸 SOCKS4 142.54.231.38:4145 M"
+      - "🇺🇸 SOCKS4 142.54.239.1:4145 M"
+      - "🇺🇸 SOCKS4 104.200.135.46:4145 M"
+      - "🇷🇺 SOCKS4 176.12.65.24:443 M"
+      - "🇺🇸 SOCKS4 184.178.172.17:4145 M"
+      - "🇺🇸 SOCKS4 24.249.199.12:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.25:15291 M"
       - "🇺🇸 SOCKS4 184.178.172.14:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.28:15294 M"
+      - "🇺🇸 SOCKS4 184.178.172.3:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.5:15303 M"
+      - "🇺🇸 SOCKS4 184.178.172.28:15294 M"
+      - "🇺🇸 SOCKS4 184.181.217.194:4145 M"
+      - "🇺🇸 SOCKS4 184.178.172.18:15280 M"
+      - "🇺🇸 SOCKS4 24.249.199.4:4145 M"
+      - "🇺🇸 SOCKS4 184.178.172.26:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.23:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.13:15311 M"
-      - "🇺🇸 SOCKS4 24.249.199.4:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.3:4145 M"
-      - "🇺🇸 SOCKS4 184.181.217.194:4145 M"
-      - "🇷🇺 SOCKS4 147.45.60.250:1081 M"
-      - "🇺🇸 SOCKS4 184.178.172.17:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.18:15280 M"
       - "🇺🇸 SOCKS4 184.181.217.201:4145 M"
-      - "🇺🇸 SOCKS4 24.249.199.12:4145 M"
-      - "🇩🇪 SOCKS4 147.45.66.115:1081 M"
-      - "🇩🇪 SOCKS4 159.195.61.240:1080 S"
-      - "🇷🇺 SOCKS4 147.45.60.252:1082 S"
-      - "🇹🇷 SOCKS4 139.28.241.247:1081 S"
-      - "🇩🇪 SOCKS4 147.45.66.115:1082 S"
+      - "🇺🇸 SOCKS4 184.178.172.11:4145 M"
+      - "🇷🇺 SOCKS4 147.45.60.252:1082 M"
+      - "🇷🇺 SOCKS4 147.45.60.250:1081 M"
+      - "🇸🇬 SOCKS4 140.245.99.105:7890 M"
+      - "🇺🇸 SOCKS4 209.38.74.191:1080 M"
+      - "🇷🇺 SOCKS4 147.45.60.246:1081 S"
+      - "🇫🇮 SOCKS4 185.230.190.195:1080 S"
+      - "🇷🇺 SOCKS4 147.45.60.252:1081 S"
       - "🇨🇳 SOCKS4 39.102.211.162:8080 S"
-      - "🇨🇳 SOCKS4 39.102.208.23:8443 S"
-      - "🇨🇳 SOCKS4 39.102.214.192:8080 S"
       - "🇨🇳 SOCKS4 39.102.213.213:8443 S"
-      - "🇨🇳 SOCKS4 39.100.88.89:34567 S"
+      - "🇨🇳 SOCKS4 39.102.208.23:8443 S"
+      - "🇨🇳 SOCKS4 39.102.214.152:8008 S"
       - "🇨🇳 SOCKS4 39.102.211.64:8443 S"
       - "🇨🇳 SOCKS4 39.102.210.176:8008 S"
+      - "🇨🇳 SOCKS4 39.102.214.192:8080 S"
       - "🇨🇳 SOCKS4 39.104.16.201:80 S"
-      - "🇨🇳 SOCKS4 39.102.214.152:8008 S"
-      - "🇺🇸 SOCKS4 186.241.90.120:7890 S"
-      - "🇷🇺 SOCKS4 130.49.218.166:1081 S"
-      - "🇷🇺 SOCKS4 147.45.60.241:1081 S"
-      - "🇷🇺 SOCKS4 147.45.60.252:1081 S"
-      - "🇩🇪 SOCKS4 116.202.20.234:9082 S"
-      - "🇷🇺 SOCKS4 147.45.60.246:1081 S"
+      - "🇨🇳 SOCKS4 39.100.88.89:34567 S"
       - "🇺🇸 SOCKS4 178.130.47.23:1081 S"
-      - "🇫🇮 SOCKS4 185.230.190.195:1080 S"
+      - "🇩🇪 SOCKS4 147.45.66.115:1081 S"
+      - "🇩🇪 SOCKS4 147.45.66.115:1082 S"
+      - "🇺🇸 SOCKS4 186.241.90.120:7890 S"
   - name: ♻️ AUTO
     type: url-test
     proxies:
+      - "🇺🇸 SOCKS5 204.48.29.137:1088 F"
       - "🇷🇺 SOCKS5 147.45.60.246:1082 F"
-      - "🇺🇸 SOCKS5 141.148.158.143:1080 F"
-      - "🇺🇸 SOCKS5 178.130.47.41:1082 F"
-      - "🇺🇸 SOCKS5 144.24.15.246:1080 F"
-      - "🇺🇸 SOCKS5 204.48.29.137:1088 M"
-      - "🇨🇦 SOCKS5 167.114.172.208:1088 M"
-      - "🇨🇦 SOCKS5 184.95.235.194:1080 M"
-      - "🇺🇸 SOCKS5 193.25.215.182:22222 M"
-      - "🇺🇸 SOCKS5 162.253.68.97:4145 M"
-      - "🇺🇸 SOCKS5 107.181.161.81:4145 M"
-      - "🇺🇸 SOCKS5 107.152.98.5:4145 M"
-      - "🇺🇸 SOCKS5 104.200.152.30:4145 M"
-      - "🇺🇸 SOCKS5 104.37.135.145:4145 M"
-      - "🇯🇵 SOCKS5 101.36.104.239:10808 M"
-      - "🇯🇵 SOCKS5 101.36.104.46:10808 M"
-      - "🇺🇸 SOCKS5 142.54.226.214:4145 M"
-      - "🇯🇵 SOCKS5 193.111.30.139:2080 M"
-      - "🇫🇷 SOCKS5 13.140.164.179:3622 M"
+      - "🇷🇺 SOCKS5 147.45.60.139:1081 F"
+      - "🇨🇦 SOCKS5 167.114.172.208:1088 F"
+      - "🇺🇸 SOCKS5 178.130.47.21:1082 F"
+      - "🇨🇿 SOCKS5 194.58.57.52:1080 M"
       - "🇳🇱 SOCKS5 109.71.244.97:1080 M"
-      - "🇭🇰 SOCKS5 123.58.219.171:10808 M"
-      - "🇫🇮 SOCKS5 193.221.203.192:1080 M"
-      - "🇳🇱 SOCKS5 144.124.232.204:1080 M"
-      - "🇭🇰 SOCKS5 172.81.111.156:10001 M"
-      - "🇸🇬 SOCKS5 178.128.106.142:1080 M"
+      - "🇺🇸 SOCKS5 193.25.215.182:22222 M"
+      - "🇺🇸 SOCKS5 141.148.158.143:1080 M"
+      - "🇫🇷 SOCKS5 185.185.80.58:1088 M"
       - "🇳🇱 SOCKS5 144.124.232.204:443 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1082 M"
-      - "🇭🇰 SOCKS5 119.28.13.138:1080 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1085 M"
-      - "🇵🇱 SOCKS5 194.59.186.35:1080 M"
-      - "🇫🇷 SOCKS5 185.185.80.58:1088 M"
-      - "🇧🇷 SOCKS5 190.89.4.185:1080 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1094 M"
+      - "🇳🇱 SOCKS5 144.124.232.204:1080 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1081 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1092 M"
+      - "🇺🇸 SOCKS5 104.200.152.30:4145 M"
+      - "🇺🇸 SOCKS5 162.253.68.97:4145 M"
+      - "🇺🇸 SOCKS5 107.181.161.81:4145 M"
+      - "🇺🇸 SOCKS5 104.37.135.145:4145 M"
+      - "🇨🇴 SOCKS5 149.130.182.81:1080 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1081 M"
-      - "🇮🇳 SOCKS5 144.24.111.128:1088 M"
-      - "🇻🇳 SOCKS5 118.70.67.11:1080 M"
-      - "🇩🇪 SOCKS5 167.86.79.35:1080 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1088 M"
-      - "🇰🇭 SOCKS5 202.79.27.12:1080 M"
       - "🇺🇸 SOCKS5 199.66.183.226:4145 M"
-      - "🇺🇸 SOCKS5 184.170.249.65:4145 M"
-      - "🇧🇩 SOCKS5 182.48.78.141:8008 M"
-      - "🇮🇩 SOCKS5 103.66.46.150:69 M"
+      - "🇺🇸 SOCKS5 192.111.130.5:17002 M"
+      - "🇺🇸 SOCKS5 192.111.130.2:4145 M"
       - "🇺🇸 SOCKS5 184.170.248.5:4145 M"
       - "🇺🇸 SOCKS5 184.170.245.148:4145 M"
-      - "🇺🇸 SOCKS5 192.111.130.2:4145 M"
-      - "🇺🇸 SOCKS5 184.181.217.220:4145 M"
-      - "🇺🇸 SOCKS5 174.64.199.82:4145 M"
-      - "🇺🇸 SOCKS5 184.178.172.11:4145 M"
-      - "🇺🇸 SOCKS5 192.111.130.5:17002 M"
-      - "🇺🇸 SOCKS5 174.75.211.193:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.197:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.196:4145 M"
-      - "🇺🇦 SOCKS5 185.210.85.26:56981 M"
-      - "🇺🇸 SOCKS5 174.64.199.79:4145 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1100 M"
-      - "🇭🇰 SOCKS5 124.156.185.140:1080 M"
+      - "🇺🇸 SOCKS5 184.170.249.65:4145 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1088 M"
       - "🇺🇸 SOCKS5 192.111.137.35:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.198:49547 M"
-      - "🇻🇳 SOCKS5 118.71.44.153:1098 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1090 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1100 M"
+      - "🇫🇮 SOCKS5 193.221.203.192:1080 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1080 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1090 M"
+      - "🇯🇵 SOCKS5 101.36.104.239:10808 M"
+      - "🇯🇵 SOCKS5 101.36.104.46:10808 M"
+      - "🇺🇸 SOCKS5 174.75.211.193:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.196:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.197:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.198:49547 M"
+      - "🇺🇸 SOCKS5 174.64.199.79:4145 M"
+      - "🇺🇸 SOCKS5 174.64.199.82:4145 M"
+      - "🇷🇺 SOCKS5 147.45.60.110:1081 M"
+      - "🇮🇳 SOCKS5 144.24.111.128:1088 M"
+      - "🇭🇰 SOCKS5 119.28.13.138:1080 M"
+      - "🇭🇰 SOCKS5 123.58.219.171:10808 M"
+      - "🇭🇰 SOCKS5 124.156.185.140:1080 M"
+      - "🇭🇰 SOCKS5 172.81.111.156:10001 M"
+      - "🇸🇬 SOCKS5 178.128.106.142:1080 M"
       - "🇸🇪 SOCKS5 171.25.158.95:1080 M"
-      - "🇹🇷 SOCKS5 139.28.240.202:1081 S"
-      - "🇹🇷 SOCKS5 139.28.241.247:1082 S"
-      - "🇺🇸 SOCKS5 107.151.148.153:1080 S"
-      - "🇩🇪 SOCKS5 144.76.159.120:1083 S"
-      - "🇮🇩 SOCKS5 103.134.220.49:1080 S"
-      - "🇻🇳 SOCKS5 118.71.44.153:1054 S"
-      - "🇰🇷 SOCKS5 121.169.46.116:1090 S"
-      - "🇰🇭 SOCKS5 110.235.247.206:1080 S"
-      - "🇯🇵 SOCKS5 152.70.107.226:1080 S"
+      - "🇩🇪 SOCKS5 147.45.178.104:1082 M"
+      - "🇫🇷 SOCKS5 13.140.164.179:3622 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1083 M"
+      - "🇮🇩 SOCKS5 103.66.46.150:69 S"
+      - "🇰🇭 SOCKS5 202.79.27.12:1080 S"
       - "🇺🇸 SOCKS5 107.175.215.29:8443 S"
-      - "🇮🇷 SOCKS5 206.123.156.225:4956 S"
-      - "🇺🇸 SOCKS5 152.53.209.196:1080 S"
       - "🇺🇸 SOCKS5 184.182.240.12:4145 S"
-      - "🇺🇸 SOCKS5 184.182.240.211:4145 S"
       - "🇺🇸 SOCKS5 184.185.2.12:4145 S"
-      - "🇯🇵 SOCKS5 152.32.203.130:10808 S"
-      - "🇧🇩 SOCKS5 103.136.107.70:1080 S"
-      - "🇨🇴 SOCKS5 149.130.182.81:1080 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1081 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1094 S"
-      - "🇸🇪 SOCKS5 188.93.140.146:1080 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1092 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:4182 S"
-      - "🇮🇷 SOCKS5 206.123.156.228:4235 S"
-      - "🇩🇪 SOCKS5 147.45.178.104:1082 S"
-      - "🇺🇸 SOCKS5 178.130.47.50:1081 S"
-      - "🇮🇷 SOCKS5 206.123.156.225:4915 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5195 S"
-      - "🇷🇺 SOCKS5 147.45.60.110:1081 S"
-      - "🇷🇺 SOCKS5 147.45.60.136:1081 S"
-      - "🇷🇺 SOCKS5 147.45.60.136:1082 S"
-      - "🇧🇩 SOCKS5 103.243.82.38:8008 S"
-      - "🇮🇷 SOCKS5 206.123.156.202:7873 S"
-      - "🇨🇿 SOCKS5 194.58.57.52:1080 S"
-      - "🇰🇷 SOCKS5 152.70.237.238:3128 S"
-      - "🇷🇺 SOCKS5 130.49.218.166:1082 S"
-      - "🇸🇨 SOCKS5 156.225.20.83:1080 S"
-      - "🇮🇷 SOCKS5 206.123.156.228:6947 S"
-      - "🇮🇩 SOCKS5 103.103.146.149:7080 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5284 S"
-      - "🇺🇸 SOCKS5 178.130.47.21:1082 S"
-      - "🇺🇸 SOCKS5 178.130.47.42:1081 S"
-      - "🇮🇷 SOCKS5 206.123.156.202:4664 S"
-      - "🇩🇪 SOCKS5 147.45.178.104:1081 S"
+      - "🇺🇸 SOCKS5 184.182.240.211:4145 S"
       - "🇨🇳 SOCKS5 171.213.209.63:10801 S"
-      - "🇷🇺 SOCKS5 147.45.60.139:1081 S"
+      - "🇺🇸 SOCKS5 178.130.47.41:1082 S"
+      - "🇷🇺 SOCKS5 147.45.60.136:1081 S"
+      - "🇺🇸 SOCKS5 144.24.15.246:1080 S"
+      - "🇮🇩 SOCKS5 103.134.220.49:1080 S"
       - "🇧🇩 SOCKS5 123.136.24.161:1080 S"
-      - "🇳🇬 SOCKS5 102.69.146.59:7080 S"
-      - "🇮🇷 SOCKS5 206.123.156.231:4519 S"
-      - "🇮🇷 SOCKS5 206.123.156.209:4176 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5079 S"
       - "🇷🇺 SOCKS5 147.45.60.110:1082 S"
-      - "🇺🇸 SOCKS4 104.200.135.46:4145 M"
-      - "🇺🇸 SOCKS4 142.54.229.249:4145 M"
-      - "🇺🇸 SOCKS4 142.54.231.38:4145 M"
-      - "🇺🇸 SOCKS4 142.54.239.1:4145 M"
-      - "🇺🇸 SOCKS4 107.181.168.145:4145 M"
-      - "🇺🇸 SOCKS4 192.111.134.10:4145 M"
-      - "🇺🇸 SOCKS4 142.54.228.193:4145 M"
-      - "🇸🇬 SOCKS4 140.245.99.105:7890 M"
-      - "🇺🇸 SOCKS4 209.38.74.191:1080 M"
-      - "🇷🇺 SOCKS4 176.12.65.24:443 M"
+      - "🇰🇭 SOCKS5 110.235.247.206:1080 S"
+      - "🇺🇸 SOCKS5 178.130.47.50:1081 S"
+      - "🇺🇸 SOCKS5 184.181.217.220:4145 S"
+      - "🇰🇷 SOCKS5 152.70.237.238:3128 S"
+      - "🇵🇱 SOCKS5 194.59.186.35:1080 S"
+      - "🇷🇺 SOCKS5 147.45.60.136:1082 S"
+      - "🇹🇷 SOCKS5 139.28.240.202:1081 S"
+      - "🇰🇷 SOCKS5 121.169.46.116:1090 S"
+      - "🇷🇺 SOCKS5 130.49.218.166:1082 S"
+      - "🇩🇪 SOCKS5 167.86.79.35:1080 S"
+      - "🇮🇷 SOCKS5 206.123.156.228:6947 S"
+      - "🇺🇸 SOCKS5 178.130.47.42:1081 S"
+      - "🇸🇨 SOCKS5 156.225.20.83:1080 S"
+      - "🇯🇵 SOCKS5 152.32.203.130:10808 S"
+      - "🇮🇷 SOCKS5 206.123.156.225:4915 S"
+      - "🇺🇸 SOCKS5 107.151.148.153:1080 S"
+      - "🇮🇷 SOCKS5 206.123.156.202:7873 S"
+      - "🇻🇳 SOCKS5 118.70.67.11:1080 S"
       - "🇺🇸 SOCKS4 198.8.94.170:4145 M"
-      - "🇺🇸 SOCKS4 192.111.129.145:16894 M"
       - "🇺🇸 SOCKS4 192.111.135.17:18302 M"
+      - "🇺🇸 SOCKS4 192.111.135.18:18301 M"
+      - "🇺🇸 SOCKS4 142.54.228.193:4145 M"
+      - "🇺🇸 SOCKS4 107.152.98.5:4145 M"
+      - "🇺🇸 SOCKS4 142.54.229.249:4145 M"
+      - "🇺🇸 SOCKS4 107.181.168.145:4145 M"
+      - "🇺🇸 SOCKS4 192.111.129.145:16894 M"
+      - "🇺🇸 SOCKS4 184.170.251.30:11288 M"
       - "🇺🇸 SOCKS4 192.252.214.20:15864 M"
       - "🇺🇸 SOCKS4 192.111.137.37:18762 M"
-      - "🇺🇸 SOCKS4 192.111.135.18:18301 M"
-      - "🇺🇸 SOCKS4 184.170.251.30:11288 M"
-      - "🇺🇸 SOCKS4 184.178.172.26:4145 M"
+      - "🇺🇸 SOCKS4 192.111.134.10:4145 M"
+      - "🇺🇸 SOCKS4 142.54.231.38:4145 M"
+      - "🇺🇸 SOCKS4 142.54.239.1:4145 M"
+      - "🇺🇸 SOCKS4 104.200.135.46:4145 M"
+      - "🇷🇺 SOCKS4 176.12.65.24:443 M"
+      - "🇺🇸 SOCKS4 184.178.172.17:4145 M"
+      - "🇺🇸 SOCKS4 24.249.199.12:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.25:15291 M"
       - "🇺🇸 SOCKS4 184.178.172.14:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.28:15294 M"
+      - "🇺🇸 SOCKS4 184.178.172.3:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.5:15303 M"
+      - "🇺🇸 SOCKS4 184.178.172.28:15294 M"
+      - "🇺🇸 SOCKS4 184.181.217.194:4145 M"
+      - "🇺🇸 SOCKS4 184.178.172.18:15280 M"
+      - "🇺🇸 SOCKS4 24.249.199.4:4145 M"
+      - "🇺🇸 SOCKS4 184.178.172.26:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.23:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.13:15311 M"
-      - "🇺🇸 SOCKS4 24.249.199.4:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.3:4145 M"
-      - "🇺🇸 SOCKS4 184.181.217.194:4145 M"
-      - "🇷🇺 SOCKS4 147.45.60.250:1081 M"
-      - "🇺🇸 SOCKS4 184.178.172.17:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.18:15280 M"
       - "🇺🇸 SOCKS4 184.181.217.201:4145 M"
-      - "🇺🇸 SOCKS4 24.249.199.12:4145 M"
-      - "🇩🇪 SOCKS4 147.45.66.115:1081 M"
-      - "🇩🇪 SOCKS4 159.195.61.240:1080 S"
-      - "🇷🇺 SOCKS4 147.45.60.252:1082 S"
-      - "🇹🇷 SOCKS4 139.28.241.247:1081 S"
-      - "🇩🇪 SOCKS4 147.45.66.115:1082 S"
+      - "🇺🇸 SOCKS4 184.178.172.11:4145 M"
+      - "🇷🇺 SOCKS4 147.45.60.252:1082 M"
+      - "🇷🇺 SOCKS4 147.45.60.250:1081 M"
+      - "🇸🇬 SOCKS4 140.245.99.105:7890 M"
+      - "🇺🇸 SOCKS4 209.38.74.191:1080 M"
+      - "🇷🇺 SOCKS4 147.45.60.246:1081 S"
+      - "🇫🇮 SOCKS4 185.230.190.195:1080 S"
+      - "🇷🇺 SOCKS4 147.45.60.252:1081 S"
       - "🇨🇳 SOCKS4 39.102.211.162:8080 S"
-      - "🇨🇳 SOCKS4 39.102.208.23:8443 S"
-      - "🇨🇳 SOCKS4 39.102.214.192:8080 S"
       - "🇨🇳 SOCKS4 39.102.213.213:8443 S"
-      - "🇨🇳 SOCKS4 39.100.88.89:34567 S"
+      - "🇨🇳 SOCKS4 39.102.208.23:8443 S"
+      - "🇨🇳 SOCKS4 39.102.214.152:8008 S"
       - "🇨🇳 SOCKS4 39.102.211.64:8443 S"
       - "🇨🇳 SOCKS4 39.102.210.176:8008 S"
+      - "🇨🇳 SOCKS4 39.102.214.192:8080 S"
       - "🇨🇳 SOCKS4 39.104.16.201:80 S"
-      - "🇨🇳 SOCKS4 39.102.214.152:8008 S"
-      - "🇺🇸 SOCKS4 186.241.90.120:7890 S"
-      - "🇷🇺 SOCKS4 130.49.218.166:1081 S"
-      - "🇷🇺 SOCKS4 147.45.60.241:1081 S"
-      - "🇷🇺 SOCKS4 147.45.60.252:1081 S"
-      - "🇩🇪 SOCKS4 116.202.20.234:9082 S"
-      - "🇷🇺 SOCKS4 147.45.60.246:1081 S"
+      - "🇨🇳 SOCKS4 39.100.88.89:34567 S"
       - "🇺🇸 SOCKS4 178.130.47.23:1081 S"
-      - "🇫🇮 SOCKS4 185.230.190.195:1080 S"
+      - "🇩🇪 SOCKS4 147.45.66.115:1081 S"
+      - "🇩🇪 SOCKS4 147.45.66.115:1082 S"
+      - "🇺🇸 SOCKS4 186.241.90.120:7890 S"
     url: "http://www.gstatic.com/generate_204"
     interval: 300
   - name: 📦 SOCKS5
     type: select
     proxies:
+      - "🇺🇸 SOCKS5 204.48.29.137:1088 F"
       - "🇷🇺 SOCKS5 147.45.60.246:1082 F"
-      - "🇺🇸 SOCKS5 141.148.158.143:1080 F"
-      - "🇺🇸 SOCKS5 178.130.47.41:1082 F"
-      - "🇺🇸 SOCKS5 144.24.15.246:1080 F"
-      - "🇺🇸 SOCKS5 204.48.29.137:1088 M"
-      - "🇨🇦 SOCKS5 167.114.172.208:1088 M"
-      - "🇨🇦 SOCKS5 184.95.235.194:1080 M"
-      - "🇺🇸 SOCKS5 193.25.215.182:22222 M"
-      - "🇺🇸 SOCKS5 162.253.68.97:4145 M"
-      - "🇺🇸 SOCKS5 107.181.161.81:4145 M"
-      - "🇺🇸 SOCKS5 107.152.98.5:4145 M"
-      - "🇺🇸 SOCKS5 104.200.152.30:4145 M"
-      - "🇺🇸 SOCKS5 104.37.135.145:4145 M"
-      - "🇯🇵 SOCKS5 101.36.104.239:10808 M"
-      - "🇯🇵 SOCKS5 101.36.104.46:10808 M"
-      - "🇺🇸 SOCKS5 142.54.226.214:4145 M"
-      - "🇯🇵 SOCKS5 193.111.30.139:2080 M"
-      - "🇫🇷 SOCKS5 13.140.164.179:3622 M"
+      - "🇷🇺 SOCKS5 147.45.60.139:1081 F"
+      - "🇨🇦 SOCKS5 167.114.172.208:1088 F"
+      - "🇺🇸 SOCKS5 178.130.47.21:1082 F"
+      - "🇨🇿 SOCKS5 194.58.57.52:1080 M"
       - "🇳🇱 SOCKS5 109.71.244.97:1080 M"
-      - "🇭🇰 SOCKS5 123.58.219.171:10808 M"
-      - "🇫🇮 SOCKS5 193.221.203.192:1080 M"
-      - "🇳🇱 SOCKS5 144.124.232.204:1080 M"
-      - "🇭🇰 SOCKS5 172.81.111.156:10001 M"
-      - "🇸🇬 SOCKS5 178.128.106.142:1080 M"
+      - "🇺🇸 SOCKS5 193.25.215.182:22222 M"
+      - "🇺🇸 SOCKS5 141.148.158.143:1080 M"
+      - "🇫🇷 SOCKS5 185.185.80.58:1088 M"
       - "🇳🇱 SOCKS5 144.124.232.204:443 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1082 M"
-      - "🇭🇰 SOCKS5 119.28.13.138:1080 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1085 M"
-      - "🇵🇱 SOCKS5 194.59.186.35:1080 M"
-      - "🇫🇷 SOCKS5 185.185.80.58:1088 M"
-      - "🇧🇷 SOCKS5 190.89.4.185:1080 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1094 M"
+      - "🇳🇱 SOCKS5 144.124.232.204:1080 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1081 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1092 M"
+      - "🇺🇸 SOCKS5 104.200.152.30:4145 M"
+      - "🇺🇸 SOCKS5 162.253.68.97:4145 M"
+      - "🇺🇸 SOCKS5 107.181.161.81:4145 M"
+      - "🇺🇸 SOCKS5 104.37.135.145:4145 M"
+      - "🇨🇴 SOCKS5 149.130.182.81:1080 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1081 M"
-      - "🇮🇳 SOCKS5 144.24.111.128:1088 M"
-      - "🇻🇳 SOCKS5 118.70.67.11:1080 M"
-      - "🇩🇪 SOCKS5 167.86.79.35:1080 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1088 M"
-      - "🇰🇭 SOCKS5 202.79.27.12:1080 M"
       - "🇺🇸 SOCKS5 199.66.183.226:4145 M"
-      - "🇺🇸 SOCKS5 184.170.249.65:4145 M"
-      - "🇧🇩 SOCKS5 182.48.78.141:8008 M"
-      - "🇮🇩 SOCKS5 103.66.46.150:69 M"
+      - "🇺🇸 SOCKS5 192.111.130.5:17002 M"
+      - "🇺🇸 SOCKS5 192.111.130.2:4145 M"
       - "🇺🇸 SOCKS5 184.170.248.5:4145 M"
       - "🇺🇸 SOCKS5 184.170.245.148:4145 M"
-      - "🇺🇸 SOCKS5 192.111.130.2:4145 M"
-      - "🇺🇸 SOCKS5 184.181.217.220:4145 M"
-      - "🇺🇸 SOCKS5 174.64.199.82:4145 M"
-      - "🇺🇸 SOCKS5 184.178.172.11:4145 M"
-      - "🇺🇸 SOCKS5 192.111.130.5:17002 M"
-      - "🇺🇸 SOCKS5 174.75.211.193:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.197:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.196:4145 M"
-      - "🇺🇦 SOCKS5 185.210.85.26:56981 M"
-      - "🇺🇸 SOCKS5 174.64.199.79:4145 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1100 M"
-      - "🇭🇰 SOCKS5 124.156.185.140:1080 M"
+      - "🇺🇸 SOCKS5 184.170.249.65:4145 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1088 M"
       - "🇺🇸 SOCKS5 192.111.137.35:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.198:49547 M"
-      - "🇻🇳 SOCKS5 118.71.44.153:1098 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1090 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1100 M"
+      - "🇫🇮 SOCKS5 193.221.203.192:1080 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1080 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1090 M"
+      - "🇯🇵 SOCKS5 101.36.104.239:10808 M"
+      - "🇯🇵 SOCKS5 101.36.104.46:10808 M"
+      - "🇺🇸 SOCKS5 174.75.211.193:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.196:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.197:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.198:49547 M"
+      - "🇺🇸 SOCKS5 174.64.199.79:4145 M"
+      - "🇺🇸 SOCKS5 174.64.199.82:4145 M"
+      - "🇷🇺 SOCKS5 147.45.60.110:1081 M"
+      - "🇮🇳 SOCKS5 144.24.111.128:1088 M"
+      - "🇭🇰 SOCKS5 119.28.13.138:1080 M"
+      - "🇭🇰 SOCKS5 123.58.219.171:10808 M"
+      - "🇭🇰 SOCKS5 124.156.185.140:1080 M"
+      - "🇭🇰 SOCKS5 172.81.111.156:10001 M"
+      - "🇸🇬 SOCKS5 178.128.106.142:1080 M"
       - "🇸🇪 SOCKS5 171.25.158.95:1080 M"
-      - "🇹🇷 SOCKS5 139.28.240.202:1081 S"
-      - "🇹🇷 SOCKS5 139.28.241.247:1082 S"
-      - "🇺🇸 SOCKS5 107.151.148.153:1080 S"
-      - "🇩🇪 SOCKS5 144.76.159.120:1083 S"
-      - "🇮🇩 SOCKS5 103.134.220.49:1080 S"
-      - "🇻🇳 SOCKS5 118.71.44.153:1054 S"
-      - "🇰🇷 SOCKS5 121.169.46.116:1090 S"
-      - "🇰🇭 SOCKS5 110.235.247.206:1080 S"
-      - "🇯🇵 SOCKS5 152.70.107.226:1080 S"
+      - "🇩🇪 SOCKS5 147.45.178.104:1082 M"
+      - "🇫🇷 SOCKS5 13.140.164.179:3622 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1083 M"
+      - "🇮🇩 SOCKS5 103.66.46.150:69 S"
+      - "🇰🇭 SOCKS5 202.79.27.12:1080 S"
       - "🇺🇸 SOCKS5 107.175.215.29:8443 S"
-      - "🇮🇷 SOCKS5 206.123.156.225:4956 S"
-      - "🇺🇸 SOCKS5 152.53.209.196:1080 S"
       - "🇺🇸 SOCKS5 184.182.240.12:4145 S"
-      - "🇺🇸 SOCKS5 184.182.240.211:4145 S"
       - "🇺🇸 SOCKS5 184.185.2.12:4145 S"
-      - "🇯🇵 SOCKS5 152.32.203.130:10808 S"
-      - "🇧🇩 SOCKS5 103.136.107.70:1080 S"
-      - "🇨🇴 SOCKS5 149.130.182.81:1080 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1081 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1094 S"
-      - "🇸🇪 SOCKS5 188.93.140.146:1080 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1092 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:4182 S"
-      - "🇮🇷 SOCKS5 206.123.156.228:4235 S"
-      - "🇩🇪 SOCKS5 147.45.178.104:1082 S"
-      - "🇺🇸 SOCKS5 178.130.47.50:1081 S"
-      - "🇮🇷 SOCKS5 206.123.156.225:4915 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5195 S"
-      - "🇷🇺 SOCKS5 147.45.60.110:1081 S"
-      - "🇷🇺 SOCKS5 147.45.60.136:1081 S"
-      - "🇷🇺 SOCKS5 147.45.60.136:1082 S"
-      - "🇧🇩 SOCKS5 103.243.82.38:8008 S"
-      - "🇮🇷 SOCKS5 206.123.156.202:7873 S"
-      - "🇨🇿 SOCKS5 194.58.57.52:1080 S"
-      - "🇰🇷 SOCKS5 152.70.237.238:3128 S"
-      - "🇷🇺 SOCKS5 130.49.218.166:1082 S"
-      - "🇸🇨 SOCKS5 156.225.20.83:1080 S"
-      - "🇮🇷 SOCKS5 206.123.156.228:6947 S"
-      - "🇮🇩 SOCKS5 103.103.146.149:7080 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5284 S"
-      - "🇺🇸 SOCKS5 178.130.47.21:1082 S"
-      - "🇺🇸 SOCKS5 178.130.47.42:1081 S"
-      - "🇮🇷 SOCKS5 206.123.156.202:4664 S"
-      - "🇩🇪 SOCKS5 147.45.178.104:1081 S"
+      - "🇺🇸 SOCKS5 184.182.240.211:4145 S"
       - "🇨🇳 SOCKS5 171.213.209.63:10801 S"
-      - "🇷🇺 SOCKS5 147.45.60.139:1081 S"
+      - "🇺🇸 SOCKS5 178.130.47.41:1082 S"
+      - "🇷🇺 SOCKS5 147.45.60.136:1081 S"
+      - "🇺🇸 SOCKS5 144.24.15.246:1080 S"
+      - "🇮🇩 SOCKS5 103.134.220.49:1080 S"
       - "🇧🇩 SOCKS5 123.136.24.161:1080 S"
-      - "🇳🇬 SOCKS5 102.69.146.59:7080 S"
-      - "🇮🇷 SOCKS5 206.123.156.231:4519 S"
-      - "🇮🇷 SOCKS5 206.123.156.209:4176 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5079 S"
       - "🇷🇺 SOCKS5 147.45.60.110:1082 S"
+      - "🇰🇭 SOCKS5 110.235.247.206:1080 S"
+      - "🇺🇸 SOCKS5 178.130.47.50:1081 S"
+      - "🇺🇸 SOCKS5 184.181.217.220:4145 S"
+      - "🇰🇷 SOCKS5 152.70.237.238:3128 S"
+      - "🇵🇱 SOCKS5 194.59.186.35:1080 S"
+      - "🇷🇺 SOCKS5 147.45.60.136:1082 S"
+      - "🇹🇷 SOCKS5 139.28.240.202:1081 S"
+      - "🇰🇷 SOCKS5 121.169.46.116:1090 S"
+      - "🇷🇺 SOCKS5 130.49.218.166:1082 S"
+      - "🇩🇪 SOCKS5 167.86.79.35:1080 S"
+      - "🇮🇷 SOCKS5 206.123.156.228:6947 S"
+      - "🇺🇸 SOCKS5 178.130.47.42:1081 S"
+      - "🇸🇨 SOCKS5 156.225.20.83:1080 S"
+      - "🇯🇵 SOCKS5 152.32.203.130:10808 S"
+      - "🇮🇷 SOCKS5 206.123.156.225:4915 S"
+      - "🇺🇸 SOCKS5 107.151.148.153:1080 S"
+      - "🇮🇷 SOCKS5 206.123.156.202:7873 S"
+      - "🇻🇳 SOCKS5 118.70.67.11:1080 S"
   - name: 📦 SOCKS4
     type: select
     proxies:
-      - "🇺🇸 SOCKS4 104.200.135.46:4145 M"
-      - "🇺🇸 SOCKS4 142.54.229.249:4145 M"
-      - "🇺🇸 SOCKS4 142.54.231.38:4145 M"
-      - "🇺🇸 SOCKS4 142.54.239.1:4145 M"
-      - "🇺🇸 SOCKS4 107.181.168.145:4145 M"
-      - "🇺🇸 SOCKS4 192.111.134.10:4145 M"
-      - "🇺🇸 SOCKS4 142.54.228.193:4145 M"
-      - "🇸🇬 SOCKS4 140.245.99.105:7890 M"
-      - "🇺🇸 SOCKS4 209.38.74.191:1080 M"
-      - "🇷🇺 SOCKS4 176.12.65.24:443 M"
       - "🇺🇸 SOCKS4 198.8.94.170:4145 M"
-      - "🇺🇸 SOCKS4 192.111.129.145:16894 M"
       - "🇺🇸 SOCKS4 192.111.135.17:18302 M"
+      - "🇺🇸 SOCKS4 192.111.135.18:18301 M"
+      - "🇺🇸 SOCKS4 142.54.228.193:4145 M"
+      - "🇺🇸 SOCKS4 107.152.98.5:4145 M"
+      - "🇺🇸 SOCKS4 142.54.229.249:4145 M"
+      - "🇺🇸 SOCKS4 107.181.168.145:4145 M"
+      - "🇺🇸 SOCKS4 192.111.129.145:16894 M"
+      - "🇺🇸 SOCKS4 184.170.251.30:11288 M"
       - "🇺🇸 SOCKS4 192.252.214.20:15864 M"
       - "🇺🇸 SOCKS4 192.111.137.37:18762 M"
-      - "🇺🇸 SOCKS4 192.111.135.18:18301 M"
-      - "🇺🇸 SOCKS4 184.170.251.30:11288 M"
-      - "🇺🇸 SOCKS4 184.178.172.26:4145 M"
+      - "🇺🇸 SOCKS4 192.111.134.10:4145 M"
+      - "🇺🇸 SOCKS4 142.54.231.38:4145 M"
+      - "🇺🇸 SOCKS4 142.54.239.1:4145 M"
+      - "🇺🇸 SOCKS4 104.200.135.46:4145 M"
+      - "🇷🇺 SOCKS4 176.12.65.24:443 M"
+      - "🇺🇸 SOCKS4 184.178.172.17:4145 M"
+      - "🇺🇸 SOCKS4 24.249.199.12:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.25:15291 M"
       - "🇺🇸 SOCKS4 184.178.172.14:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.28:15294 M"
+      - "🇺🇸 SOCKS4 184.178.172.3:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.5:15303 M"
+      - "🇺🇸 SOCKS4 184.178.172.28:15294 M"
+      - "🇺🇸 SOCKS4 184.181.217.194:4145 M"
+      - "🇺🇸 SOCKS4 184.178.172.18:15280 M"
+      - "🇺🇸 SOCKS4 24.249.199.4:4145 M"
+      - "🇺🇸 SOCKS4 184.178.172.26:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.23:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.13:15311 M"
-      - "🇺🇸 SOCKS4 24.249.199.4:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.3:4145 M"
-      - "🇺🇸 SOCKS4 184.181.217.194:4145 M"
-      - "🇷🇺 SOCKS4 147.45.60.250:1081 M"
-      - "🇺🇸 SOCKS4 184.178.172.17:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.18:15280 M"
       - "🇺🇸 SOCKS4 184.181.217.201:4145 M"
-      - "🇺🇸 SOCKS4 24.249.199.12:4145 M"
-      - "🇩🇪 SOCKS4 147.45.66.115:1081 M"
-      - "🇩🇪 SOCKS4 159.195.61.240:1080 S"
-      - "🇷🇺 SOCKS4 147.45.60.252:1082 S"
-      - "🇹🇷 SOCKS4 139.28.241.247:1081 S"
-      - "🇩🇪 SOCKS4 147.45.66.115:1082 S"
+      - "🇺🇸 SOCKS4 184.178.172.11:4145 M"
+      - "🇷🇺 SOCKS4 147.45.60.252:1082 M"
+      - "🇷🇺 SOCKS4 147.45.60.250:1081 M"
+      - "🇸🇬 SOCKS4 140.245.99.105:7890 M"
+      - "🇺🇸 SOCKS4 209.38.74.191:1080 M"
+      - "🇷🇺 SOCKS4 147.45.60.246:1081 S"
+      - "🇫🇮 SOCKS4 185.230.190.195:1080 S"
+      - "🇷🇺 SOCKS4 147.45.60.252:1081 S"
       - "🇨🇳 SOCKS4 39.102.211.162:8080 S"
-      - "🇨🇳 SOCKS4 39.102.208.23:8443 S"
-      - "🇨🇳 SOCKS4 39.102.214.192:8080 S"
       - "🇨🇳 SOCKS4 39.102.213.213:8443 S"
-      - "🇨🇳 SOCKS4 39.100.88.89:34567 S"
+      - "🇨🇳 SOCKS4 39.102.208.23:8443 S"
+      - "🇨🇳 SOCKS4 39.102.214.152:8008 S"
       - "🇨🇳 SOCKS4 39.102.211.64:8443 S"
       - "🇨🇳 SOCKS4 39.102.210.176:8008 S"
+      - "🇨🇳 SOCKS4 39.102.214.192:8080 S"
       - "🇨🇳 SOCKS4 39.104.16.201:80 S"
-      - "🇨🇳 SOCKS4 39.102.214.152:8008 S"
-      - "🇺🇸 SOCKS4 186.241.90.120:7890 S"
-      - "🇷🇺 SOCKS4 130.49.218.166:1081 S"
-      - "🇷🇺 SOCKS4 147.45.60.241:1081 S"
-      - "🇷🇺 SOCKS4 147.45.60.252:1081 S"
-      - "🇩🇪 SOCKS4 116.202.20.234:9082 S"
-      - "🇷🇺 SOCKS4 147.45.60.246:1081 S"
+      - "🇨🇳 SOCKS4 39.100.88.89:34567 S"
       - "🇺🇸 SOCKS4 178.130.47.23:1081 S"
-      - "🇫🇮 SOCKS4 185.230.190.195:1080 S"
+      - "🇩🇪 SOCKS4 147.45.66.115:1081 S"
+      - "🇩🇪 SOCKS4 147.45.66.115:1082 S"
+      - "🇺🇸 SOCKS4 186.241.90.120:7890 S"
   - name: 🇺🇸 US
     type: select
     proxies:
-      - "🇺🇸 SOCKS5 141.148.158.143:1080 F"
-      - "🇺🇸 SOCKS5 178.130.47.41:1082 F"
-      - "🇺🇸 SOCKS5 144.24.15.246:1080 F"
-      - "🇺🇸 SOCKS5 204.48.29.137:1088 M"
+      - "🇺🇸 SOCKS5 204.48.29.137:1088 F"
+      - "🇺🇸 SOCKS5 178.130.47.21:1082 F"
       - "🇺🇸 SOCKS5 193.25.215.182:22222 M"
+      - "🇺🇸 SOCKS5 141.148.158.143:1080 M"
+      - "🇺🇸 SOCKS5 104.200.152.30:4145 M"
       - "🇺🇸 SOCKS5 162.253.68.97:4145 M"
       - "🇺🇸 SOCKS5 107.181.161.81:4145 M"
-      - "🇺🇸 SOCKS5 107.152.98.5:4145 M"
-      - "🇺🇸 SOCKS5 104.200.152.30:4145 M"
       - "🇺🇸 SOCKS5 104.37.135.145:4145 M"
-      - "🇺🇸 SOCKS5 142.54.226.214:4145 M"
       - "🇺🇸 SOCKS5 199.66.183.226:4145 M"
-      - "🇺🇸 SOCKS5 184.170.249.65:4145 M"
+      - "🇺🇸 SOCKS5 192.111.130.5:17002 M"
+      - "🇺🇸 SOCKS5 192.111.130.2:4145 M"
       - "🇺🇸 SOCKS5 184.170.248.5:4145 M"
       - "🇺🇸 SOCKS5 184.170.245.148:4145 M"
-      - "🇺🇸 SOCKS5 192.111.130.2:4145 M"
-      - "🇺🇸 SOCKS5 184.181.217.220:4145 M"
-      - "🇺🇸 SOCKS5 174.64.199.82:4145 M"
-      - "🇺🇸 SOCKS5 184.178.172.11:4145 M"
-      - "🇺🇸 SOCKS5 192.111.130.5:17002 M"
-      - "🇺🇸 SOCKS5 174.75.211.193:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.197:4145 M"
-      - "🇺🇸 SOCKS5 174.77.111.196:4145 M"
-      - "🇺🇸 SOCKS5 174.64.199.79:4145 M"
+      - "🇺🇸 SOCKS5 184.170.249.65:4145 M"
       - "🇺🇸 SOCKS5 192.111.137.35:4145 M"
+      - "🇺🇸 SOCKS5 174.75.211.193:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.196:4145 M"
+      - "🇺🇸 SOCKS5 174.77.111.197:4145 M"
       - "🇺🇸 SOCKS5 174.77.111.198:49547 M"
-      - "🇺🇸 SOCKS5 107.151.148.153:1080 S"
+      - "🇺🇸 SOCKS5 174.64.199.79:4145 M"
+      - "🇺🇸 SOCKS5 174.64.199.82:4145 M"
       - "🇺🇸 SOCKS5 107.175.215.29:8443 S"
-      - "🇺🇸 SOCKS5 152.53.209.196:1080 S"
       - "🇺🇸 SOCKS5 184.182.240.12:4145 S"
-      - "🇺🇸 SOCKS5 184.182.240.211:4145 S"
       - "🇺🇸 SOCKS5 184.185.2.12:4145 S"
+      - "🇺🇸 SOCKS5 184.182.240.211:4145 S"
+      - "🇺🇸 SOCKS5 178.130.47.41:1082 S"
+      - "🇺🇸 SOCKS5 144.24.15.246:1080 S"
       - "🇺🇸 SOCKS5 178.130.47.50:1081 S"
-      - "🇺🇸 SOCKS5 178.130.47.21:1082 S"
+      - "🇺🇸 SOCKS5 184.181.217.220:4145 S"
       - "🇺🇸 SOCKS5 178.130.47.42:1081 S"
-      - "🇺🇸 SOCKS4 104.200.135.46:4145 M"
-      - "🇺🇸 SOCKS4 142.54.229.249:4145 M"
-      - "🇺🇸 SOCKS4 142.54.231.38:4145 M"
-      - "🇺🇸 SOCKS4 142.54.239.1:4145 M"
-      - "🇺🇸 SOCKS4 107.181.168.145:4145 M"
-      - "🇺🇸 SOCKS4 192.111.134.10:4145 M"
-      - "🇺🇸 SOCKS4 142.54.228.193:4145 M"
-      - "🇺🇸 SOCKS4 209.38.74.191:1080 M"
+      - "🇺🇸 SOCKS5 107.151.148.153:1080 S"
       - "🇺🇸 SOCKS4 198.8.94.170:4145 M"
-      - "🇺🇸 SOCKS4 192.111.129.145:16894 M"
       - "🇺🇸 SOCKS4 192.111.135.17:18302 M"
+      - "🇺🇸 SOCKS4 192.111.135.18:18301 M"
+      - "🇺🇸 SOCKS4 142.54.228.193:4145 M"
+      - "🇺🇸 SOCKS4 107.152.98.5:4145 M"
+      - "🇺🇸 SOCKS4 142.54.229.249:4145 M"
+      - "🇺🇸 SOCKS4 107.181.168.145:4145 M"
+      - "🇺🇸 SOCKS4 192.111.129.145:16894 M"
+      - "🇺🇸 SOCKS4 184.170.251.30:11288 M"
       - "🇺🇸 SOCKS4 192.252.214.20:15864 M"
       - "🇺🇸 SOCKS4 192.111.137.37:18762 M"
-      - "🇺🇸 SOCKS4 192.111.135.18:18301 M"
-      - "🇺🇸 SOCKS4 184.170.251.30:11288 M"
-      - "🇺🇸 SOCKS4 184.178.172.26:4145 M"
+      - "🇺🇸 SOCKS4 192.111.134.10:4145 M"
+      - "🇺🇸 SOCKS4 142.54.231.38:4145 M"
+      - "🇺🇸 SOCKS4 142.54.239.1:4145 M"
+      - "🇺🇸 SOCKS4 104.200.135.46:4145 M"
+      - "🇺🇸 SOCKS4 184.178.172.17:4145 M"
+      - "🇺🇸 SOCKS4 24.249.199.12:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.25:15291 M"
       - "🇺🇸 SOCKS4 184.178.172.14:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.28:15294 M"
+      - "🇺🇸 SOCKS4 184.178.172.3:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.5:15303 M"
+      - "🇺🇸 SOCKS4 184.178.172.28:15294 M"
+      - "🇺🇸 SOCKS4 184.181.217.194:4145 M"
+      - "🇺🇸 SOCKS4 184.178.172.18:15280 M"
+      - "🇺🇸 SOCKS4 24.249.199.4:4145 M"
+      - "🇺🇸 SOCKS4 184.178.172.26:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.23:4145 M"
       - "🇺🇸 SOCKS4 184.178.172.13:15311 M"
-      - "🇺🇸 SOCKS4 24.249.199.4:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.3:4145 M"
-      - "🇺🇸 SOCKS4 184.181.217.194:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.17:4145 M"
-      - "🇺🇸 SOCKS4 184.178.172.18:15280 M"
       - "🇺🇸 SOCKS4 184.181.217.201:4145 M"
-      - "🇺🇸 SOCKS4 24.249.199.12:4145 M"
-      - "🇺🇸 SOCKS4 186.241.90.120:7890 S"
+      - "🇺🇸 SOCKS4 184.178.172.11:4145 M"
+      - "🇺🇸 SOCKS4 209.38.74.191:1080 M"
       - "🇺🇸 SOCKS4 178.130.47.23:1081 S"
+      - "🇺🇸 SOCKS4 186.241.90.120:7890 S"
+  - name: 🇷🇺 RU
+    type: select
+    proxies:
+      - "🇷🇺 SOCKS5 147.45.60.246:1082 F"
+      - "🇷🇺 SOCKS5 147.45.60.139:1081 F"
+      - "🇷🇺 SOCKS5 147.45.60.110:1081 M"
+      - "🇷🇺 SOCKS5 147.45.60.136:1081 S"
+      - "🇷🇺 SOCKS5 147.45.60.110:1082 S"
+      - "🇷🇺 SOCKS5 147.45.60.136:1082 S"
+      - "🇷🇺 SOCKS5 130.49.218.166:1082 S"
+      - "🇷🇺 SOCKS4 176.12.65.24:443 M"
+      - "🇷🇺 SOCKS4 147.45.60.252:1082 M"
+      - "🇷🇺 SOCKS4 147.45.60.250:1081 M"
+      - "🇷🇺 SOCKS4 147.45.60.246:1081 S"
+      - "🇷🇺 SOCKS4 147.45.60.252:1081 S"
   - name: 🇩🇪 DE
     type: select
     proxies:
       - "🇩🇪 SOCKS5 144.76.159.120:1082 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1085 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1081 M"
-      - "🇩🇪 SOCKS5 167.86.79.35:1080 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1088 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1100 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1090 M"
       - "🇩🇪 SOCKS5 144.76.159.120:1080 M"
-      - "🇩🇪 SOCKS5 144.76.159.120:1083 S"
-      - "🇩🇪 SOCKS5 147.45.178.104:1082 S"
-      - "🇩🇪 SOCKS5 147.45.178.104:1081 S"
-      - "🇩🇪 SOCKS4 147.45.66.115:1081 M"
-      - "🇩🇪 SOCKS4 159.195.61.240:1080 S"
+      - "🇩🇪 SOCKS5 144.76.159.120:1090 M"
+      - "🇩🇪 SOCKS5 147.45.178.104:1082 M"
+      - "🇩🇪 SOCKS5 144.76.159.120:1083 M"
+      - "🇩🇪 SOCKS5 167.86.79.35:1080 S"
+      - "🇩🇪 SOCKS4 147.45.66.115:1081 S"
       - "🇩🇪 SOCKS4 147.45.66.115:1082 S"
-      - "🇩🇪 SOCKS4 116.202.20.234:9082 S"
-  - name: 🇷🇺 RU
-    type: select
-    proxies:
-      - "🇷🇺 SOCKS5 147.45.60.246:1082 F"
-      - "🇷🇺 SOCKS5 147.45.60.110:1081 S"
-      - "🇷🇺 SOCKS5 147.45.60.136:1081 S"
-      - "🇷🇺 SOCKS5 147.45.60.136:1082 S"
-      - "🇷🇺 SOCKS5 130.49.218.166:1082 S"
-      - "🇷🇺 SOCKS5 147.45.60.139:1081 S"
-      - "🇷🇺 SOCKS5 147.45.60.110:1082 S"
-      - "🇷🇺 SOCKS4 176.12.65.24:443 M"
-      - "🇷🇺 SOCKS4 147.45.60.250:1081 M"
-      - "🇷🇺 SOCKS4 147.45.60.252:1082 S"
-      - "🇷🇺 SOCKS4 130.49.218.166:1081 S"
-      - "🇷🇺 SOCKS4 147.45.60.241:1081 S"
-      - "🇷🇺 SOCKS4 147.45.60.252:1081 S"
-      - "🇷🇺 SOCKS4 147.45.60.246:1081 S"
-  - name: 🇮🇷 IR
-    type: select
-    proxies:
-      - "🇮🇷 SOCKS5 206.123.156.225:4956 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:4182 S"
-      - "🇮🇷 SOCKS5 206.123.156.228:4235 S"
-      - "🇮🇷 SOCKS5 206.123.156.225:4915 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5195 S"
-      - "🇮🇷 SOCKS5 206.123.156.202:7873 S"
-      - "🇮🇷 SOCKS5 206.123.156.228:6947 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5284 S"
-      - "🇮🇷 SOCKS5 206.123.156.202:4664 S"
-      - "🇮🇷 SOCKS5 206.123.156.231:4519 S"
-      - "🇮🇷 SOCKS5 206.123.156.209:4176 S"
-      - "🇮🇷 SOCKS5 206.123.156.223:5079 S"
   - name: 🇨🇳 CN
     type: select
     proxies:
       - "🇨🇳 SOCKS5 171.213.209.63:10801 S"
       - "🇨🇳 SOCKS4 39.102.211.162:8080 S"
-      - "🇨🇳 SOCKS4 39.102.208.23:8443 S"
-      - "🇨🇳 SOCKS4 39.102.214.192:8080 S"
       - "🇨🇳 SOCKS4 39.102.213.213:8443 S"
-      - "🇨🇳 SOCKS4 39.100.88.89:34567 S"
+      - "🇨🇳 SOCKS4 39.102.208.23:8443 S"
+      - "🇨🇳 SOCKS4 39.102.214.152:8008 S"
       - "🇨🇳 SOCKS4 39.102.211.64:8443 S"
       - "🇨🇳 SOCKS4 39.102.210.176:8008 S"
+      - "🇨🇳 SOCKS4 39.102.214.192:8080 S"
       - "🇨🇳 SOCKS4 39.104.16.201:80 S"
-      - "🇨🇳 SOCKS4 39.102.214.152:8008 S"
+      - "🇨🇳 SOCKS4 39.100.88.89:34567 S"
+  - name: 🇭🇰 HK
+    type: select
+    proxies:
+      - "🇭🇰 SOCKS5 119.28.13.138:1080 M"
+      - "🇭🇰 SOCKS5 123.58.219.171:10808 M"
+      - "🇭🇰 SOCKS5 124.156.185.140:1080 M"
+      - "🇭🇰 SOCKS5 172.81.111.156:10001 M"
+  - name: 🇳🇱 NL
+    type: select
+    proxies:
+      - "🇳🇱 SOCKS5 109.71.244.97:1080 M"
+      - "🇳🇱 SOCKS5 144.124.232.204:443 M"
+      - "🇳🇱 SOCKS5 144.124.232.204:1080 M"
+  - name: 🇧🇷 BR
+    type: select
+    proxies:
+      - "🇧🇷 SOCKS5 147.15.17.132:1094 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1081 M"
+      - "🇧🇷 SOCKS5 147.15.17.132:1092 M"
   - name: 🇯🇵 JP
     type: select
     proxies:
       - "🇯🇵 SOCKS5 101.36.104.239:10808 M"
       - "🇯🇵 SOCKS5 101.36.104.46:10808 M"
-      - "🇯🇵 SOCKS5 193.111.30.139:2080 M"
-      - "🇯🇵 SOCKS5 152.70.107.226:1080 S"
       - "🇯🇵 SOCKS5 152.32.203.130:10808 S"
-  - name: 🇭🇰 HK
-    type: select
-    proxies:
-      - "🇭🇰 SOCKS5 123.58.219.171:10808 M"
-      - "🇭🇰 SOCKS5 172.81.111.156:10001 M"
-      - "🇭🇰 SOCKS5 119.28.13.138:1080 M"
-      - "🇭🇰 SOCKS5 124.156.185.140:1080 M"
-  - name: 🇧🇷 BR
-    type: select
-    proxies:
-      - "🇧🇷 SOCKS5 190.89.4.185:1080 M"
-      - "🇧🇷 SOCKS5 147.15.17.132:1081 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1094 S"
-      - "🇧🇷 SOCKS5 147.15.17.132:1092 S"
 rules:
   - "DOMAIN-SUFFIX,local,DIRECT"
   - "IP-CIDR,127.0.0.0/8,DIRECT"
