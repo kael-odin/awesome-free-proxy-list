@@ -17,7 +17,7 @@ Only the `main` branch is supported. Automated data refreshes land there continu
 
 ## How to report
 
-Use GitHub's [private vulnerability reporting](https://github.com/Thordata/awesome-free-proxy-list/security/advisories/new) on this repository. Please do not open a public issue for anything in scope.
+Use GitHub's [private vulnerability reporting](https://github.com/kael-odin/awesome-free-proxy-list/security/advisories/new) on this repository. Please do not open a public issue for anything in scope.
 
 Include: affected script/file, the commit SHA, and a minimal reproduction. You can also run `python scripts/check.py IP:PORT` to capture per-proxy diagnostics worth attaching.
 
