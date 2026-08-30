@@ -248,7 +248,7 @@ PRs welcome — new sources, validation-logic improvements, dashboard enhancemen
 
 ## 📄 License
 
-[MIT](LICENSE) © Thordata
+[MIT](LICENSE) © kael-odin
 
 ---
 
@@ -308,4 +308,4 @@ python scripts/update.py
 
 Free proxies are unstable and may be abused. **Do not use for sensitive traffic.** Use at your own risk. This repo only aggregates public sources; it does not operate any proxy server.
 
-License: [MIT](LICENSE) © Thordata
+License: [MIT](LICENSE) © kael-odin
