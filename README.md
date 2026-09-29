@@ -25,17 +25,17 @@ curl -s https://raw.githubusercontent.com/kael-odin/awesome-free-proxy-list/main
 ## 📊 Live stats
 
 <!-- STATS:START -->
-Last update (UTC): **2026-09-29T13:01:51+00:00**
+Last update (UTC): **2026-09-29T22:21:35+00:00**
 
-> 🏆 **Top trusted: 17** — fast ∩ high-anon ∩ survived ≥2 days. The highest-success subset [`proxies/top-trusted.txt`](proxies/top-trusted.txt) (may be 0 on a fresh install before streaks accumulate).
+> 🏆 **Top trusted: 12** — fast ∩ high-anon ∩ survived ≥2 days. The highest-success subset [`proxies/top-trusted.txt`](proxies/top-trusted.txt) (may be 0 on a fresh install before streaks accumulate).
 
 | Type | Working | Total Candidates |
 |---|---:|---:|
-| HTTP | 61 | 100 |
-| HTTPS | 23 | 100 |
-| SOCKS4 | 77 | 90 |
-| SOCKS5 | 64 | 91 |
-| ALL | 187 | 281 |
+| HTTP | 42 | 61 |
+| HTTPS | 12 | 61 |
+| SOCKS4 | 72 | 77 |
+| SOCKS5 | 41 | 64 |
+| ALL | 146 | 202 |
 <!-- STATS:END -->
 
 > Auto-injected by `scripts/update.py` on every run — no manual maintenance. Numbers fluctuate each run because free proxies live for minutes-to-hours.
