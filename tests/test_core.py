@@ -16,7 +16,17 @@ sys.path.insert(0, str(SCRIPTS))
 import subscription  # noqa: E402
 from geoip_lookup import classify_ip_type  # noqa: E402
 from subscription import flag_emoji  # noqa: E402
-from update import Proxy, classify_anonymity, tier_of  # noqa: E402
+from update import (  # noqa: E402
+    Proxy,
+    build_history,
+    classify_anonymity,
+    fair_slice,
+    format_hostport,
+    parse_candidates,
+    split_hostport,
+    stable_hostports,
+    tier_of,
+)
 
 
 # ---------- tier_of ----------
@@ -249,3 +259,160 @@ class TestClassifyIpType:
     def test_case_insensitive(self):
         assert classify_ip_type("AMAZON.COM INC.") == "datacenter"
         assert classify_ip_type("comcast cable") == "residential"
+
+
+# ---------- hostport helpers (IPv4 + bracketed IPv6) ----------
+class TestHostportHelpers:
+    def test_format_ipv4(self):
+        assert format_hostport("1.2.3.4", 8080) == "1.2.3.4:8080"
+
+    def test_format_ipv6_bracketed(self):
+        assert format_hostport("2001:db8::1", 8080) == "[2001:db8::1]:8080"
+
+    def test_split_ipv4(self):
+        assert split_hostport("1.2.3.4:8080") == ("1.2.3.4", 8080)
+
+    def test_split_ipv6(self):
+        assert split_hostport("[2001:db8::1]:8080") == ("2001:db8::1", 8080)
+
+    def test_roundtrip_both_families(self):
+        for hp in ("1.2.3.4:8080", "[2001:db8::1]:8080"):
+            host, port = split_hostport(hp)
+            assert format_hostport(host, port) == hp
+
+    def test_proxy_url_ipv4_unchanged(self):
+        p = Proxy(type="http", host="1.2.3.4", port=8080)
+        assert p.hostport == "1.2.3.4:8080"
+        assert p.url == "http://1.2.3.4:8080"
+
+    def test_proxy_url_https_uses_http_scheme(self):
+        p = Proxy(type="https", host="1.2.3.4", port=8080)
+        assert p.url == "http://1.2.3.4:8080"
+
+    def test_proxy_url_ipv6_brackets(self):
+        p = Proxy(type="socks5", host="2001:db8::1", port=1080)
+        assert p.hostport == "[2001:db8::1]:1080"
+        assert p.url == "socks5://[2001:db8::1]:1080"
+
+
+# ---------- parse_candidates ----------
+class TestParseCandidates:
+    def test_ipv4_basic(self):
+        assert parse_candidates("1.2.3.4:8080\n5.6.7.8:3128\n") == ["1.2.3.4:8080", "5.6.7.8:3128"]
+
+    def test_ipv6_bracketed_accepted(self):
+        assert parse_candidates("[2001:db8::1]:8080\n") == ["[2001:db8::1]:8080"]
+
+    def test_ipv6_invalid_rejected(self):
+        assert parse_candidates("[gg::notahex]:8080\n") == []
+
+    def test_bare_ipv6_rejected_as_ambiguous(self):
+        # "2001:db8::1:8080" — trailing group could be the port or part of the
+        # address; unparseable unambiguously, so it must be skipped.
+        assert parse_candidates("2001:db8::1:8080\n") == []
+
+    def test_garbage_lines_skipped(self):
+        assert parse_candidates("hello\n# comment\n\n1.2.3.4\n1.2.3.4:99999\n") == []
+
+
+# ---------- fair_slice (fair candidate capping) ----------
+class TestFairSlice:
+    @staticmethod
+    def _candidates(big=100, small=3):
+        cands = {}
+        for i in range(big):
+            cands[f"10.{i // 250}.{i % 250}.1:1080"] = "http://big.example/list"
+        for i in range(small):
+            cands[f"9.9.{i}.1:1080"] = "http://small.example/list"
+        return cands
+
+    def test_small_source_not_starved(self):
+        picked = fair_slice(self._candidates(), cap=10)
+        sources = set(picked.values())
+        assert "http://small.example/list" in sources
+        assert "http://big.example/list" in sources
+
+    def test_all_of_small_source_included_when_cap_allows(self):
+        picked = fair_slice(self._candidates(big=100, small=3), cap=10)
+        small = [hp for hp, src in picked.items() if src.endswith("small.example/list")]
+        assert len(small) == 3
+
+    def test_cap_respected(self):
+        assert len(fair_slice(self._candidates(), cap=10)) == 10
+
+    def test_deterministic(self):
+        assert fair_slice(self._candidates(), 10) == fair_slice(self._candidates(), 10)
+
+    def test_under_cap_returns_all(self):
+        assert len(fair_slice(self._candidates(big=5, small=3), cap=100)) == 8
+
+    def test_empty(self):
+        assert fair_slice({}, 10) == {}
+
+
+# ---------- build_history / stable_hostports (streak grace window) ----------
+class TestBuildHistory:
+    @staticmethod
+    def _proxy(hp):
+        host, port = split_hostport(hp)
+        return Proxy(type="http", host=host, port=port, country_code="US", anonymity="elite")
+
+    def test_new_proxy_streak_one(self):
+        h = build_history({}, [self._proxy("1.1.1.1:80")], "2026-10-29")
+        assert h["1.1.1.1:80"]["streak"] == 1
+
+    def test_streak_increments_next_day(self):
+        prev = {"1.1.1.1:80": {"streak": 5, "last_seen": "2026-10-28"}}
+        h = build_history(prev, [self._proxy("1.1.1.1:80")], "2026-10-29")
+        assert h["1.1.1.1:80"]["streak"] == 6
+
+    def test_same_day_rerun_keeps_streak(self):
+        prev = {"1.1.1.1:80": {"streak": 6, "last_seen": "2026-10-29"}}
+        h = build_history(prev, [self._proxy("1.1.1.1:80")], "2026-10-29")
+        assert h["1.1.1.1:80"]["streak"] == 6
+
+    def test_one_missed_day_carries_streak_frozen(self):
+        prev = {"1.1.1.1:80": {"streak": 30, "last_seen": "2026-10-28", "type": "http"}}
+        h = build_history(prev, [], "2026-10-29")
+        assert h["1.1.1.1:80"]["streak"] == 30
+
+    def test_two_missed_days_dropped(self):
+        prev = {"1.1.1.1:80": {"streak": 30, "last_seen": "2026-10-27"}}
+        h = build_history(prev, [], "2026-10-29")
+        assert "1.1.1.1:80" not in h
+
+    def test_recovered_proxy_resumes_streak(self):
+        prev = {"1.1.1.1:80": {"streak": 30, "last_seen": "2026-10-28"}}
+        h = build_history(prev, [self._proxy("1.1.1.1:80")], "2026-10-29")
+        assert h["1.1.1.1:80"]["streak"] == 31
+
+
+class TestStableHostports:
+    def test_requires_seen_today(self):
+        history = {
+            "2.2.2.2:80": {"streak": 9, "last_seen": "2026-10-28"},  # grace-carried, absent today
+            "1.1.1.1:80": {"streak": 5, "last_seen": "2026-10-29"},
+            "3.3.3.3:80": {"streak": 1, "last_seen": "2026-10-29"},  # below threshold
+        }
+        assert stable_hostports(history, "2026-10-29", 2) == ["1.1.1.1:80"]
+
+    def test_sorted_by_streak_desc(self):
+        history = {
+            "1.1.1.1:80": {"streak": 5, "last_seen": "2026-10-29"},
+            "2.2.2.2:80": {"streak": 9, "last_seen": "2026-10-29"},
+        }
+        assert stable_hostports(history, "2026-10-29", 2) == ["2.2.2.2:80", "1.1.1.1:80"]
+
+
+# ---------- classify_ip_type keyword-table regression ----------
+class TestClassifyIpTypeEdgeCases:
+    def test_leaseweb_with_space_still_datacenter(self):
+        assert classify_ip_type("Leaseweb USA, Inc.") == "datacenter"
+
+    def test_path_net_datacenter(self):
+        assert classify_ip_type("path.net, LLC") == "datacenter"
+
+    def test_generic_path_no_longer_mismatches(self):
+        # "path" was too generic — a residential ISP whose org merely contains
+        # "path" used to be classified datacenter before the datacenter table.
+        assert classify_ip_type("Compath Mobile Networks") == "unknown"

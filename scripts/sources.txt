@@ -5,6 +5,7 @@
 #   - A 404/unreachable source is skipped silently; the pipeline keeps running.
 #
 # Curated 2026-07. Each source has been verified to return raw ip:port text.
+# sunny9577/proxy-scrape removed 2026-10 (repo gone, 404 on every run).
 
 # --- TheSpeedX (large, multi-protocol) ---
 https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt http
@@ -27,6 +28,3 @@ https://raw.githubusercontent.com/hookzof/socks5_list/master/proxy.txt socks5
 
 # --- ShiftyTR (mixed forward) ---
 https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/proxy.txt mixed
-
-# --- sunny9577 (scraped mixed) ---
-https://raw.githubusercontent.com/sunny9577/proxy-scrape/master/output.txt mixed

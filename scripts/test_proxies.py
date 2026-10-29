@@ -54,11 +54,9 @@ def load_proxies(kind: str, *, country: str | None = None, tier: str | None = No
 
 def proxy_url(p: dict) -> str:
     t = p.get("type", "http")
-    if t in ("http", "https"):
-        return f"http://{p['ip']}:{p['port']}"
-    if t == "socks4":
-        return f"socks4://{p['ip']}:{p['port']}"
-    return f"socks5://{p['ip']}:{p['port']}"
+    scheme = "http" if t in ("http", "https") else t
+    netloc = f"[{p['ip']}]:{p['port']}" if ":" in p["ip"] else f"{p['ip']}:{p['port']}"
+    return f"{scheme}://{netloc}"
 
 
 async def test_one(p: dict, idx: int, total: int) -> dict:

@@ -22,6 +22,7 @@ Configuration via environment variables (all optional):
 import asyncio
 import csv
 import dataclasses
+import ipaddress
 import json
 import json as _json
 import os
@@ -30,7 +31,7 @@ import sys
 import time
 from collections import defaultdict
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Iterable, Literal
 
@@ -77,6 +78,26 @@ ANON_PROBE_TOP = int(os.getenv("PROXY_ANON_PROBE_TOP", "0"))
 ANON_PROBE_CONCURRENCY = int(os.getenv("PROXY_ANON_CONCURRENCY", "40"))
 
 PROXY_RE = re.compile(r"^\s*(?P<host>\d{1,3}(?:\.\d{1,3}){3})\s*:\s*(?P<port>\d{2,5})\s*$")
+# Bracketed IPv6 only ([2001:db8::1]:8080). Bare IPv6 like "2001:db8::1:8080" is
+# ambiguous — the trailing group could be the port or part of the address — so it
+# is deliberately not matched.
+IPV6_PROXY_RE = re.compile(r"^\s*\[(?P<host>[0-9a-fA-F:]+)\]\s*:\s*(?P<port>\d{1,5})\s*$")
+
+
+def format_hostport(host: str, port: int) -> str:
+    """Render host:port; IPv6 literals get brackets so the form stays parseable."""
+    if ":" in host:
+        return f"[{host}]:{port}"
+    return f"{host}:{port}"
+
+
+def split_hostport(hp: str) -> tuple[str, int]:
+    """Inverse of format_hostport: accepts '1.2.3.4:80' and '[v6]:80'."""
+    if hp.startswith("["):
+        host, _, port_s = hp[1:].partition("]:")
+        return host, int(port_s)
+    host, _, port_s = hp.rpartition(":")
+    return host, int(port_s)
 
 
 @dataclass(frozen=True)
@@ -101,15 +122,12 @@ class Proxy:
 
     @property
     def hostport(self) -> str:
-        return f"{self.host}:{self.port}"
+        return format_hostport(self.host, self.port)
 
     @property
     def url(self) -> str:
-        if self.type in ("http", "https"):
-            return f"http://{self.host}:{self.port}"
-        if self.type == "socks4":
-            return f"socks4://{self.host}:{self.port}"
-        return f"socks5://{self.host}:{self.port}"
+        scheme = "http" if self.type in ("http", "https") else self.type
+        return f"{scheme}://{self.hostport}"
 
     @property
     def tier(self) -> str:
@@ -171,12 +189,20 @@ def parse_candidates(text: str) -> list[str]:
         # Some sources pad with whitespace or quote marks; strip common wrappers.
         line = line.strip("'\"")
         m = PROXY_RE.match(line)
-        if not m:
-            continue
-        host = m.group("host")
-        port = int(m.group("port"))
+        if m:
+            host = m.group("host")
+        else:
+            m6 = IPV6_PROXY_RE.match(line)
+            if not m6:
+                continue
+            host = m6.group("host")
+            try:
+                ipaddress.IPv6Address(host)
+            except ValueError:
+                continue
+        port = int(m.group("port") if m else m6.group("port"))
         if 1 <= port <= 65535:
-            out.append(f"{host}:{port}")
+            out.append(format_hostport(host, port))
     return out
 
 
@@ -348,9 +374,6 @@ async def check_socks(proxy: Proxy, timeout_s: float, real_ip: str | None = None
     return None, "unknown"
 
 
-PROXY_HEADER_NAMES = ("via", "x-forwarded-for", "x-forwarded", "forwarded")
-
-
 async def _detect_anonymity_one(
     session: aiohttp.ClientSession, proxy_url: str, real_ip: str | None, *, start_idx: int = 0
 ) -> str:
@@ -462,17 +485,61 @@ def _load_existing_as_candidates() -> tuple[dict[str, dict[str, str]], dict[str,
             counts[name] = 0
             continue
         for x in items:
-            hp = f"{x['ip']}:{x['port']}"
+            hp = format_hostport(x["ip"], int(x["port"]))
             buckets[bucket].setdefault(hp, x.get("source") or "refresh")
         counts[name] = len(items)
     return buckets, counts
 
 
+def ip_sort_key(hp: str) -> tuple:
+    """Numeric-ish sort key for host:port (IPv4 labels compared as ints; the rest
+    falls back to string order). Keeps candidate ordering deterministic."""
+    host, port = split_hostport(hp)
+    labels = host.split(".")
+    if len(labels) == 4 and all(label.isdigit() for label in labels):
+        return (0, [int(label) for label in labels], port)
+    return (1, host, port)
+
+
+def fair_slice(candidates: dict[str, str], cap: int) -> dict[str, str]:
+    """Cap the candidate pool without starving small sources.
+
+    The previous `sorted(items)[:cap]` had two failure modes: truncating a
+    lexicographic sort biases toward low-numeric-prefix IPs (9.x never got
+    tested), and one huge source crowds smaller ones out of the cap entirely
+    (hookzof alone posts ~80k socks5 candidates vs a 2000 cap). Instead, sort
+    each source's list numerically and round-robin one candidate per source
+    until the cap — deterministic for a given scrape, fair by construction.
+    """
+    if len(candidates) <= cap:
+        return dict(sorted(candidates.items(), key=lambda kv: ip_sort_key(kv[0])))
+    by_source: dict[str, list[str]] = defaultdict(list)
+    for hp, src in candidates.items():
+        by_source[src].append(hp)
+    for lst in by_source.values():
+        lst.sort(key=ip_sort_key)
+    lists = [by_source[src] for src in sorted(by_source)]
+    cursors = [0] * len(lists)
+    picked: list[str] = []
+    while len(picked) < cap:
+        advanced = False
+        for i, lst in enumerate(lists):
+            if cursors[i] < len(lst):
+                picked.append(lst[cursors[i]])
+                cursors[i] += 1
+                advanced = True
+                if len(picked) >= cap:
+                    break
+        if not advanced:
+            break
+    return {hp: candidates[hp] for hp in picked}
+
+
 def to_proxies(proxy_type: ProxyType, hostports_with_source: dict[str, str]) -> list[Proxy]:
     out: list[Proxy] = []
     for hp, src in hostports_with_source.items():
-        host, port_s = hp.split(":", 1)
-        out.append(Proxy(type=proxy_type, host=host, port=int(port_s), source=src))
+        host, port = split_hostport(hp)
+        out.append(Proxy(type=proxy_type, host=host, port=port, source=src))
     return out
 
 
@@ -609,12 +676,10 @@ def save_history(history: dict[str, dict], today: str) -> None:
     for >= STABLE_MIN_STREAK consecutive days. Also writes a small summary
     of the distribution for the dashboard."""
     HISTORY_FILE.write_text(_json.dumps(history, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
-    # Stable subset: proxies with streak >= threshold, newest-first.
+    # Stable subset: seen working TODAY (carried grace entries don't count) with
+    # streak >= threshold, longest streak first.
     STABLE_MIN_STREAK = int(os.getenv("PROXY_STABLE_MIN_STREAK", "2"))
-    stable = sorted(
-        (hp for hp, info in history.items() if info.get("streak", 0) >= STABLE_MIN_STREAK),
-        key=lambda hp: -history[hp].get("streak", 0),
-    )
+    stable = stable_hostports(history, today, STABLE_MIN_STREAK)
     write_txt(OUT_DIR / "stable.txt", stable)
     dist = {"total": len(history), "stable": len(stable)}
     by_streak: dict[str, int] = defaultdict(int)
@@ -623,6 +688,53 @@ def save_history(history: dict[str, dict], today: str) -> None:
     dist["by_streak"] = dict(by_streak)
     (OUT_DIR / "history-summary.json").write_text(
         _json.dumps(dist, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+
+
+# A proxy absent from today's validation keeps its streak entry for this many
+# days before being dropped from history.json.
+HISTORY_GRACE_DAYS = 1
+
+
+def build_history(prev_history: dict[str, dict], working: list[Proxy], today: str) -> dict[str, dict]:
+    """Merge today's working set into the survival history.
+
+    Streak increments each day a proxy passes validation. A proxy absent today
+    is *carried* (streak frozen) for HISTORY_GRACE_DAYS before being dropped:
+    refresh runs false-negative in bursts — the runner IP gets throttled right
+    after the daily scrape storm, so 8-minute re-tests have shown ~40% of the
+    freshly-validated set "failing" — and one transient miss used to amputate
+    multi-day streaks (a 100+ day streak died on a single bad probe).
+    """
+    grace_cutoff = (date.fromisoformat(today) - timedelta(days=HISTORY_GRACE_DAYS)).isoformat()
+    new_history: dict[str, dict] = {}
+    for p in working:
+        prev = prev_history.get(p.hostport, {})
+        prev_streak = prev.get("streak", 0)
+        prev_last = prev.get("last_seen", "")
+        # Increment only if last seen was a previous day (not same run).
+        streak = prev_streak if prev_last == today else prev_streak + 1
+        new_history[p.hostport] = {
+            "streak": streak,
+            "last_seen": today,
+            "type": p.type,
+            "country_code": p.country_code,
+            "anonymity": p.anonymity,
+        }
+    for hp, info in prev_history.items():
+        if hp not in new_history and info.get("last_seen", "") >= grace_cutoff:
+            new_history[hp] = info
+    return new_history
+
+
+def stable_hostports(history: dict[str, dict], today: str, min_streak: int) -> list[str]:
+    """hostports with streak >= min_streak that were seen working TODAY, longest streak first.
+
+    Grace-carried entries (absent today) are excluded: stable.txt must only
+    contain proxies that passed the most recent validation."""
+    return sorted(
+        (hp for hp, info in history.items() if info.get("streak", 0) >= min_streak and info.get("last_seen") == today),
+        key=lambda hp: -history[hp].get("streak", 0),
     )
 
 
@@ -681,10 +793,10 @@ async def main(refresh: bool = False) -> None:
     else:
         scraped, source_counts = await scrape_all_sources()
 
-    # Cap candidates to keep runtime stable. Sort for deterministic ordering.
-    forward_candidates = dict(sorted(scraped["forward"].items())[:MAX_PER_TYPE])
-    socks4_candidates = dict(sorted(scraped["socks4"].items())[:MAX_PER_TYPE])
-    socks5_candidates = dict(sorted(scraped["socks5"].items())[:MAX_PER_TYPE])
+    # Cap candidates to keep runtime stable, fairly across sources.
+    forward_candidates = fair_slice(scraped["forward"], MAX_PER_TYPE)
+    socks4_candidates = fair_slice(scraped["socks4"], MAX_PER_TYPE)
+    socks5_candidates = fair_slice(scraped["socks5"], MAX_PER_TYPE)
 
     forward_proxies = to_proxies("http", forward_candidates)
     socks4_proxies = to_proxies("socks4", socks4_candidates)
@@ -766,19 +878,9 @@ async def main(refresh: bool = False) -> None:
     # --- Survival history (streak of consecutive days seen working) ---
     prev_history = load_history()
     today = updated_utc[:10]
-    new_history: dict[str, dict] = {}
-    for p in http_proxies + https_proxies + socks4_proxies_ok + socks5_proxies_ok:
-        prev_streak = prev_history.get(p.hostport, {}).get("streak", 0)
-        prev_last = prev_history.get(p.hostport, {}).get("last_seen", "")
-        # Increment only if last seen was a previous day (not same run).
-        streak = prev_streak + 1 if prev_last != today else max(prev_streak, 1)
-        new_history[p.hostport] = {
-            "streak": streak,
-            "last_seen": today,
-            "type": p.type,
-            "country_code": p.country_code,
-            "anonymity": p.anonymity,
-        }
+    new_history = build_history(
+        prev_history, http_proxies + https_proxies + socks4_proxies_ok + socks5_proxies_ok, today
+    )
     save_history(new_history, today)
     STABLE_MIN_STREAK = int(os.getenv("PROXY_STABLE_MIN_STREAK", "2"))
 
@@ -933,7 +1035,7 @@ async def main(refresh: bool = False) -> None:
         },
         "by_anonymity": {
             "all": anon_counts(all_proxies),
-            "note": "elite=high-anon(no proxy headers); anonymous=headers but hides real IP; transparent=leaks real IP; unknown=not probed (only top-N per type probed to bound runtime)",
+            "note": "elite=high-anon(no proxy headers); anonymous=headers but hides real IP; transparent=leaks real IP; unknown=anonymity probe failed/timed out (probed inline for every validated proxy; bounded fallback re-probe via PROXY_ANON_PROBE_TOP)",
             "probed_top_n": ANON_PROBE_TOP,
         },
         # IP type inferred from ASN (datacenter / residential / unknown).
@@ -954,7 +1056,7 @@ async def main(refresh: bool = False) -> None:
         # die in minutes-to-hours, so the age of this snapshot matters a lot.
         "data_freshness": {
             "updated_utc": updated_utc,
-            "update_schedule": "daily at 00:15 UTC (workflow_dispatch to force)",
+            "update_schedule": "daily full update at 00:15 UTC + lightweight re-validation refresh every 6h (workflow_dispatch to force)",
             "warning": "Free proxies expire in minutes-to-hours; verify before use.",
         },
         "top_fastest": [p.to_dict(updated_utc) for p in all_proxies[:10]],

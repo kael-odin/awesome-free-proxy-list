@@ -34,9 +34,13 @@ TIMEOUT_SEC = 12.0
 
 
 def parse_target(target: str) -> tuple[str, int]:
-    if ":" not in target:
+    target = target.strip()
+    if target.startswith("["):  # IPv6 literal form [host]:port
+        host, _, port_s = target[1:].partition("]:")
+    elif ":" in target:
+        host, _, port_s = target.rpartition(":")
+    else:
         raise SystemExit(f"Expected ip:port, got: {target!r}")
-    host, port_s = target.rsplit(":", 1)
     try:
         port = int(port_s)
     except ValueError:
@@ -47,11 +51,9 @@ def parse_target(target: str) -> tuple[str, int]:
 
 
 def build_url(host: str, port: int, ptype: str) -> str:
-    if ptype in ("http", "https"):
-        return f"http://{host}:{port}"
-    if ptype == "socks4":
-        return f"socks4://{host}:{port}"
-    return f"socks5://{host}:{port}"
+    scheme = "http" if ptype in ("http", "https") else ptype
+    netloc = f"[{host}]:{port}" if ":" in host else f"{host}:{port}"
+    return f"{scheme}://{netloc}"
 
 
 async def fetch_via(
@@ -139,6 +141,12 @@ async def check(host: str, port: int, ptype: str, geoip: GeoIP) -> dict:
     }
 
 
+def flag_emoji(cc: str) -> str:
+    if not cc or len(cc) != 2:
+        return "🏳️"
+    return "".join(chr(0x1F1E6 + ord(c) - 65) for c in cc.upper())
+
+
 def print_report(r: dict) -> None:
     print(f"\n  Proxy:   {r['proxy']}  ({r['type']})")
     print(f"  URL:     {r['url']}")
@@ -151,7 +159,7 @@ def print_report(r: dict) -> None:
     print(f"  Your IP: {r['your_ip'] or 'unknown'}")
     print(
         f"  Exit IP: {r['exit_ip'] or 'unknown'}"
-        + (f"   🇺 {r['country']} ({r['country_code']})" if r["country_code"] else "")
+        + (f"   {flag_emoji(r['country_code'])} {r['country']} ({r['country_code']})" if r["country_code"] else "")
     )
     anon = "🟢 yes" if r["anonymous"] else ("🔴 no" if r["exit_ip"] else "⚪ unknown")
     print(f"  Anonymous (exit ≠ your IP): {anon}")

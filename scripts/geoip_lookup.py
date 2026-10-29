@@ -29,16 +29,19 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB_PATH = ROOT / "scripts" / "data" / "GeoLite2-Country.mmdb"
 DEFAULT_ASN_DB_PATH = ROOT / "scripts" / "data" / "GeoLite2-ASN.mmdb"
 
-# Community mirror of MaxMind GeoLite2-Country. No license key required.
-# `git.io` is a stable short link that follows the "latest" release tag.
-GEOIP_DB_URL = os.getenv(
+# Community mirror of MaxMind GeoLite2 (P3TERX/GeoLite.mmdb). No license key
+# required. Tried in order: the raw.githubusercontent.com direct link first
+# (stable download branch), then the legacy git.io short link as a fallback —
+# git.io is a deprecated GitHub service that could disappear at any time.
+GEOIP_DB_URLS = os.getenv(
     "PROXY_GEOIP_DB_URL",
+    "https://raw.githubusercontent.com/P3TERX/GeoLite.mmdb/download/GeoLite2-Country.mmdb,"
     "https://git.io/GeoLite2-Country.mmdb",
-)
-ASN_DB_URL = os.getenv(
+).split(",")
+ASN_DB_URLS = os.getenv(
     "PROXY_ASN_DB_URL",
-    "https://git.io/GeoLite2-ASN.mmdb",
-)
+    "https://raw.githubusercontent.com/P3TERX/GeoLite.mmdb/download/GeoLite2-ASN.mmdb,https://git.io/GeoLite2-ASN.mmdb",
+).split(",")
 
 # Re-download if the cached DB is older than this many days.
 GEOIP_REFRESH_DAYS = int(os.getenv("PROXY_GEOIP_REFRESH_DAYS", "7"))
@@ -80,19 +83,14 @@ DATACENTER_ORG_KEYWORDS = (
     "tencent",
     "huawei",
     "bandwidth",
-    " LeaseWeb",
-    "cogent",
     "cloudflare",
     "fastly",
     "github",
-    "oracle",
     "marhost",
     "aeza",
-    "path",
+    "path.net",
     "timeweb",
     "firstbyte",
-    "datacamp",
-    "louis",
 )
 
 # ISPs typically offering residential access (consumer / mobile ISPs).
@@ -172,34 +170,36 @@ def download_db(dest: Path | None = None) -> Optional[Path]:
 
     Returns the path on success, or None if the download failed after retries.
     """
-    return _download_mmdb(GEOIP_DB_URL, dest or _db_path())
+    return _download_mmdb(GEOIP_DB_URLS, dest or _db_path())
 
 
-def _download_mmdb(url: str, dest: Path) -> Optional[Path]:
-    """Download an mmdb from ``url`` to ``dest`` with 3 retries. Shared by
-    country + ASN DBs."""
+def _download_mmdb(urls: list[str], dest: Path) -> Optional[Path]:
+    """Download an mmdb to ``dest``, trying each mirror URL in order with retries.
+
+    Shared by country + ASN DBs."""
     import time
 
     dest.parent.mkdir(parents=True, exist_ok=True)
     last_err: Exception | None = None
-    for attempt in range(3):
-        try:
-            req = urllib.request.Request(
-                url,
-                headers={"User-Agent": "free-proxy-list-bot/1.0"},
-            )
-            with urllib.request.urlopen(req, timeout=60) as resp:  # noqa: S310 — trusted mirror
-                data = resp.read()
-            if len(data) < 1024:
-                last_err = ValueError("downloaded file too small")
-                continue
-            dest.write_bytes(data)
-            return dest
-        except Exception as e:
-            last_err = e
-            time.sleep(1.0 * (attempt + 1))
+    for url in urls:
+        for attempt in range(3):
+            try:
+                req = urllib.request.Request(
+                    url,
+                    headers={"User-Agent": "free-proxy-list-bot/1.0"},
+                )
+                with urllib.request.urlopen(req, timeout=60) as resp:  # noqa: S310 — trusted mirror
+                    data = resp.read()
+                if len(data) < 1024:
+                    last_err = ValueError("downloaded file too small")
+                    continue
+                dest.write_bytes(data)
+                return dest
+            except Exception as e:
+                last_err = e
+                time.sleep(1.0 * (attempt + 1))
     if last_err is not None:
-        print(f"warn: db download failed after 3 attempts: {last_err}", file=sys.stderr)
+        print(f"warn: db download failed from all {len(urls)} mirrors: {last_err}", file=sys.stderr)
     return None
 
 
@@ -215,7 +215,7 @@ def ensure_asn_db() -> Optional[Path]:
     path = _asn_db_path()
     if not _needs_download(path):
         return path
-    return _download_mmdb(ASN_DB_URL, path)
+    return _download_mmdb(ASN_DB_URLS, path)
 
 
 def ensure_db() -> Optional[Path]:

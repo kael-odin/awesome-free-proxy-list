@@ -79,7 +79,7 @@ def clash_proxy_name(p: Proxy, idx: int) -> str:
     cc = p.country_code or "??"
     flag = flag_emoji(cc)
     tier = tier_of(p.latency_ms)
-    return f"{flag} {p.type.upper()} {p.host}:{p.port} {tier[:1].upper()}"
+    return f"{flag} {p.type.upper()} {p.hostport} {tier[:1].upper()}"
 
 
 def clash_proxy_entry(p: Proxy, name: str) -> dict:
@@ -266,12 +266,7 @@ def build_v2ray_sub(proxies: list[Proxy]) -> str:
         if p.hostport in seen:
             continue
         seen.add(p.hostport)
-        if p.type in ("http", "https"):
-            urls.append(f"http://{p.host}:{p.port}")
-        elif p.type == "socks5":
-            urls.append(f"socks5://{p.host}:{p.port}")
-        elif p.type == "socks4":
-            urls.append(f"socks4://{p.host}:{p.port}")
+        urls.append(p.url)
     joined = "\n".join(urls)
     return base64.b64encode(joined.encode("utf-8")).decode("ascii")
 
@@ -286,12 +281,7 @@ def build_links(proxies: list[Proxy], ptype: str | None = None) -> str:
         if p.hostport in seen:
             continue
         seen.add(p.hostport)
-        if p.type in ("http", "https"):
-            urls.append(f"http://{p.host}:{p.port}")
-        elif p.type == "socks5":
-            urls.append(f"socks5://{p.host}:{p.port}")
-        elif p.type == "socks4":
-            urls.append(f"socks4://{p.host}:{p.port}")
+        urls.append(p.url)
     return "\n".join(urls) + ("\n" if urls else "")
 
 
