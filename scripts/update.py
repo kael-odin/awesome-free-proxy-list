@@ -572,17 +572,17 @@ def update_readme_stats(stats: dict) -> None:
     trusted = c["all"].get("top_trusted", 0)
     block = (
         f"{start}\n"
-        f"Last update (UTC): **{stats['updated_utc']}**\n\n"
-        f"> 🏆 **Top trusted: {trusted}** — fast ∩ high-anon ∩ survived ≥2 days. "
-        f"The highest-success subset [`proxies/top-trusted.txt`](proxies/top-trusted.txt) "
-        f"(may be 0 on a fresh install before streaks accumulate).\n\n"
-        f"| Type | Working | Total Candidates |\n"
+        f"数据更新（UTC）：**{stats['updated_utc']}**\n\n"
+        f"> 🏆 **信任锚点：{trusted} 个** — fast ∩ 高匿 ∩ 连续存活 ≥2 天，"
+        f"成功率最高的子集 [`proxies/top-trusted.txt`](proxies/top-trusted.txt) "
+        f"（新环境 streak 未积累之前可能为 0）。\n\n"
+        f"| 类型 | 可用 | 候选总数 |\n"
         f"|---|---:|---:|\n"
         f"| HTTP | {c['http']['working']} | {c['http']['candidates']} |\n"
         f"| HTTPS | {c['https']['working']} | {c['https']['candidates']} |\n"
         f"| SOCKS4 | {c['socks4']['working']} | {c['socks4']['candidates']} |\n"
         f"| SOCKS5 | {c['socks5']['working']} | {c['socks5']['candidates']} |\n"
-        f"| ALL | {c['all']['working']} | {c['all']['candidates']} |\n"
+        f"| 全部 | {c['all']['working']} | {c['all']['candidates']} |\n"
         f"{end}"
     )
 
