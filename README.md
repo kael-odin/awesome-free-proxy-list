@@ -25,17 +25,17 @@ curl -s https://raw.githubusercontent.com/kael-odin/awesome-free-proxy-list/main
 ## 📊 实时统计
 
 <!-- STATS:START -->
-数据更新（UTC）：**2026-11-28T07:59:03+00:00**
+数据更新（UTC）：**2026-11-28T20:16:22+00:00**
 
-> 🏆 **信任锚点：13 个** — fast ∩ 高匿 ∩ 连续存活 ≥2 天，成功率最高的子集 [`proxies/top-trusted.txt`](proxies/top-trusted.txt) （新环境 streak 未积累之前可能为 0）。
+> 🏆 **信任锚点：7 个** — fast ∩ 高匿 ∩ 连续存活 ≥2 天，成功率最高的子集 [`proxies/top-trusted.txt`](proxies/top-trusted.txt) （新环境 streak 未积累之前可能为 0）。
 
 | 类型 | 可用 | 候选总数 |
 |---|---:|---:|
-| HTTP | 244 | 343 |
-| HTTPS | 26 | 343 |
-| SOCKS4 | 72 | 98 |
-| SOCKS5 | 101 | 152 |
-| 全部 | 387 | 593 |
+| HTTP | 222 | 244 |
+| HTTPS | 15 | 244 |
+| SOCKS4 | 65 | 72 |
+| SOCKS5 | 75 | 101 |
+| 全部 | 333 | 417 |
 <!-- STATS:END -->
 
 > 由 `scripts/update.py` 每次运行自动注入，无需手动维护。免费代理存活以分钟到小时计，数字每次运行自然波动。
